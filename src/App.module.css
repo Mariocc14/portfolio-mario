@@ -1686,37 +1686,161 @@
   color: var(--accent);
 }
 
-/* ============ Other projects ============ */
-.projectsSection {
+/* ============ Lifecycle carousel (case 1) ============ */
+.lifecycleFrame {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.015) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+  padding: 1.5rem 1.375rem 1.25rem;
+  color: #ebebeb;
+  max-width: 360px;
+  width: 100%;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  position: relative;
+  box-shadow:
+    0 16px 42px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.lifecyclePhaseNum {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.lifecyclePhaseNum::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 83, 55, 0.2);
+}
+
+.lifecycleTitle {
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.65rem, 2vw, 1.9rem);
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: -0.015em;
+  margin: 0.1rem 0 0.15rem;
+}
+
+.lifecycleDesc {
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+  margin: 0 0 0.2rem;
+}
+
+.lifecycleChannels {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.1rem;
+}
+
+.lifecycleChannelChip {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.lifecycleSample {
+  margin-top: auto;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  background: rgba(229, 83, 55, 0.09);
+  border-left: 3px solid var(--accent);
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.45;
+}
+
+.lifecycleSampleLabel {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  margin: 0 0 0.28rem;
+}
+
+.lifecycleTimeline {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding-top: 0.25rem;
+}
+
+.lifecycleTimelineDot {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lifecycleTimelineDotDone {
+  background: rgba(229, 83, 55, 0.4);
+}
+
+.lifecycleTimelineDotActive {
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(229, 83, 55, 0.45);
+}
+
+/* ============ Other products (full end-to-end) ============ */
+.productsSection {
   margin: 5rem 0 4rem;
 }
 
 @media (min-width: 768px) {
-  .projectsSection {
+  .productsSection {
     margin: 7rem 0 5rem;
   }
 }
 
-.projectsGrid {
+.productsGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 1.5rem;
   margin-top: 2.5rem;
 }
 
-@media (min-width: 900px) {
-  .projectsGrid {
+@media (min-width: 960px) {
+  .productsGrid {
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
   }
 }
 
-.projectCard {
+.productCard {
   display: flex;
   flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 22px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -1724,150 +1848,331 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.projectCard:hover {
+.productCard:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 20px 50px -20px rgba(10, 10, 10, 0.18),
-    0 6px 16px rgba(10, 10, 10, 0.06);
-  border-color: rgba(229, 83, 55, 0.35);
+    0 22px 56px -20px rgba(10, 10, 10, 0.22),
+    0 6px 18px rgba(10, 10, 10, 0.08);
+  border-color: rgba(229, 83, 55, 0.3);
 }
 
-.projectVisual {
+.productPreview {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   display: grid;
   place-items: center;
-  color: #fff;
+  padding: 1.25rem;
 }
 
-.projectVisualMonkway {
+/* --- Monkway brand (emerald + white, habit tracking) --- */
+.previewMonkway {
   background:
-    radial-gradient(120% 80% at 20% 10%, rgba(255, 255, 255, 0.18) 0%, transparent 50%),
-    linear-gradient(135deg, #f59e0b 0%, #e55337 55%, #8b2e15 100%);
+    radial-gradient(120% 80% at 85% 15%, rgba(16, 185, 129, 0.16) 0%, transparent 55%),
+    radial-gradient(100% 60% at 10% 100%, rgba(16, 185, 129, 0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #fafaf9 0%, #f1f5f3 100%);
 }
 
-.projectVisualSprint {
-  background:
-    radial-gradient(120% 80% at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-    linear-gradient(140deg, #0f0e0c 0%, #1e1b3a 50%, #25263a 100%);
-}
-
-.projectVisualInner {
+.monkwayPhone {
+  width: 70%;
+  max-width: 260px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 0.95rem 0.9rem 1rem;
+  box-shadow:
+    0 16px 40px -12px rgba(10, 10, 10, 0.2),
+    0 3px 10px rgba(10, 10, 10, 0.06),
+    inset 0 0 0 1px rgba(10, 10, 10, 0.04);
   position: relative;
-  width: 88%;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
   z-index: 1;
 }
 
-.projectGlyph {
-  font-family: "Instrument Serif", serif;
-  font-style: italic;
-  font-size: clamp(4.5rem, 12vw, 7rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: #fff;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
-  flex-shrink: 0;
-}
-
-.projectMockup {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  padding: 0.65rem 0.8rem;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+.monkwayHeader {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.85);
-  letter-spacing: 0.02em;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
 }
 
-.projectMockupRow {
+.monkwayBrand {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
-.projectMockupDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
+.monkwayMark {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: #10b981;
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
 }
 
-.projectMockupDotOn {
-  background: #4ade80;
-  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2);
+.monkwayMark::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #ffffff;
 }
 
-.projectMockupDotCoral {
-  background: var(--accent);
+.monkwayWordmark {
+  font-family: "Inter", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  letter-spacing: -0.01em;
 }
 
-.projectMockupLabel {
-  opacity: 0.7;
+.monkwayStreak {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+}
+
+.monkwayToday {
   font-size: 0.6rem;
+  color: #6b6b6b;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
 }
 
-.projectWave {
+.monkwayList {
   display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 20px;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
-.projectWave span {
+.monkwayItem {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 9px;
+  background: #f7faf8;
+  border: 1px solid rgba(16, 185, 129, 0.08);
+}
+
+.monkwayCheck {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #10b981;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+.monkwayCheckEmpty {
+  background: transparent;
+  border: 1.5px solid rgba(10, 10, 10, 0.15);
+  color: transparent;
+}
+
+.monkwayLabel {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monkwayTime {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  color: #8a8a8a;
+  letter-spacing: 0.03em;
+}
+
+/* --- Sprint brand (warm cream + terracotta + olive, AI receptionist) --- */
+.previewSprint {
+  background:
+    radial-gradient(120% 80% at 80% 20%, rgba(217, 107, 58, 0.08) 0%, transparent 55%),
+    radial-gradient(100% 80% at 20% 100%, rgba(62, 122, 78, 0.08) 0%, transparent 60%),
+    #F5EFE4;
+}
+
+.sprintBoard {
+  width: 82%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.sprintHeadline {
+  font-family: "Fraunces", "Instrument Serif", serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: #1A1410;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4rem;
+}
+
+.sprintHeadline em {
+  font-style: italic;
+}
+
+.sprintCall {
+  background: #FBF7EE;
+  border: 1px solid #D9CEB8;
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  box-shadow: 0 10px 24px -14px rgba(26, 20, 16, 0.25);
+}
+
+.sprintCallHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sprintMark {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #0F1A14;
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sprintMark::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #2F7A55;
+  top: 3px;
+  right: 3px;
+}
+
+.sprintBrandName {
+  font-family: "Fraunces", serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1A1410;
+  letter-spacing: -0.005em;
+}
+
+.sprintCallMeta {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  color: #7A6E5E;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.sprintWave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.sprintWave span {
   width: 3px;
   border-radius: 2px;
-  background: currentColor;
-  animation: waveBar 1.4s ease-in-out infinite;
+  background: #3E7A4E;
+  animation: sprintWaveBar 1.4s ease-in-out infinite;
 }
 
-.projectWave span:nth-child(1) { height: 40%; animation-delay: -1.3s; }
-.projectWave span:nth-child(2) { height: 75%; animation-delay: -1.1s; }
-.projectWave span:nth-child(3) { height: 55%; animation-delay: -0.9s; }
-.projectWave span:nth-child(4) { height: 90%; animation-delay: -0.7s; }
-.projectWave span:nth-child(5) { height: 65%; animation-delay: -0.5s; }
-.projectWave span:nth-child(6) { height: 80%; animation-delay: -0.3s; }
-.projectWave span:nth-child(7) { height: 45%; animation-delay: -0.1s; }
+.sprintWave span:nth-child(1) { height: 40%; animation-delay: -1.3s; }
+.sprintWave span:nth-child(2) { height: 70%; animation-delay: -1.1s; }
+.sprintWave span:nth-child(3) { height: 55%; animation-delay: -0.9s; }
+.sprintWave span:nth-child(4) { height: 90%; animation-delay: -0.7s; }
+.sprintWave span:nth-child(5) { height: 50%; animation-delay: -0.5s; }
+.sprintWave span:nth-child(6) { height: 80%; animation-delay: -0.3s; }
+.sprintWave span:nth-child(7) { height: 35%; animation-delay: -0.1s; }
+.sprintWave span:nth-child(8) { height: 65%; animation-delay: -0.2s; }
+.sprintWave span:nth-child(9) { height: 45%; animation-delay: -0.6s; }
+.sprintWave span:nth-child(10) { height: 75%; animation-delay: -0.8s; }
 
-@keyframes waveBar {
-  0%, 100% { transform: scaleY(0.5); }
+@keyframes sprintWaveBar {
+  0%, 100% { transform: scaleY(0.4); }
   50% { transform: scaleY(1); }
 }
 
-.projectBody {
+.sprintBooking {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  background: #EEF3EC;
+  border: 1px solid rgba(62, 122, 78, 0.25);
+  font-size: 0.65rem;
+  color: #1A1410;
+}
+
+.sprintBookingDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #3E7A4E;
+  flex-shrink: 0;
+}
+
+.sprintChannels {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.sprintChannel {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  color: #6B4B2E;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #F0C9A8;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* --- Card body (shared) --- */
+.productBody {
   padding: 1.5rem 1.5rem 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.55rem;
 }
 
-.projectTag {
+.productTag {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   font-family: "JetBrains Mono", monospace;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.08em;
   color: var(--muted);
   text-transform: uppercase;
   margin: 0;
 }
 
-.projectTag::before {
+.productTag::before {
   content: "";
   width: 6px;
   height: 6px;
@@ -1875,10 +2180,10 @@
   background: var(--accent);
 }
 
-.projectName {
+.productName {
   font-family: "Instrument Serif", serif;
   font-style: italic;
-  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  font-size: clamp(1.65rem, 2.4vw, 2.05rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -1886,21 +2191,29 @@
   font-weight: 400;
 }
 
-.projectDesc {
-  font-size: 0.95rem;
+.productKicker {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+
+.productDesc {
+  font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--ink-2);
-  margin: 0.35rem 0 0.25rem;
+  margin: 0.25rem 0 0.25rem;
 }
 
-.projectMeta {
+.productMeta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  margin: 0.25rem 0 0.5rem;
+  gap: 0.4rem 1rem;
+  margin: 0.25rem 0 0.4rem;
 }
 
-.projectMetaItem {
+.productMetaItem {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.68rem;
   letter-spacing: 0.05em;
@@ -1908,28 +2221,28 @@
   text-transform: uppercase;
 }
 
-.projectMetaItem strong {
+.productMetaItem strong {
   color: var(--ink);
   font-weight: 500;
 }
 
-.projectLink {
-  margin-top: 0.25rem;
+.productLink {
+  margin-top: 0.35rem;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.875rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--accent);
   letter-spacing: -0.005em;
 }
 
-.projectLink::after {
+.productLink::after {
   content: "↗";
   transition: transform 0.25s ease;
   display: inline-block;
 }
 
-.projectCard:hover .projectLink::after {
+.productCard:hover .productLink::after {
   transform: translate(2px, -2px);
 }

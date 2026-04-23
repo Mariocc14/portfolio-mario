@@ -367,6 +367,164 @@ function Carousel({
   );
 }
 
+/* ============ Lifecycle carousel (Case 1 — event lifecycle phases) ============ */
+type LifecyclePhase = {
+  num: number;
+  title: string;
+  desc: string;
+  channels: string[];
+  sampleLabel: string;
+  sample: string;
+};
+
+const lifecyclePhases: LifecyclePhase[] = [
+  {
+    num: 1,
+    title: "Waitlist launch",
+    desc: "Build an early demand pool before any ticket is on sale — the foundation of every scalable event.",
+    channels: ["Email", "Web"],
+    sampleLabel: "Subject",
+    sample: "Be first in line when this experience drops — join the waitlist →",
+  },
+  {
+    num: 2,
+    title: "Pre-sale notification",
+    desc: "Reward the waitlist with early access. Turn anticipation into commitment before general launch.",
+    channels: ["Email", "Push"],
+    sampleLabel: "Push title",
+    sample: "Your early access opens in 24h — secure your seats before everyone else.",
+  },
+  {
+    num: 3,
+    title: "Sales launch",
+    desc: "Open gates communication across every active channel to maximize the launch-window peak.",
+    channels: ["Email", "Push", "SMS"],
+    sampleLabel: "Launch email",
+    sample: "Tickets are live — pick your date before they're gone.",
+  },
+  {
+    num: 4,
+    title: "Open gates",
+    desc: "Sustain demand post-launch with real-time, availability-aware messaging for remaining inventory.",
+    channels: ["Push", "In-app"],
+    sampleLabel: "Reminder",
+    sample: "Last available dates for this weekend — reserve now.",
+  },
+  {
+    num: 5,
+    title: "Dates extension",
+    desc: "When demand extends, new dates reactivate the existing audience with zero friction — one journey, repeatable.",
+    channels: ["Email", "Push"],
+    sampleLabel: "Announcement",
+    sample: "More dates just added — pick your evening.",
+  },
+  {
+    num: 6,
+    title: "FOMO last days",
+    desc: "Closing-window sequence that lifts conversion among procrastinators through scarcity and timing cues.",
+    channels: ["Push", "SMS", "Email"],
+    sampleLabel: "Final push",
+    sample: "48h left — 90% sold out. Don't miss your chance.",
+  },
+];
+
+function LifecycleCarousel() {
+  const [index, setIndex] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const total = lifecyclePhases.length;
+
+  const scrollTo = (i: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const clamped = Math.max(0, Math.min(total - 1, i));
+    track.scrollTo({ left: track.clientWidth * clamped, behavior: "smooth" });
+    setIndex(clamped);
+  };
+
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const i = Math.round(track.scrollLeft / track.clientWidth);
+    if (i !== index) setIndex(i);
+  };
+
+  return (
+    <div className={styles.carousel}>
+      <div className={styles.carouselTrack} ref={trackRef} onScroll={onScroll}>
+        {lifecyclePhases.map((p, i) => (
+          <div key={p.num} className={styles.carouselSlide}>
+            <div className={styles.lifecycleFrame}>
+              <p className={styles.lifecyclePhaseNum}>
+                Phase {String(p.num).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </p>
+              <h4 className={styles.lifecycleTitle}>{p.title}</h4>
+              <p className={styles.lifecycleDesc}>{p.desc}</p>
+              <div className={styles.lifecycleChannels}>
+                {p.channels.map((c) => (
+                  <span key={c} className={styles.lifecycleChannelChip}>
+                    {c}
+                  </span>
+                ))}
+              </div>
+              <div className={styles.lifecycleSample}>
+                <p className={styles.lifecycleSampleLabel}>{p.sampleLabel}</p>
+                {p.sample}
+              </div>
+              <div className={styles.lifecycleTimeline} aria-hidden="true">
+                {Array.from({ length: total }, (_, j) => (
+                  <span
+                    key={j}
+                    className={`${styles.lifecycleTimelineDot} ${
+                      j < i ? styles.lifecycleTimelineDotDone : ""
+                    } ${j === i ? styles.lifecycleTimelineDotActive : ""}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className={styles.carouselControls}>
+        <div className={styles.carouselDots} role="tablist" aria-label="Lifecycle phases">
+          {lifecyclePhases.map((p, i) => (
+            <button
+              key={p.num}
+              role="tab"
+              aria-selected={i === index}
+              aria-label={`Phase ${i + 1}: ${p.title}`}
+              className={`${styles.carouselDot} ${i === index ? styles.carouselDotActive : ""}`}
+              onClick={() => scrollTo(i)}
+            />
+          ))}
+          <span className={styles.carouselCount}>
+            {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+          </span>
+        </div>
+        <div className={styles.carouselArrows}>
+          <button
+            type="button"
+            className={styles.carouselArrow}
+            onClick={() => scrollTo(index - 1)}
+            disabled={index === 0}
+            aria-label="Previous phase"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            className={styles.carouselArrow}
+            onClick={() => scrollTo(index + 1)}
+            disabled={index === total - 1}
+            aria-label="Next phase"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ============ Sticky scroll progress + back-to-top FAB ============ */
 function StickyChrome() {
   const [progress, setProgress] = useState(0);
@@ -603,16 +761,7 @@ export default function App() {
                   </div>
                 </div>
                 <div className={`${styles.caseVisual} ${styles.bgMidnight}`}>
-                  <Carousel
-                    frameMeta="email · fever originals · launch"
-                    slides={[
-                      { src: img.cabaret, alt: "Cabaret — Fever Original launch campaign" },
-                      { src: img.neon, alt: "Neon Brush — creative experience campaign" },
-                      { src: img.jury, alt: "The Jury Experience — launch email" },
-                      { src: img.ditd, alt: "Dining in the Dark — event campaign" },
-                      { src: img.wcib, alt: "Launch campaign — multichannel execution" },
-                    ]}
-                  />
+                  <LifecycleCarousel />
                 </div>
               </div>
             </article>
@@ -894,104 +1043,108 @@ export default function App() {
           </div>
         </section>
 
-        {/* ============ OTHER PROJECTS ============ */}
+        {/* ============ OTHER PRODUCTS ============ */}
         <section
           id="projects"
-          className={`${styles.section} ${styles.projectsSection}`}
-          aria-labelledby="projects-heading"
+          className={`${styles.section} ${styles.productsSection}`}
+          aria-labelledby="products-heading"
         >
           <div className={styles.sectionHead}>
-            <span className={styles.eyebrow}>Beyond CRM</span>
-            <h2 id="projects-heading" className={styles.sectionTitle}>
-              Side projects where I <em>ship</em> the product, not just the brief.
+            <span className={styles.eyebrow}>Other products</span>
+            <h2 id="products-heading" className={styles.sectionTitle}>
+              Products I’ve <em>built</em> end-to-end — from concept to live service.
             </h2>
             <p className={styles.sectionLede}>
-              Two products I’m building outside the day job — each an excuse to go end-to-end from
-              idea to live service.
+              Beyond consulting, I design and ship full products. These are two I own from
+              strategy and CRM to UX, stack and go-to-market.
             </p>
           </div>
 
-          <div className={styles.projectsGrid}>
-            {/* Monkway */}
+          <div className={styles.productsGrid}>
+            {/* Monkway — mindful habits app */}
             <a
-              className={styles.projectCard}
+              className={styles.productCard}
               href="https://monkway.app/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Visit Monkway — mindful habits app"
+              aria-label="Visit Monkway — habit tracking app"
             >
-              <div className={`${styles.projectVisual} ${styles.projectVisualMonkway}`}>
-                <div className={styles.projectVisualInner}>
-                  <span className={styles.projectGlyph} aria-hidden="true">
-                    m
-                  </span>
-                  <div className={styles.projectMockup} aria-hidden="true">
-                    <span className={styles.projectMockupLabel}>Today</span>
-                    <span className={styles.projectMockupRow}>
+              <div className={`${styles.productPreview} ${styles.previewMonkway}`}>
+                <div className={styles.monkwayPhone} aria-hidden="true">
+                  <div className={styles.monkwayHeader}>
+                    <div className={styles.monkwayBrand}>
+                      <span className={styles.monkwayMark} />
+                      <span className={styles.monkwayWordmark}>Monkway</span>
+                    </div>
+                    <span className={styles.monkwayStreak}>12-day streak</span>
+                  </div>
+                  <p className={styles.monkwayToday}>Today · 23 apr</p>
+                  <div className={styles.monkwayList}>
+                    <div className={styles.monkwayItem}>
+                      <span className={styles.monkwayCheck}>✓</span>
+                      <span className={styles.monkwayLabel}>Morning meditation</span>
+                      <span className={styles.monkwayTime}>07:00</span>
+                    </div>
+                    <div className={styles.monkwayItem}>
+                      <span className={styles.monkwayCheck}>✓</span>
+                      <span className={styles.monkwayLabel}>Read 20 pages</span>
+                      <span className={styles.monkwayTime}>done</span>
+                    </div>
+                    <div className={styles.monkwayItem}>
                       <span
-                        className={`${styles.projectMockupDot} ${styles.projectMockupDotOn}`}
-                      />
-                      Morning meditation · 07:00
-                    </span>
-                    <span className={styles.projectMockupRow}>
-                      <span
-                        className={`${styles.projectMockupDot} ${styles.projectMockupDotOn}`}
-                      />
-                      Read 20 pages · done
-                    </span>
-                    <span className={styles.projectMockupRow}>
-                      <span
-                        className={`${styles.projectMockupDot} ${styles.projectMockupDotCoral}`}
-                      />
-                      Evening walk · 19:30
-                    </span>
+                        className={`${styles.monkwayCheck} ${styles.monkwayCheckEmpty}`}
+                      >
+                        ✓
+                      </span>
+                      <span className={styles.monkwayLabel}>Evening walk</span>
+                      <span className={styles.monkwayTime}>19:30</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className={styles.projectBody}>
-                <p className={styles.projectTag}>Side project · Habits & focus</p>
-                <h3 className={styles.projectName}>Monkway</h3>
-                <p className={styles.projectDesc}>
-                  A calmer approach to habits — daily rituals instead of streak anxiety. Designed
-                  around intentional consistency, reflection and gentle nudges rather than guilt.
+              <div className={styles.productBody}>
+                <p className={styles.productTag}>Product · Consumer app</p>
+                <h3 className={styles.productName}>Monkway</h3>
+                <p className={styles.productKicker}>
+                  A calmer way to build habits.
                 </p>
-                <div className={styles.projectMeta}>
-                  <span className={styles.projectMetaItem}>
-                    <strong>Role:</strong> Founder · Product
+                <p className={styles.productDesc}>
+                  Daily rituals over streak anxiety. A PWA designed around intentional
+                  consistency, reflection and gentle nudges — for people tired of guilt-driven
+                  productivity apps.
+                </p>
+                <div className={styles.productMeta}>
+                  <span className={styles.productMetaItem}>
+                    <strong>Role:</strong> Founder · Product · CRM
                   </span>
-                  <span className={styles.projectMetaItem}>
-                    <strong>Stack:</strong> Mobile app
+                  <span className={styles.productMetaItem}>
+                    <strong>Stack:</strong> PWA · React
                   </span>
                 </div>
-                <span className={styles.projectLink}>monkway.app</span>
+                <span className={styles.productLink}>monkway.app</span>
               </div>
             </a>
 
-            {/* Sprint (AI voice receptionist) */}
+            {/* Sprint — AI voice receptionist */}
             <a
-              className={styles.projectCard}
+              className={styles.productCard}
               href="https://web-production-98b02b.up.railway.app/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit Sprint — AI voice receptionist for small businesses"
             >
-              <div className={`${styles.projectVisual} ${styles.projectVisualSprint}`}>
-                <div className={styles.projectVisualInner}>
-                  <span className={styles.projectGlyph} aria-hidden="true">
-                    s
-                  </span>
-                  <div className={styles.projectMockup} aria-hidden="true">
-                    <span className={styles.projectMockupLabel}>Incoming call</span>
-                    <span className={styles.projectMockupRow}>
-                      <span
-                        className={`${styles.projectMockupDot} ${styles.projectMockupDotOn}`}
-                      />
-                      AI answering · 00:14
-                    </span>
-                    <span
-                      className={styles.projectWave}
-                      style={{ color: "rgba(255,255,255,0.85)" }}
-                    >
+              <div className={`${styles.productPreview} ${styles.previewSprint}`}>
+                <div className={styles.sprintBoard} aria-hidden="true">
+                  <p className={styles.sprintHeadline}>
+                    Tus citas, en <em>piloto automático</em>.
+                  </p>
+                  <div className={styles.sprintCall}>
+                    <div className={styles.sprintCallHead}>
+                      <span className={styles.sprintMark} />
+                      <span className={styles.sprintBrandName}>Sprint</span>
+                      <span className={styles.sprintCallMeta}>AI · 00:14</span>
+                    </div>
+                    <div className={styles.sprintWave}>
                       <span />
                       <span />
                       <span />
@@ -999,33 +1152,43 @@ export default function App() {
                       <span />
                       <span />
                       <span />
-                    </span>
-                    <span className={styles.projectMockupRow}>
-                      <span
-                        className={`${styles.projectMockupDot} ${styles.projectMockupDotCoral}`}
-                      />
-                      Booking confirmed · Google Cal
-                    </span>
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                    <div className={styles.sprintBooking}>
+                      <span className={styles.sprintBookingDot} />
+                      Cita confirmada · Google Calendar
+                    </div>
+                  </div>
+                  <div className={styles.sprintChannels}>
+                    <span className={styles.sprintChannel}>WhatsApp</span>
+                    <span className={styles.sprintChannel}>Chat</span>
+                    <span className={styles.sprintChannel}>Voz</span>
                   </div>
                 </div>
               </div>
-              <div className={styles.projectBody}>
-                <p className={styles.projectTag}>Side project · AI agent · SMB</p>
-                <h3 className={styles.projectName}>Sprint</h3>
-                <p className={styles.projectDesc}>
-                  An AI voice receptionist for small businesses — takes WhatsApp, chat and phone
-                  calls, books into Google Calendar, and speaks with a cloned voice. Built for
-                  clinics, salons and consultants who can’t afford to miss a call.
+              <div className={styles.productBody}>
+                <p className={styles.productTag}>Product · AI agent for SMBs</p>
+                <h3 className={styles.productName}>Sprint</h3>
+                <p className={styles.productKicker}>
+                  An AI receptionist that never sleeps.
                 </p>
-                <div className={styles.projectMeta}>
-                  <span className={styles.projectMetaItem}>
-                    <strong>Role:</strong> Co-founder · CRM & Ops
+                <p className={styles.productDesc}>
+                  Answers WhatsApp, web chat and phone calls, books into Google Calendar and
+                  speaks with a cloned voice via ElevenLabs. Built for clinics, salons and
+                  consultants who can’t afford to miss a booking. Includes client app and
+                  internal CMS.
+                </p>
+                <div className={styles.productMeta}>
+                  <span className={styles.productMetaItem}>
+                    <strong>Role:</strong> Co-founder · Product · CRM
                   </span>
-                  <span className={styles.projectMetaItem}>
-                    <strong>Stack:</strong> ElevenLabs · Google Cal · Web app
+                  <span className={styles.productMetaItem}>
+                    <strong>Stack:</strong> ElevenLabs · Google Cal · Web
                   </span>
                 </div>
-                <span className={styles.projectLink}>See landing</span>
+                <span className={styles.productLink}>sprint.agency</span>
               </div>
             </a>
           </div>
