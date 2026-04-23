@@ -72,6 +72,8 @@ const stackGroups: StackGroup[] = [
     label: "Data & Code",
     items: [
       "SQL",
+      "JavaScript",
+      "React",
       "HTML / CSS (Email)",
       "Git / GitHub",
       "Looker / GA4",
