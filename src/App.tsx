@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
@@ -77,78 +77,207 @@ const levelLabel = (n: number) =>
 type Slide = { src: string; alt: string; meta?: string };
 
 /* ============ Channel orchestration visual (hero right) ============ */
-const channels: {
+const orchestrationChannels: {
   key: string;
   name: string;
-  badge: string;
-  preview: string;
-  iconClass: string;
-  icon: ReactNode;
+  meta: string;
+  x: number;
+  y: number;
+  color: string;
+  pathD: string;
+  dur: string;
+  begin: string;
 }[] = [
   {
     key: "email",
     name: "Email",
-    badge: "SFMC · AMPscript",
-    preview: "Mario, tonight's Candlelight is almost sold out →",
-    iconClass: styles.channelIconEmail,
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-10 6L2 7" />
-      </svg>
-    ),
+    meta: "SFMC",
+    x: 270,
+    y: 32,
+    color: "#6366f1",
+    pathD: "M 60 160 C 140 160, 190 40, 266 32",
+    dur: "2.6s",
+    begin: "0s",
   },
   {
     key: "push",
     name: "Push",
-    badge: "Braze · Native",
-    preview: "Your waitlist just opened · tap to secure seats",
-    iconClass: styles.channelIconPush,
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-      </svg>
-    ),
+    meta: "Braze",
+    x: 270,
+    y: 96,
+    color: "#f59e0b",
+    pathD: "M 60 160 C 140 160, 200 100, 266 96",
+    dur: "2.2s",
+    begin: "0.35s",
   },
   {
     key: "sms",
     name: "SMS",
-    badge: "Transactional",
-    preview: "Fever: your QR ticket for tonight →",
-    iconClass: styles.channelIconSms,
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-    ),
+    meta: "TWL",
+    x: 270,
+    y: 160,
+    color: "#2563eb",
+    pathD: "M 60 160 C 160 160, 200 160, 266 160",
+    dur: "1.8s",
+    begin: "0.7s",
   },
   {
     key: "wa",
     name: "WhatsApp",
-    badge: "Reminders · HSM",
-    preview: "Tu experiencia empieza en 2 h — detalles aquí",
-    iconClass: styles.channelIconWa,
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M20.5 3.5A11.9 11.9 0 0 0 3.5 20.4L2 22l1.7-.4a11.9 11.9 0 0 0 16.8-18.1zM12 21.2a9.2 9.2 0 0 1-4.7-1.3l-.3-.2-3 .8.8-2.9-.2-.3A9.2 9.2 0 1 1 12 21.2zm5.3-6.9-1.9-.6-.2.1c-.2.1-.4.3-.9.9l-.2.2a15.6 15.6 0 0 1-4.1-4l.3-.3a3 3 0 0 0 .7-1.1l-.1-.2-.7-1.7c-.2-.5-.4-.5-.6-.5H8.9a1 1 0 0 0-.7.3 3 3 0 0 0-1 2.2 5.2 5.2 0 0 0 1.1 2.8 11.7 11.7 0 0 0 4.8 4.3c2.2 1 2.9.9 3.5.8a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2z" />
-      </svg>
-    ),
+    meta: "HSM",
+    x: 270,
+    y: 224,
+    color: "#10b981",
+    pathD: "M 60 160 C 140 160, 200 220, 266 224",
+    dur: "2.4s",
+    begin: "1.05s",
   },
   {
     key: "app",
     name: "In-app",
-    badge: "Personalized",
-    preview: "New near you — based on your last 3 bookings",
-    iconClass: styles.channelIconApp,
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="5" y="2" width="14" height="20" rx="2.5" />
-        <path d="M12 18h.01" />
-      </svg>
-    ),
+    meta: "Native",
+    x: 270,
+    y: 288,
+    color: "#ec4899",
+    pathD: "M 60 160 C 140 160, 190 280, 266 288",
+    dur: "2.8s",
+    begin: "1.4s",
   },
 ];
+
+function OrchestrationGraph() {
+  return (
+    <svg
+      className={styles.orchestration}
+      viewBox="0 0 360 320"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Multichannel CRM orchestration — one system dispatching to email, push, SMS, WhatsApp and in-app"
+    >
+      <defs>
+        <filter id="orchGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="2.2" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <radialGradient id="orchOrigin" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#fca68e" />
+          <stop offset="60%" stopColor="#e55337" />
+          <stop offset="100%" stopColor="#b83d22" />
+        </radialGradient>
+      </defs>
+
+      {/* Connection curves */}
+      <g fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1" strokeLinecap="round">
+        {orchestrationChannels.map((c) => (
+          <path key={c.key} id={`orch-${c.key}`} d={c.pathD} />
+        ))}
+      </g>
+
+      {/* Origin node (CRM engine) */}
+      <g>
+        {/* expanding pulse rings */}
+        <circle cx="60" cy="160" r="12" fill="none" stroke="#e55337" strokeOpacity="0.35">
+          <animate
+            attributeName="r"
+            values="12;36"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="stroke-opacity"
+            values="0.35;0"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        <circle cx="60" cy="160" r="12" fill="none" stroke="#e55337" strokeOpacity="0.35">
+          <animate
+            attributeName="r"
+            values="12;36"
+            dur="3s"
+            begin="1.5s"
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="stroke-opacity"
+            values="0.35;0"
+            dur="3s"
+            begin="1.5s"
+            repeatCount="indefinite"
+          />
+        </circle>
+        {/* static rings */}
+        <circle cx="60" cy="160" r="20" fill="none" stroke="rgba(229,83,55,0.18)" strokeWidth="1" />
+        <circle cx="60" cy="160" r="12" fill="none" stroke="rgba(229,83,55,0.45)" strokeWidth="1" />
+        {/* core */}
+        <circle cx="60" cy="160" r="6" fill="url(#orchOrigin)" filter="url(#orchGlow)" />
+        {/* label */}
+        <text
+          x="60"
+          y="204"
+          className={styles.orchestrationLabel}
+          textAnchor="middle"
+        >
+          CRM engine
+        </text>
+        <text
+          x="60"
+          y="216"
+          className={styles.orchestrationChannelMeta}
+          textAnchor="middle"
+        >
+          SFMC · BRAZE · SQL
+        </text>
+      </g>
+
+      {/* Endpoints */}
+      {orchestrationChannels.map((c) => (
+        <g key={c.key}>
+          <circle
+            cx={c.x}
+            cy={c.y}
+            r="10"
+            fill="none"
+            stroke={c.color}
+            strokeOpacity="0.22"
+          />
+          <circle cx={c.x} cy={c.y} r="4" fill={c.color} />
+          <text
+            x={c.x + 14}
+            y={c.y - 1}
+            className={styles.orchestrationChannel}
+          >
+            {c.name}
+          </text>
+          <text
+            x={c.x + 14}
+            y={c.y + 10}
+            className={styles.orchestrationChannelMeta}
+          >
+            {c.meta}
+          </text>
+        </g>
+      ))}
+
+      {/* Animated pulse dots traveling along each path */}
+      {orchestrationChannels.map((c) => (
+        <circle key={`pulse-${c.key}`} r="2.5" fill="#fca68e" filter="url(#orchGlow)">
+          <animateMotion
+            dur={c.dur}
+            repeatCount="indefinite"
+            begin={c.begin}
+            rotate="auto"
+          >
+            <mpath href={`#orch-${c.key}`} />
+          </animateMotion>
+        </circle>
+      ))}
+    </svg>
+  );
+}
 
 function ChannelStack() {
   return (
@@ -157,24 +286,11 @@ function ChannelStack() {
         <p className={styles.channelsTitle}>Lifecycle orchestration</p>
         <span className={styles.channelsLive}>Live</span>
       </div>
-      <div className={styles.channelList}>
-        {channels.map((c) => (
-          <div key={c.key} className={styles.channelRow}>
-            <span className={`${styles.channelIcon} ${c.iconClass}`}>{c.icon}</span>
-            <div className={styles.channelBody}>
-              <p className={styles.channelName}>
-                {c.name}
-                <span className={styles.channelBadge}>{c.badge}</span>
-              </p>
-              <p className={styles.channelPreview}>{c.preview}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <OrchestrationGraph />
       <div className={styles.channelsFooter}>
         <span>5 channels · 1 system</span>
         <span>
-          <strong>SFMC</strong> · Braze · SQL
+          <strong>Real-time</strong> dispatch
         </span>
       </div>
     </aside>
