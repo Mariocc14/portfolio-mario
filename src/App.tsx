@@ -54,25 +54,41 @@ const services = [
   },
 ];
 
-// Stack with proficiency levels (1-5). 5 = Expert, 4 = Advanced, 3 = Proficient.
-type StackItem = { name: string; level: 3 | 4 | 5 };
-const stack: StackItem[] = [
-  { name: "Salesforce Marketing Cloud", level: 5 },
-  { name: "Journey Builder", level: 5 },
-  { name: "Automation Studio", level: 5 },
-  { name: "AMPscript", level: 5 },
-  { name: "SQL", level: 4 },
-  { name: "Content Builder", level: 5 },
-  { name: "Braze", level: 4 },
-  { name: "HTML / CSS (Email)", level: 4 },
-  { name: "Git / GitHub", level: 3 },
-  { name: "Figma", level: 3 },
-  { name: "Jira & Confluence", level: 4 },
-  { name: "Looker / GA4", level: 3 },
+// Stack grouped by domain. Minimalist — no proficiency levels.
+type StackGroup = { label: string; items: string[] };
+const stackGroups: StackGroup[] = [
+  {
+    label: "CRM & Lifecycle",
+    items: [
+      "Salesforce Marketing Cloud",
+      "Journey Builder",
+      "Automation Studio",
+      "Content Builder",
+      "AMPscript",
+      "Braze",
+    ],
+  },
+  {
+    label: "Data & Code",
+    items: [
+      "SQL",
+      "HTML / CSS (Email)",
+      "Git / GitHub",
+      "Looker / GA4",
+    ],
+  },
+  {
+    label: "AI & Tools",
+    items: [
+      "Claude",
+      "Cursor",
+      "ChatGPT",
+      "GitHub Copilot",
+      "Figma",
+      "Jira & Confluence",
+    ],
+  },
 ];
-
-const levelLabel = (n: number) =>
-  n >= 5 ? "Expert" : n >= 4 ? "Advanced" : "Proficient";
 
 type Slide = { src: string; alt: string; meta?: string };
 
@@ -1322,30 +1338,19 @@ export default function App() {
                 journey orchestration and multichannel delivery.
               </p>
             </div>
-            <div className={styles.stackGrid}>
-              {stack.map((s) => {
-                const label = levelLabel(s.level);
-                return (
-                  <div key={s.name} className={styles.stackItem}>
-                    <p className={styles.stackItemName}>{s.name}</p>
-                    <div className={styles.stackItemLevel}>
-                      <span className={styles.levelBar}>
-                        <span
-                          className={styles.levelBarFill}
-                          style={{ width: `${(s.level / 5) * 100}%` }}
-                        />
-                      </span>
-                      <span
-                        className={`${styles.levelLabel} ${
-                          label === "Expert" ? styles.levelLabelExpert : ""
-                        }`}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className={styles.stackGroups}>
+              {stackGroups.map((group) => (
+                <div key={group.label} className={styles.stackGroup}>
+                  <p className={styles.stackGroupLabel}>{group.label}</p>
+                  <ul className={styles.stackChips}>
+                    {group.items.map((item) => (
+                      <li key={item} className={styles.stackChip}>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </section>
