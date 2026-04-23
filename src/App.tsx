@@ -430,6 +430,7 @@ export default function App() {
           <div className={styles.navLinks}>
             <a href="#work">Work</a>
             <a href="#services">Services</a>
+            <a href="#projects">Projects</a>
             <a href="#stack">Stack</a>
             <a href="#about">About</a>
           </div>
@@ -890,6 +891,143 @@ export default function App() {
                 </div>
               </div>
             </article>
+          </div>
+        </section>
+
+        {/* ============ OTHER PROJECTS ============ */}
+        <section
+          id="projects"
+          className={`${styles.section} ${styles.projectsSection}`}
+          aria-labelledby="projects-heading"
+        >
+          <div className={styles.sectionHead}>
+            <span className={styles.eyebrow}>Beyond CRM</span>
+            <h2 id="projects-heading" className={styles.sectionTitle}>
+              Side projects where I <em>ship</em> the product, not just the brief.
+            </h2>
+            <p className={styles.sectionLede}>
+              Two products I’m building outside the day job — each an excuse to go end-to-end from
+              idea to live service.
+            </p>
+          </div>
+
+          <div className={styles.projectsGrid}>
+            {/* Monkway */}
+            <a
+              className={styles.projectCard}
+              href="https://monkway.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit Monkway — mindful habits app"
+            >
+              <div className={`${styles.projectVisual} ${styles.projectVisualMonkway}`}>
+                <div className={styles.projectVisualInner}>
+                  <span className={styles.projectGlyph} aria-hidden="true">
+                    m
+                  </span>
+                  <div className={styles.projectMockup} aria-hidden="true">
+                    <span className={styles.projectMockupLabel}>Today</span>
+                    <span className={styles.projectMockupRow}>
+                      <span
+                        className={`${styles.projectMockupDot} ${styles.projectMockupDotOn}`}
+                      />
+                      Morning meditation · 07:00
+                    </span>
+                    <span className={styles.projectMockupRow}>
+                      <span
+                        className={`${styles.projectMockupDot} ${styles.projectMockupDotOn}`}
+                      />
+                      Read 20 pages · done
+                    </span>
+                    <span className={styles.projectMockupRow}>
+                      <span
+                        className={`${styles.projectMockupDot} ${styles.projectMockupDotCoral}`}
+                      />
+                      Evening walk · 19:30
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.projectBody}>
+                <p className={styles.projectTag}>Side project · Habits & focus</p>
+                <h3 className={styles.projectName}>Monkway</h3>
+                <p className={styles.projectDesc}>
+                  A calmer approach to habits — daily rituals instead of streak anxiety. Designed
+                  around intentional consistency, reflection and gentle nudges rather than guilt.
+                </p>
+                <div className={styles.projectMeta}>
+                  <span className={styles.projectMetaItem}>
+                    <strong>Role:</strong> Founder · Product
+                  </span>
+                  <span className={styles.projectMetaItem}>
+                    <strong>Stack:</strong> Mobile app
+                  </span>
+                </div>
+                <span className={styles.projectLink}>monkway.app</span>
+              </div>
+            </a>
+
+            {/* Sprint (AI voice receptionist) */}
+            <a
+              className={styles.projectCard}
+              href="https://web-production-98b02b.up.railway.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit Sprint — AI voice receptionist for small businesses"
+            >
+              <div className={`${styles.projectVisual} ${styles.projectVisualSprint}`}>
+                <div className={styles.projectVisualInner}>
+                  <span className={styles.projectGlyph} aria-hidden="true">
+                    s
+                  </span>
+                  <div className={styles.projectMockup} aria-hidden="true">
+                    <span className={styles.projectMockupLabel}>Incoming call</span>
+                    <span className={styles.projectMockupRow}>
+                      <span
+                        className={`${styles.projectMockupDot} ${styles.projectMockupDotOn}`}
+                      />
+                      AI answering · 00:14
+                    </span>
+                    <span
+                      className={styles.projectWave}
+                      style={{ color: "rgba(255,255,255,0.85)" }}
+                    >
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                    <span className={styles.projectMockupRow}>
+                      <span
+                        className={`${styles.projectMockupDot} ${styles.projectMockupDotCoral}`}
+                      />
+                      Booking confirmed · Google Cal
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.projectBody}>
+                <p className={styles.projectTag}>Side project · AI agent · SMB</p>
+                <h3 className={styles.projectName}>Sprint</h3>
+                <p className={styles.projectDesc}>
+                  An AI voice receptionist for small businesses — takes WhatsApp, chat and phone
+                  calls, books into Google Calendar, and speaks with a cloned voice. Built for
+                  clinics, salons and consultants who can’t afford to miss a call.
+                </p>
+                <div className={styles.projectMeta}>
+                  <span className={styles.projectMetaItem}>
+                    <strong>Role:</strong> Co-founder · CRM & Ops
+                  </span>
+                  <span className={styles.projectMetaItem}>
+                    <strong>Stack:</strong> ElevenLabs · Google Cal · Web app
+                  </span>
+                </div>
+                <span className={styles.projectLink}>See landing</span>
+              </div>
+            </a>
           </div>
         </section>
 
