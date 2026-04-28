@@ -1134,16 +1134,23 @@ export default function App() {
         {/* ============ HERO ============ */}
         <section className={styles.hero} aria-labelledby="hero-heading">
           <div className={styles.heroLeft}>
-            <img
-              src="/imagen_perfil/mario-profile.png"
-              alt="Mario Calvo"
-              className={styles.heroAvatar}
-              loading="eager"
-            />
-            <span className={styles.pill}>
-              <span className={styles.pillDot} />
-              CRM &amp; Lifecycle Consultant · Remote / Madrid
-            </span>
+            <div className={styles.heroByline}>
+              <div className={styles.heroAvatarWrap}>
+                <img
+                  src="/imagen_perfil/mario-avatar.png"
+                  alt="Mario Calvo"
+                  className={styles.heroAvatar}
+                  loading="eager"
+                />
+              </div>
+              <div className={styles.heroBylineText}>
+                <p className={styles.heroName}>Mario Calvo</p>
+                <span className={styles.pill}>
+                  <span className={styles.pillDot} />
+                  CRM &amp; Lifecycle Consultant · Remote / Madrid
+                </span>
+              </div>
+            </div>
             <h1 id="hero-heading" className={styles.headline}>
               Lifecycle systems that <em>scale</em> across markets, channels and products.
             </h1>
