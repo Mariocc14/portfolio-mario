@@ -775,65 +775,15 @@ function TourismLifecycle() {
 }
 
 /* ============ In-app content cards (case 08) ============ */
-type ContentCard = {
-  time: string;
-  image: string;
-  title: string;
-  body: string;
-  cta: string;
-};
-
-const contentCards: ContentCard[] = [
-  {
-    time: "9h ago",
-    image: "/magnific/freepik-magnific.png",
-    title: "Freepik is now Magnific",
-    body: "Pro workflows and creative tools, all designed around one belief.",
-    cta: "Find out more",
-  },
-  {
-    time: "12h ago",
-    image: "/magnific/kling-3-4k.png",
-    title: "Native 4K AI video model",
-    body: "Kling 3.0 4K — no upscaling. Richer texture and depth.",
-    cta: "Create videos",
-  },
-  {
-    time: "12h ago",
-    image: "/magnific/gpt-2.png",
-    title: "Photorealism down to the last pixel",
-    body: "GPT Image 2 — portraits, product shots and UI mockups.",
-    cta: "Try GPT 2",
-  },
-];
-
 function ContentCardsMockup() {
   return (
     <div className={styles.cardsMock} aria-hidden="true">
-      <div className={styles.cardsMockTop}>
-        <span className={styles.cardsMockHeading}>Notifications</span>
-        <span className={styles.cardsMockClose}>×</span>
-      </div>
-      <div className={styles.cardsMockTabs}>
-        <span className={`${styles.cardsTab} ${styles.cardsTabActive}`}>What's new</span>
-        <span className={styles.cardsTab}>Inbox</span>
-      </div>
-      <div className={styles.cardsMockBody}>
-        {contentCards.map((card) => (
-          <article key={card.title} className={styles.contentCard}>
-            <p className={styles.contentCardTime}>{card.time}</p>
-            <img
-              className={styles.contentCardImage}
-              src={card.image}
-              alt=""
-              loading="lazy"
-            />
-            <p className={styles.contentCardTitle}>{card.title}</p>
-            <p className={styles.contentCardText}>{card.body}</p>
-            <span className={styles.contentCardCta}>{card.cta} →</span>
-          </article>
-        ))}
-      </div>
+      <img
+        src="/magnific/notifications-panel.png"
+        alt=""
+        className={styles.cardsMockImg}
+        loading="lazy"
+      />
     </div>
   );
 }
