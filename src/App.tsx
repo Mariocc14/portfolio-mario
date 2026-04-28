@@ -822,9 +822,11 @@ function ContentCardsMockup() {
         {contentCards.map((card) => (
           <article key={card.title} className={styles.contentCard}>
             <p className={styles.contentCardTime}>{card.time}</p>
-            <div
+            <img
               className={styles.contentCardImage}
-              style={{ backgroundImage: `url(${card.image})` }}
+              src={card.image}
+              alt=""
+              loading="lazy"
             />
             <p className={styles.contentCardTitle}>{card.title}</p>
             <p className={styles.contentCardText}>{card.body}</p>

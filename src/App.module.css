@@ -1197,9 +1197,8 @@
 
 .contentCardImage {
   width: 100%;
-  aspect-ratio: 1.87 / 1;
-  background-size: cover;
-  background-position: center;
+  height: auto;
+  display: block;
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.06);
 }
