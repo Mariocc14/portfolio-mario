@@ -788,24 +788,21 @@ const contentCards: ContentCard[] = [
     time: "9h ago",
     image: "/magnific/freepik-magnific.png",
     title: "Freepik is now Magnific",
-    body:
-      "Your talent calls for a platform that rises with it. Pro workflows and creative tools — designed around one belief: creativity is a mindset, not a skill set.",
+    body: "Pro workflows and creative tools, all designed around one belief.",
     cta: "Find out more",
   },
   {
     time: "12h ago",
     image: "/magnific/kling-3-4k.png",
-    title: "The first-ever native 4K AI video model",
-    body:
-      "Produce professional-grade videos from text and references with Kling 3.0 4K. No upscaling. Richer texture, depth and realism in every frame.",
+    title: "Native 4K AI video model",
+    body: "Kling 3.0 4K — no upscaling. Richer texture and depth.",
     cta: "Create videos",
   },
   {
     time: "12h ago",
     image: "/magnific/gpt-2.png",
     title: "Photorealism down to the last pixel",
-    body:
-      "GPT Image 2 delivers a major leap in photorealism and in-image text rendering. Portraits, product shots and UI mockups with unprecedented detail.",
+    body: "GPT Image 2 — portraits, product shots and UI mockups.",
     cta: "Try GPT 2",
   },
 ];
@@ -1233,6 +1230,7 @@ export default function App() {
             <span className={styles.clientLogo}>Candlelight</span>
             <span className={styles.clientLogo}>Fever Originals</span>
             <span className={styles.clientLogoBold}>Freepik</span>
+            <span className={styles.clientLogoBold}>Magnific</span>
           </div>
         </section>
 
