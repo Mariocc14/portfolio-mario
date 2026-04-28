@@ -1051,6 +1051,58 @@
   font-weight: 600;
 }
 
+/* ----- Tourism lifecycle (Case 07, light cream background) ----- */
+.tourismFlow {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.tourismHeader {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  fill: rgba(20, 20, 20, 0.45);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.tourismNum {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  font-weight: 600;
+  fill: #c24a2d;
+}
+
+.tourismTitle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  fill: rgba(20, 20, 20, 0.85);
+}
+
+.tourismDesc {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  fill: rgba(20, 20, 20, 0.5);
+}
+
+.tourismSpurLabel {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  fill: #c24a2d;
+}
+
 /* Gradient backdrops for variety — softer, warmer, less contrast with white emails */
 .bgCoral {
   background: linear-gradient(140deg, #f4a98f 0%, #e07049 60%, #c24a2d 100%);

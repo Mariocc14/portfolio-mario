@@ -585,6 +585,195 @@ function AutomationPipeline() {
   );
 }
 
+/* ============ Tourism lifecycle journey (case 07) ============ */
+type TourismStage = {
+  key: "plan" | "purchase" | "travel" | "event" | "stay";
+  num: string;
+  title: string;
+  desc: string;
+};
+
+const tourismStages: TourismStage[] = [
+  { key: "plan", num: "01", title: "Trip planning", desc: "Research & inspiration" },
+  { key: "purchase", num: "02", title: "Purchase", desc: "Booking moment" },
+  { key: "travel", num: "03", title: "Travel", desc: "Journey to city" },
+  { key: "event", num: "04", title: "Event", desc: "Live experience" },
+  { key: "stay", num: "05", title: "City stay", desc: "Extended visit" },
+];
+
+const repurchaseSpurs: { key: string; label: string }[] = [
+  { key: "preevent", label: "Pre-event upsell" },
+  { key: "cross", label: "Cross-sell shows" },
+  { key: "city", label: "Local activities" },
+  { key: "loyalty", label: "Loyalty + next" },
+];
+
+function TourismIcon({ stage }: { stage: TourismStage }) {
+  const c = "rgba(20, 20, 20, 0.85)";
+  switch (stage.key) {
+    case "plan":
+      return (
+        <g fill="none" stroke={c} strokeWidth="1.4" strokeLinecap="round">
+          <circle cx="-1.5" cy="-1.5" r="4" />
+          <line x1="1.7" y1="1.7" x2="5" y2="5" />
+        </g>
+      );
+    case "purchase":
+      return (
+        <g>
+          <rect x="-6.5" y="-4.5" width="13" height="9" rx="1.6" fill="none" stroke={c} strokeWidth="1.2" />
+          <rect x="-6.5" y="-2" width="13" height="1.6" fill={c} />
+        </g>
+      );
+    case "travel":
+      return <path d="M -6 -3 L 6 0 L -6 3 L -3 0 Z" fill={c} />;
+    case "event":
+      return (
+        <g>
+          <rect x="-6" y="-4" width="12" height="8" rx="1.4" fill="none" stroke={c} strokeWidth="1.2" />
+          <line x1="0" y1="-3" x2="0" y2="3" stroke={c} strokeWidth="0.9" strokeDasharray="1 1" />
+        </g>
+      );
+    case "stay":
+      return (
+        <g fill={c}>
+          <rect x="-5" y="-5" width="10" height="10" fill="none" stroke={c} strokeWidth="1.2" />
+          <rect x="-3" y="-3" width="2" height="2" />
+          <rect x="1" y="-3" width="2" height="2" />
+          <rect x="-3" y="1" width="2" height="2" />
+          <rect x="1" y="1" width="2" height="2" />
+        </g>
+      );
+    default:
+      return null;
+  }
+}
+
+function TourismLifecycle() {
+  const startY = 50;
+  const stageGap = 90;
+  const lineTop = startY + 18;
+  const lineBottom = startY + (tourismStages.length - 1) * stageGap - 18;
+  return (
+    <svg
+      className={styles.tourismFlow}
+      viewBox="0 0 360 480"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Tourism user lifecycle journey from trip planning, purchase, travel, event attendance to city stay, with re-purchase opportunities along the way"
+    >
+      <text x="60" y="22" className={styles.tourismHeader} textAnchor="middle">
+        USER LIFECYCLE
+      </text>
+
+      {/* Vertical journey line */}
+      <line
+        x1="60"
+        y1={lineTop}
+        x2="60"
+        y2={lineBottom}
+        stroke="rgba(20,20,20,0.18)"
+        strokeWidth="1"
+        strokeDasharray="2 4"
+      />
+
+      {/* Animated traveling pulse */}
+      {[0, 1.6, 3.2].map((delay, i) => (
+        <circle key={i} cx="60" r="2.5" fill="rgba(20,20,20,0.85)" opacity="0">
+          <animate
+            attributeName="cy"
+            from={lineTop}
+            to={lineBottom}
+            dur="4.8s"
+            begin={`${delay}s`}
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;0.85;0.85;0"
+            keyTimes="0;0.1;0.9;1"
+            dur="4.8s"
+            begin={`${delay}s`}
+            repeatCount="indefinite"
+          />
+        </circle>
+      ))}
+
+      {/* Re-purchase spurs */}
+      {repurchaseSpurs.map((spur, i) => {
+        const y = startY + (i + 0.5) * stageGap;
+        return (
+          <g key={spur.key}>
+            <line
+              x1="60"
+              y1={y}
+              x2="115"
+              y2={y}
+              stroke="#e55337"
+              strokeWidth="0.9"
+              strokeDasharray="2 3"
+              opacity="0.7"
+            />
+            <circle cx="60" cy={y} r="2.5" fill="#e55337" />
+            <circle cx="125" cy={y} r="7" fill="#fef0ec" stroke="#e55337" strokeWidth="1" />
+            <text
+              x="125"
+              y={y + 2.6}
+              fontFamily="JetBrains Mono, monospace"
+              fontSize="7.5"
+              fontWeight="700"
+              textAnchor="middle"
+              fill="#c24a2d"
+            >
+              €+
+            </text>
+            <text x="140" y={y + 2.8} className={styles.tourismSpurLabel}>
+              {spur.label.toUpperCase()}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* Stages */}
+      {tourismStages.map((stage, i) => {
+        const y = startY + i * stageGap;
+        return (
+          <g key={stage.key}>
+            <circle
+              cx="60"
+              cy={y}
+              r="22"
+              fill="none"
+              stroke="rgba(20,20,20,0.18)"
+              strokeWidth="0.6"
+            />
+            <circle
+              cx="60"
+              cy={y}
+              r="17"
+              fill="rgba(255,255,255,0.7)"
+              stroke="rgba(20,20,20,0.55)"
+              strokeWidth="1.2"
+            />
+            <g transform={`translate(60 ${y})`}>
+              <TourismIcon stage={stage} />
+            </g>
+            <text x="98" y={y - 7} className={styles.tourismNum}>
+              {stage.num}
+            </text>
+            <text x="98" y={y + 7} className={styles.tourismTitle}>
+              {stage.title}
+            </text>
+            <text x="98" y={y + 22} className={styles.tourismDesc}>
+              {stage.desc}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 /* ============ Carousel (with email-frame + lightbox) ============ */
 function Carousel({
   slides,
@@ -1345,16 +1534,8 @@ export default function App() {
                     <span className={styles.impactPill}>Repeat + cross-sell opportunities</span>
                   </div>
                 </div>
-                <div className={`${styles.caseVisual} ${styles.bgCream}`}>
-                  <Carousel
-                    light
-                    frameMeta="email · tourism · lifecycle"
-                    slides={[
-                      { src: img.reactivation, alt: "Travel lifecycle — reactivation campaign" },
-                      { src: img.reminder, alt: "Reminder QR — tourism ticketing" },
-                      { src: img.purchase, alt: "Purchase confirmation — tourism" },
-                    ]}
-                  />
+                <div className={`${styles.caseVisual} ${styles.bgCream} ${styles.caseVisualPipeline}`}>
+                  <TourismLifecycle />
                 </div>
               </div>
             </article>
