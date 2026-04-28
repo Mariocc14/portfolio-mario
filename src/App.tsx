@@ -1134,6 +1134,12 @@ export default function App() {
         {/* ============ HERO ============ */}
         <section className={styles.hero} aria-labelledby="hero-heading">
           <div className={styles.heroLeft}>
+            <img
+              src="/imagen_perfil/mario-profile.png"
+              alt="Mario Calvo"
+              className={styles.heroAvatar}
+              loading="eager"
+            />
             <span className={styles.pill}>
               <span className={styles.pillDot} />
               CRM &amp; Lifecycle Consultant · Remote / Madrid
