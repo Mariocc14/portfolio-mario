@@ -1192,7 +1192,6 @@ export default function App() {
                       { src: img.purchase, alt: "Candlelight — purchase confirmation redesign" },
                       { src: img.giftcard, alt: "Gift card confirmation redesign" },
                       { src: img.reminder, alt: "Reminder QR — event tickets" },
-                      { src: img.onboardingClub, alt: "Fever Club onboarding — loyalty integration" },
                     ]}
                   />
                 </div>
