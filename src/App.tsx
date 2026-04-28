@@ -774,6 +774,68 @@ function TourismLifecycle() {
   );
 }
 
+/* ============ In-app content cards (case 08) ============ */
+type ContentCard = {
+  time: string;
+  image: string;
+  title: string;
+  body: string;
+  cta: string;
+};
+
+const contentCards: ContentCard[] = [
+  {
+    time: "9h ago",
+    image: img.reactivation,
+    title: "Candlelight Bridgerton — last sessions",
+    body: "Final dates in Madrid, Barcelona and Valencia. Don't miss it.",
+    cta: "Book now",
+  },
+  {
+    time: "12h ago",
+    image: img.newsletter,
+    title: "Movies this week — Captain America",
+    body: "Now showing in 12 cities. Earn points with every purchase.",
+    cta: "Get tickets",
+  },
+  {
+    time: "1d ago",
+    image: img.loyalty,
+    title: "Your points are about to expire",
+    body: "150 points in 7 days. Use them on any experience.",
+    cta: "Redeem",
+  },
+];
+
+function ContentCardsMockup() {
+  return (
+    <div className={styles.cardsMock} aria-hidden="true">
+      <div className={styles.cardsMockTop}>
+        <span className={styles.cardsMockHeading}>Notifications</span>
+        <span className={styles.cardsMockClose}>×</span>
+      </div>
+      <div className={styles.cardsMockTabs}>
+        <span className={`${styles.cardsTab} ${styles.cardsTabActive}`}>What's new</span>
+        <span className={styles.cardsTab}>Inbox</span>
+      </div>
+      <div className={styles.cardsMockBody}>
+        {contentCards.map((card) => (
+          <article key={card.title} className={styles.contentCard}>
+            <p className={styles.contentCardTime}>{card.time}</p>
+            <div
+              className={styles.contentCardImage}
+              style={{ backgroundImage: `url(${card.image})` }}
+            />
+            <p className={styles.contentCardTitle}>{card.title}</p>
+            <p className={styles.contentCardText}>{card.body}</p>
+            <span className={styles.contentCardCta}>{card.cta} →</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ============ Carousel (with email-frame + lightbox) ============ */
 function Carousel({
   slides,
@@ -1536,6 +1598,46 @@ export default function App() {
                 </div>
                 <div className={`${styles.caseVisual} ${styles.bgCream} ${styles.caseVisualPipeline}`}>
                   <TourismLifecycle />
+                </div>
+              </div>
+            </article>
+
+            {/* CASE 8 */}
+            <article className={styles.caseCard}>
+              <div className={`${styles.caseTop} ${styles.caseTopReverse}`}>
+                <div className={`${styles.caseVisual} ${styles.bgMidnight} ${styles.caseVisualCards}`}>
+                  <ContentCardsMockup />
+                </div>
+                <div className={styles.caseCopy}>
+                  <span className={styles.caseTag}>
+                    <span className={styles.caseTagNum}>08</span> · In-app · Braze · Content Cards
+                  </span>
+                  <div>
+                    <h3 className={styles.caseTitle}>
+                      In-app Content Cards System
+                    </h3>
+                    <div className={styles.caseBlock}>
+                      <p className={styles.caseLabel}>Challenge</p>
+                      <p className={styles.caseText}>
+                        Email reach plateaued for time-sensitive launches. The app had a captive
+                        audience but no CRM-driven surface to activate it in real time.
+                      </p>
+                    </div>
+                    <div className={styles.caseBlock}>
+                      <p className={styles.caseLabel}>Solution</p>
+                      <ul className={styles.caseList}>
+                        <li>Braze Content Cards delivered through the app SDK</li>
+                        <li>Shared segmentation logic with email (SQL + SFMC)</li>
+                        <li>Modular templates: image · headline · body · deep-link</li>
+                        <li>Editorial calendar synced across email, push and in-app</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className={styles.caseImpact}>
+                    <span className={styles.impactPill}>New always-on owned channel</span>
+                    <span className={styles.impactPill}>Higher reach on launches</span>
+                    <span className={styles.impactPill}>Cross-vertical promotion</span>
+                  </div>
                 </div>
               </div>
             </article>
