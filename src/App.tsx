@@ -391,6 +391,200 @@ function Lightbox({
   );
 }
 
+/* ============ Automation pipeline (case 03) ============ */
+type AutomationStep = {
+  key: "sql" | "automation" | "journey" | "ampscript" | "metabase";
+  num: string;
+  title: string;
+  desc: string;
+  color: string;
+};
+
+const automationSteps: AutomationStep[] = [
+  { key: "sql", num: "01", title: "SQL", desc: "Automated audiences", color: "#6366f1" },
+  { key: "automation", num: "02", title: "Automation Studio", desc: "Scheduled SFMC pipelines", color: "#00a1e0" },
+  { key: "journey", num: "03", title: "Journey Builder", desc: "Modular lifecycle flows", color: "#ec4899" },
+  { key: "ampscript", num: "04", title: "AMPscript", desc: "Dynamic HTML templates", color: "#f59e0b" },
+  { key: "metabase", num: "05", title: "Metabase", desc: "Data analytics", color: "#10b981" },
+];
+
+function PipelineIcon({ step }: { step: AutomationStep }) {
+  const c = step.color;
+  switch (step.key) {
+    case "sql":
+      return (
+        <g fill={c}>
+          <ellipse cx="0" cy="-4.5" rx="6.5" ry="2" />
+          <ellipse cx="0" cy="0" rx="6.5" ry="2" />
+          <ellipse cx="0" cy="4.5" rx="6.5" ry="2" />
+        </g>
+      );
+    case "automation":
+      return <polygon points="-3.5,-4.5 -3.5,4.5 4.5,0" fill={c} />;
+    case "journey":
+      return (
+        <g fill="none" stroke={c} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M -5.5 -3.5 L 0 1.5 L 5.5 -3.5" />
+          <path d="M 0 1.5 L 0 5.5" />
+          <circle cx="-5.5" cy="-3.5" r="0.9" fill={c} stroke="none" />
+          <circle cx="5.5" cy="-3.5" r="0.9" fill={c} stroke="none" />
+          <circle cx="0" cy="5.5" r="0.9" fill={c} stroke="none" />
+        </g>
+      );
+    case "ampscript":
+      return (
+        <text
+          fontFamily="JetBrains Mono, monospace"
+          fontSize="11"
+          fontWeight="700"
+          textAnchor="middle"
+          dy="3.5"
+          fill={c}
+        >
+          {"{ }"}
+        </text>
+      );
+    case "metabase":
+      return (
+        <g fill={c}>
+          <rect x="-6" y="-1" width="2" height="6" rx="0.5" />
+          <rect x="-2.5" y="-3.5" width="2" height="8.5" rx="0.5" />
+          <rect x="1" y="-5" width="2" height="10" rx="0.5" />
+          <rect x="4.5" y="-2.5" width="2" height="7.5" rx="0.5" />
+        </g>
+      );
+    default:
+      return null;
+  }
+}
+
+function AutomationPipeline() {
+  const startY = 64;
+  const stepGap = 84;
+  const lineTop = startY + 18;
+  const lineBottom = startY + (automationSteps.length - 1) * stepGap - 18;
+  return (
+    <svg
+      className={styles.automationFlow}
+      viewBox="0 0 360 440"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="Lifecycle automation pipeline — SQL audiences, Automation Studio, Journey Builder, AMPscript templates and Metabase analytics"
+    >
+      <defs>
+        <filter id="pipeGlow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="1.8" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Header */}
+      <text
+        x="60"
+        y="28"
+        className={styles.orchestrationLabel}
+        textAnchor="middle"
+      >
+        AUTOMATION PIPELINE
+      </text>
+
+      {/* Vertical dashed connector */}
+      <line
+        x1="60"
+        y1={lineTop}
+        x2="60"
+        y2={lineBottom}
+        stroke="rgba(255,255,255,0.14)"
+        strokeWidth="1"
+        strokeDasharray="2 4"
+      />
+
+      {/* Animated pulses traveling down */}
+      {[0, 1.4, 2.8].map((delay, i) => (
+        <circle
+          key={i}
+          cx="60"
+          r="2.5"
+          fill="#fafafa"
+          filter="url(#pipeGlow)"
+          opacity="0"
+        >
+          <animate
+            attributeName="cy"
+            from={lineTop}
+            to={lineBottom}
+            dur="4.2s"
+            begin={`${delay}s`}
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;0.85;0.85;0"
+            keyTimes="0;0.1;0.9;1"
+            dur="4.2s"
+            begin={`${delay}s`}
+            repeatCount="indefinite"
+          />
+        </circle>
+      ))}
+
+      {/* Steps */}
+      {automationSteps.map((step, i) => {
+        const y = startY + i * stepGap;
+        return (
+          <g key={step.key}>
+            <circle
+              cx="60"
+              cy={y}
+              r="22"
+              fill="none"
+              stroke={step.color}
+              strokeWidth="0.6"
+              opacity="0.25"
+            />
+            <circle
+              cx="60"
+              cy={y}
+              r="17"
+              fill={`${step.color}1a`}
+              stroke={step.color}
+              strokeWidth="1.4"
+            />
+            <g transform={`translate(60 ${y})`}>
+              <PipelineIcon step={step} />
+            </g>
+            <text
+              x="100"
+              y={y - 7}
+              className={styles.pipelineNum}
+              fill={step.color}
+            >
+              {step.num}
+            </text>
+            <text
+              x="100"
+              y={y + 7}
+              className={styles.orchestrationChannel}
+            >
+              {step.title}
+            </text>
+            <text
+              x="100"
+              y={y + 22}
+              className={styles.orchestrationChannelMeta}
+            >
+              {step.desc}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 /* ============ Carousel (with email-frame + lightbox) ============ */
 function Carousel({
   slides,
@@ -981,15 +1175,8 @@ export default function App() {
                     <span className={styles.impactPill}>More personalization</span>
                   </div>
                 </div>
-                <div className={`${styles.caseVisual} ${styles.bgMidnight}`}>
-                  <Carousel
-                    frameMeta="email · lifecycle automation"
-                    slides={[
-                      { src: img.onboardingEmail, alt: "Onboarding — dynamic content across movies and events" },
-                      { src: img.onboardingClub, alt: "Fever Club onboarding — loyalty integration" },
-                      { src: img.newsletter, alt: "Automated cinema newsletter" },
-                    ]}
-                  />
+                <div className={`${styles.caseVisual} ${styles.bgMidnight} ${styles.caseVisualPipeline}`}>
+                  <AutomationPipeline />
                 </div>
               </div>
             </article>

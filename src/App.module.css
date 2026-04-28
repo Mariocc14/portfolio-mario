@@ -1028,6 +1028,29 @@
   color: rgba(10, 10, 10, 0.4);
 }
 
+/* ----- Automation pipeline (Case 03) ----- */
+.caseVisualPipeline {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.automationFlow {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.pipelineNum {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
 /* Gradient backdrops for variety — softer, warmer, less contrast with white emails */
 .bgCoral {
   background: linear-gradient(140deg, #f4a98f 0%, #e07049 60%, #c24a2d 100%);
