@@ -1280,7 +1280,6 @@ export default function App() {
                   <Carousel
                     frameMeta="email · personalized newsletter"
                     slides={[
-                      { src: img.newsletter, alt: "Personalized movies newsletter" },
                       { src: img.loyalty, alt: "Loyalty points expiration email" },
                       { src: img.churn, alt: "Churn re-engagement — personalized coupon" },
                       { src: img.reactivation, alt: "Reactivation — Candlelight Bridgerton" },
