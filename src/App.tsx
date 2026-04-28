@@ -1081,7 +1081,6 @@ export default function App() {
                     frameMeta="email · cinema · geo-targeted"
                     slides={[
                       { src: img.newsletter, alt: "Automated cinema newsletter — dynamic per market" },
-                      { src: img.reminder, alt: "Cinema reminder QR email" },
                     ]}
                   />
                 </div>
