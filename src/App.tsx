@@ -786,24 +786,27 @@ type ContentCard = {
 const contentCards: ContentCard[] = [
   {
     time: "9h ago",
-    image: img.reactivation,
-    title: "Candlelight Bridgerton — last sessions",
-    body: "Final dates in Madrid, Barcelona and Valencia. Don't miss it.",
-    cta: "Book now",
+    image: "/magnific/freepik-magnific.png",
+    title: "Freepik is now Magnific",
+    body:
+      "Your talent calls for a platform that rises with it. Pro workflows and creative tools — designed around one belief: creativity is a mindset, not a skill set.",
+    cta: "Find out more",
   },
   {
     time: "12h ago",
-    image: img.newsletter,
-    title: "Movies this week — Captain America",
-    body: "Now showing in 12 cities. Earn points with every purchase.",
-    cta: "Get tickets",
+    image: "/magnific/kling-3-4k.png",
+    title: "The first-ever native 4K AI video model",
+    body:
+      "Produce professional-grade videos from text and references with Kling 3.0 4K. No upscaling. Richer texture, depth and realism in every frame.",
+    cta: "Create videos",
   },
   {
-    time: "1d ago",
-    image: img.loyalty,
-    title: "Your points are about to expire",
-    body: "150 points in 7 days. Use them on any experience.",
-    cta: "Redeem",
+    time: "12h ago",
+    image: "/magnific/gpt-2.png",
+    title: "Photorealism down to the last pixel",
+    body:
+      "GPT Image 2 delivers a major leap in photorealism and in-image text rendering. Portraits, product shots and UI mockups with unprecedented detail.",
+    cta: "Try GPT 2",
   },
 ];
 
