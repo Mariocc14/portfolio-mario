@@ -1237,27 +1237,27 @@ export default function App() {
         <section className={styles.stats} aria-label="Impact">
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              ~<em>60%</em>
+              <em>40M+</em>
             </p>
-            <p className={styles.statLabel}>Reduction in campaign setup time after lifecycle automation</p>
+            <p className={styles.statLabel}>Users in the CRM databases I've worked with</p>
           </div>
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>50%+</em>
+              <em>25+</em>
             </p>
-            <p className={styles.statLabel}>Operational workload reduced via reusable SFMC journeys</p>
+            <p className={styles.statLabel}>Languages handled across lifecycle communications</p>
           </div>
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>60+</em>
+              <em>150+</em>
             </p>
-            <p className={styles.statLabel}>Cities activated with dynamic, city-aware content</p>
+            <p className={styles.statLabel}>Cities with dynamic, locally-aware content</p>
           </div>
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>7</em>
+              <em>30+</em>
             </p>
-            <p className={styles.statLabel}>CRM programs designed end-to-end, from brief to rollout</p>
+            <p className={styles.statLabel}>Automated flows shipped across the lifecycle</p>
           </div>
         </section>
 
