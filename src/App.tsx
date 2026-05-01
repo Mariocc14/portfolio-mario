@@ -181,9 +181,9 @@ function OrchestrationGraph() {
           </feMerge>
         </filter>
         <radialGradient id="orchOrigin" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#fca68e" />
-          <stop offset="60%" stopColor="#e55337" />
-          <stop offset="100%" stopColor="#b83d22" />
+          <stop offset="0%" stopColor="#bef264" />
+          <stop offset="60%" stopColor="#84cc16" />
+          <stop offset="100%" stopColor="#4d7c0f" />
         </radialGradient>
       </defs>
 
@@ -197,7 +197,7 @@ function OrchestrationGraph() {
       {/* Origin node (CRM engine) */}
       <g>
         {/* expanding pulse rings */}
-        <circle cx="60" cy="160" r="12" fill="none" stroke="#e55337" strokeOpacity="0.35">
+        <circle cx="60" cy="160" r="12" fill="none" stroke="#84cc16" strokeOpacity="0.35">
           <animate
             attributeName="r"
             values="12;36"
@@ -211,7 +211,7 @@ function OrchestrationGraph() {
             repeatCount="indefinite"
           />
         </circle>
-        <circle cx="60" cy="160" r="12" fill="none" stroke="#e55337" strokeOpacity="0.35">
+        <circle cx="60" cy="160" r="12" fill="none" stroke="#84cc16" strokeOpacity="0.35">
           <animate
             attributeName="r"
             values="12;36"
@@ -228,8 +228,8 @@ function OrchestrationGraph() {
           />
         </circle>
         {/* static rings */}
-        <circle cx="60" cy="160" r="20" fill="none" stroke="rgba(229,83,55,0.18)" strokeWidth="1" />
-        <circle cx="60" cy="160" r="12" fill="none" stroke="rgba(229,83,55,0.45)" strokeWidth="1" />
+        <circle cx="60" cy="160" r="20" fill="none" stroke="rgba(132,204,22,0.18)" strokeWidth="1" />
+        <circle cx="60" cy="160" r="12" fill="none" stroke="rgba(132,204,22,0.45)" strokeWidth="1" />
         {/* core */}
         <circle cx="60" cy="160" r="6" fill="url(#orchOrigin)" filter="url(#orchGlow)" />
         {/* label */}
@@ -282,7 +282,7 @@ function OrchestrationGraph() {
 
       {/* Animated pulse dots traveling along each path */}
       {orchestrationChannels.map((c) => (
-        <circle key={`pulse-${c.key}`} r="2.5" fill="#fca68e" filter="url(#orchGlow)">
+        <circle key={`pulse-${c.key}`} r="2.5" fill="#bef264" filter="url(#orchGlow)">
           <animateMotion
             dur={c.dur}
             repeatCount="indefinite"
@@ -709,13 +709,13 @@ function TourismLifecycle() {
               y1={y}
               x2="115"
               y2={y}
-              stroke="#e55337"
+              stroke="#84cc16"
               strokeWidth="0.9"
               strokeDasharray="2 3"
               opacity="0.7"
             />
-            <circle cx="60" cy={y} r="2.5" fill="#e55337" />
-            <circle cx="125" cy={y} r="7" fill="#fef0ec" stroke="#e55337" strokeWidth="1" />
+            <circle cx="60" cy={y} r="2.5" fill="#84cc16" />
+            <circle cx="125" cy={y} r="7" fill="#ecfccb" stroke="#84cc16" strokeWidth="1" />
             <text
               x="125"
               y={y + 2.6}
@@ -723,7 +723,7 @@ function TourismLifecycle() {
               fontSize="7.5"
               fontWeight="700"
               textAnchor="middle"
-              fill="#c24a2d"
+              fill="#4d7c0f"
             >
               €+
             </text>
@@ -1057,6 +1057,89 @@ function LifecycleCarousel() {
 }
 
 /* ============ Sticky scroll progress + back-to-top FAB ============ */
+/* ============ Activity ticker (top of page) ============ */
+const tickerEvents = [
+  { icon: "→", text: "Email sent · onboarding day 3", ch: "ES-Madrid" },
+  { icon: "✓", text: "Purchase confirmed · €49.50", ch: "Candlelight" },
+  { icon: "↗", text: "Journey trigger · cart abandoned", ch: "SFMC" },
+  { icon: "✓", text: "Push delivered", ch: "Braze · iOS" },
+  { icon: "→", text: "Audience refreshed · 1.2M users", ch: "SQL" },
+  { icon: "✓", text: "In-app card surfaced", ch: "Magnific" },
+  { icon: "↗", text: "Reactivation flow · day 30", ch: "Bridgerton" },
+  { icon: "→", text: "WhatsApp HSM · ticket reminder", ch: "Twilio" },
+  { icon: "✓", text: "AMPscript rendered · 14 markets", ch: "Content" },
+];
+
+function ActivityTicker() {
+  // Render 2x to make the loop seamless
+  const sequence = [...tickerEvents, ...tickerEvents];
+  return (
+    <div className={styles.ticker} role="status" aria-live="off">
+      <div className={styles.tickerInner}>
+        <span className={styles.tickerLabel}>Live · CRM events</span>
+        <div className={styles.tickerTrack} aria-hidden="true">
+          <span className={styles.tickerEvent}>
+            {sequence.map((e, i) => (
+              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginRight: "2.5rem" }}>
+                <span className={styles.tickerEventIcon}>{e.icon}</span>
+                <span>{e.text}</span>
+                <span className={styles.tickerEventCh}>{e.ch}</span>
+              </span>
+            ))}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============ Animated stat number (count-up on enter) ============ */
+function StatNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const [display, setDisplay] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !startedRef.current) {
+            startedRef.current = true;
+            const start = performance.now();
+            const dur = 1400;
+            const step = (now: number) => {
+              const t = Math.min(1, (now - start) / dur);
+              const eased = 1 - Math.pow(1 - t, 3);
+              setDisplay(Math.round(value * eased));
+              if (t < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [value]);
+
+  const formatted =
+    value >= 1_000_000
+      ? `${Math.round(display / 100_000) / 10}M`
+      : value >= 1000
+      ? `${Math.round(display / 100) / 10}K`
+      : display.toString();
+
+  return (
+    <span ref={ref}>
+      {formatted}
+      {suffix}
+    </span>
+  );
+}
+
 function StickyChrome() {
   const [progress, setProgress] = useState(0);
   const [fabVisible, setFabVisible] = useState(false);
@@ -1109,6 +1192,9 @@ export default function App() {
     <div className={styles.page}>
       <StickyChrome />
 
+      {/* ============ ACTIVITY TICKER ============ */}
+      <ActivityTicker />
+
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
@@ -1155,32 +1241,13 @@ export default function App() {
               Lifecycle systems that <em>scale</em> across markets, channels and products.
             </h1>
             <p className={styles.heroLede}>
-              I’m <strong>Mario Calvo</strong> — a CRM specialist with 4+ years designing and
-              automating lifecycle programs for fast-moving consumer brands. I turn fragmented
-              campaigns into scalable systems across <strong>email, push and in-app</strong>,
-              powered by SFMC, AMPscript and SQL.
+              CRM specialist turning fragmented campaigns into scalable lifecycle systems —
+              SFMC · AMPscript · SQL · Braze · in-app.
             </p>
             <div className={styles.heroActions}>
               <a href="#work" className={`${styles.btn} ${styles.btnPrimary}`}>
                 See case studies <span className={styles.arrow}>→</span>
               </a>
-              <a href="#contact" className={`${styles.btn} ${styles.btnGhost}`}>
-                Book a call
-              </a>
-            </div>
-            <div className={styles.heroMeta}>
-              <div className={styles.metaItem}>
-                <p className={styles.metaLabel}>Experience</p>
-                <p className={styles.metaValue}>4+ years</p>
-              </div>
-              <div className={styles.metaItem}>
-                <p className={styles.metaLabel}>Markets</p>
-                <p className={styles.metaValue}>60+ cities</p>
-              </div>
-              <div className={styles.metaItem}>
-                <p className={styles.metaLabel}>Core stack</p>
-                <p className={styles.metaValue}>SFMC · SQL · AMP</p>
-              </div>
             </div>
           </div>
 
@@ -1203,25 +1270,25 @@ export default function App() {
         <section className={styles.stats} aria-label="Impact">
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>40M+</em>
+              <em><StatNumber value={40_000_000} suffix="+" /></em>
             </p>
             <p className={styles.statLabel}>Users in the CRM databases I've worked with</p>
           </div>
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>25+</em>
+              <em><StatNumber value={25} suffix="+" /></em>
             </p>
             <p className={styles.statLabel}>Languages handled across lifecycle communications</p>
           </div>
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>150+</em>
+              <em><StatNumber value={150} suffix="+" /></em>
             </p>
             <p className={styles.statLabel}>Cities with dynamic, locally-aware content</p>
           </div>
           <div className={styles.stat}>
             <p className={styles.statNumber}>
-              <em>30+</em>
+              <em><StatNumber value={30} suffix="+" /></em>
             </p>
             <p className={styles.statLabel}>Automated flows shipped across the lifecycle</p>
           </div>

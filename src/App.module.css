@@ -1,31 +1,32 @@
 /* Mario Calvo — CRM & Lifecycle consultant portfolio
-   Premium editorial aesthetic: warm off-white + near-black,
-   coral accent, serif display type, rich imagery. */
+   v2: neutral palette + chartreuse accent + Geist type system.
+   The site reads as a quiet automation running in the background. */
 
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap");
 
 .page {
-  --bg: #f7f5f0;
-  --bg-soft: #efece4;
+  --bg: #f5f4f1;
+  --bg-soft: #ecebe6;
   --surface: #ffffff;
   --ink: #0a0a0a;
   --ink-2: #2a2a2a;
   --muted: #6b6b6b;
-  --line: #e5e2d8;
-  --line-strong: #d6d2c5;
-  --accent: #e55337;
-  --accent-deep: #b83d22;
-  --accent-soft: #fbe7e0;
-  --dark: #0f0e0c;
-  --dark-2: #181614;
+  --line: #e7e5e0;
+  --line-strong: #d8d6cf;
+  --accent: #84cc16;
+  --accent-deep: #4d7c0f;
+  --accent-soft: #ecfccb;
+  --dark: #0c0c0a;
+  --dark-2: #171614;
   --chip: #1a1a1a;
 
   min-height: 100vh;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Geist", system-ui, -apple-system, sans-serif;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -49,8 +50,108 @@
   z-index: 50;
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
-  background: rgba(247, 245, 240, 0.72);
+  background: rgba(245, 244, 241, 0.78);
   border-bottom: 1px solid rgba(10, 10, 10, 0.06);
+}
+
+/* ============ Activity ticker (top of page) ============ */
+.ticker {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  overflow: hidden;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+}
+
+.tickerInner {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0.55rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .tickerInner {
+    padding: 0.55rem 2rem;
+  }
+}
+
+.tickerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.tickerLabel::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(132, 204, 22, 0.18);
+  animation: tickerPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes tickerPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(132, 204, 22, 0.18); }
+  50% { box-shadow: 0 0 0 7px rgba(132, 204, 22, 0); }
+}
+
+.tickerTrack {
+  flex: 1;
+  position: relative;
+  height: 1.2rem;
+  overflow: hidden;
+}
+
+.tickerEvent {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  animation: tickerScroll 22s linear infinite;
+}
+
+.tickerEvent + .tickerEvent { animation-delay: -7.3s; }
+.tickerEvent + .tickerEvent + .tickerEvent { animation-delay: -14.6s; }
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-200%); }
+}
+
+.tickerEventIcon {
+  font-size: 0.85rem;
+}
+
+.tickerEventCh {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  border-left: 1px solid var(--line-strong);
+  padding-left: 0.6rem;
+  margin-left: 0.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tickerEvent { animation: none; left: auto; position: static; }
+  .tickerLabel::before { animation: none; }
 }
 
 .navInner {
@@ -86,7 +187,7 @@
   color: #fff;
   display: grid;
   place-items: center;
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-style: italic;
   font-size: 1.1rem;
   line-height: 1;
@@ -179,7 +280,7 @@
   background: var(--surface);
   box-shadow:
     0 0 0 3px var(--surface),
-    0 0 0 4px rgba(229, 83, 55, 0.18),
+    0 0 0 4px rgba(132, 204, 22, 0.18),
     0 14px 36px rgba(0, 0, 0, 0.18),
     0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -207,7 +308,7 @@
 }
 
 .heroName {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: 1.4rem;
   letter-spacing: -0.01em;
   font-weight: 400;
@@ -244,7 +345,7 @@
 }
 
 .headline {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-weight: 400;
   font-size: clamp(2.75rem, 6.5vw, 4.75rem);
   line-height: 0.98;
@@ -372,7 +473,7 @@
 }
 
 .orchestrationLabel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 9px;
   fill: rgba(255, 255, 255, 0.42);
   letter-spacing: 1.5px;
@@ -380,7 +481,7 @@
 }
 
 .orchestrationChannel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 9.5px;
   fill: rgba(255, 255, 255, 0.72);
   letter-spacing: 1.2px;
@@ -388,7 +489,7 @@
 }
 
 .orchestrationChannelMeta {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 8px;
   fill: rgba(255, 255, 255, 0.38);
   letter-spacing: 0.8px;
@@ -421,7 +522,7 @@
 }
 
 .channelsTitle {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.7rem;
   letter-spacing: 0.12em;
   color: #888;
@@ -433,7 +534,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.65rem;
   letter-spacing: 0.1em;
   color: #4ade80;
@@ -476,7 +577,7 @@
 
 .channelRow:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(229, 83, 55, 0.35);
+  border-color: rgba(132, 204, 22, 0.35);
   transform: translateX(2px);
 }
 
@@ -491,7 +592,7 @@
 }
 
 .channelIconEmail { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
-.channelIconPush { background: linear-gradient(135deg, #e55337 0%, #f59e0b 100%); }
+.channelIconPush { background: linear-gradient(135deg, #84cc16 0%, #f59e0b 100%); }
 .channelIconSms { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); }
 .channelIconWa { background: linear-gradient(135deg, #22c55e 0%, #0d9488 100%); }
 .channelIconApp { background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); }
@@ -513,7 +614,7 @@
 }
 
 .channelBadge {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.6rem;
   letter-spacing: 0.06em;
   color: #888;
@@ -537,7 +638,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.68rem;
   color: #888;
   letter-spacing: 0.04em;
@@ -578,7 +679,7 @@
 }
 
 .clientLogo {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: 1.5rem;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -616,7 +717,7 @@
 }
 
 .stat .statNumber {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: clamp(2.75rem, 5vw, 4rem);
   font-weight: 400;
   letter-spacing: -0.03em;
@@ -678,7 +779,7 @@
 }
 
 .sectionTitle {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -734,7 +835,7 @@
 }
 
 .serviceNum {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.75rem;
   color: var(--muted);
   margin: 0 0 1rem;
@@ -753,7 +854,7 @@
 }
 
 .serviceTitle {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -822,7 +923,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -836,7 +937,7 @@
 }
 
 .caseTitle {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: clamp(1.75rem, 2.5vw, 2.25rem);
   font-weight: 400;
   letter-spacing: -0.015em;
@@ -1055,7 +1156,7 @@
 }
 
 .carouselCount {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.05em;
@@ -1103,7 +1204,7 @@
 }
 
 .pipelineNum {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 8.5px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
@@ -1120,7 +1221,7 @@
 }
 
 .tourismHeader {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 9px;
   fill: rgba(20, 20, 20, 0.45);
   letter-spacing: 1.5px;
@@ -1128,16 +1229,16 @@
 }
 
 .tourismNum {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 8.5px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
   font-weight: 600;
-  fill: #c24a2d;
+  fill: #4d7c0f;
 }
 
 .tourismTitle {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 10px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -1146,7 +1247,7 @@
 }
 
 .tourismDesc {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 8px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -1154,12 +1255,12 @@
 }
 
 .tourismSpurLabel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 8px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   font-weight: 600;
-  fill: #c24a2d;
+  fill: #4d7c0f;
 }
 
 /* ----- In-app content cards mockup (Case 08) ----- */
@@ -1188,21 +1289,15 @@
   display: block;
 }
 
-/* Gradient backdrops for variety — softer, warmer, less contrast with white emails */
-.bgCoral {
-  background: linear-gradient(140deg, #f4a98f 0%, #e07049 60%, #c24a2d 100%);
-}
-
-.bgMidnight {
-  background: linear-gradient(140deg, #25263a 0%, #1b1d2e 50%, #14141c 100%);
-}
-
+/* Unified neutral surfaces — the case visuals do the differentiation */
+.bgCoral,
+.bgMidnight,
 .bgForest {
-  background: linear-gradient(140deg, #2a3a32 0%, #1e2a24 60%, #14201a 100%);
+  background: var(--dark);
 }
 
 .bgCream {
-  background: linear-gradient(140deg, #f5efde 0%, #e8dfc7 100%);
+  background: var(--bg-soft);
 }
 
 /* ----- Email client frame (wraps each carousel image so whites look intentional) ----- */
@@ -1226,7 +1321,7 @@
   box-shadow:
     0 26px 60px rgba(0, 0, 0, 0.5),
     0 8px 20px rgba(0, 0, 0, 0.3),
-    inset 0 0 0 1px rgba(229, 83, 55, 0.4);
+    inset 0 0 0 1px rgba(132, 204, 22, 0.4);
 }
 
 .emailFrameBar {
@@ -1257,7 +1352,7 @@
 .emailFrameDots span:nth-child(3) { background: #27c93f; }
 
 .emailFrameMeta {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.65rem;
   letter-spacing: 0.06em;
   color: #6b6b6b;
@@ -1413,7 +1508,7 @@
 }
 
 .lightboxCount {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.05em;
@@ -1474,7 +1569,7 @@
 }
 
 .stackTitle {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   letter-spacing: -0.015em;
   font-weight: 400;
@@ -1517,7 +1612,7 @@
 }
 
 .stackGroupLabel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.7rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1548,7 +1643,7 @@
 }
 
 .stackChip:hover {
-  border-color: rgba(229, 83, 55, 0.55);
+  border-color: rgba(132, 204, 22, 0.55);
   color: #fff;
 }
 
@@ -1569,7 +1664,7 @@
   background: linear-gradient(90deg, var(--accent) 0%, #f59e0b 100%);
   transform-origin: left;
   transition: transform 0.08s ease-out;
-  box-shadow: 0 0 12px rgba(229, 83, 55, 0.4);
+  box-shadow: 0 0 12px rgba(132, 204, 22, 0.4);
 }
 
 /* ----- Floating back-to-top / contact button ----- */
@@ -1646,7 +1741,7 @@
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.7rem;
   letter-spacing: 0.06em;
   color: var(--muted);
@@ -1688,7 +1783,7 @@
 }
 
 .quote {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: clamp(1.5rem, 3.5vw, 2.5rem);
   font-weight: 400;
   line-height: 1.2;
@@ -1708,7 +1803,7 @@
 }
 
 .quoteAttr {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.8125rem;
   color: var(--muted);
   letter-spacing: 0.02em;
@@ -1754,7 +1849,7 @@
 }
 
 .contactEyebrow {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   color: var(--accent);
@@ -1763,7 +1858,7 @@
 }
 
 .contactTitle {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -1821,7 +1916,7 @@
 }
 
 .contactBtnLabel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.65rem;
   color: #888;
   letter-spacing: 0.08em;
@@ -1883,7 +1978,7 @@
 }
 
 .lifecyclePhaseNum {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   color: var(--accent);
@@ -1900,11 +1995,11 @@
   height: 6px;
   border-radius: 999px;
   background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(229, 83, 55, 0.2);
+  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.2);
 }
 
 .lifecycleTitle {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.65rem, 2vw, 1.9rem);
@@ -1929,7 +2024,7 @@
 }
 
 .lifecycleChannelChip {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.58rem;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.82);
@@ -1944,7 +2039,7 @@
   margin-top: auto;
   padding: 0.7rem 0.85rem;
   border-radius: 10px;
-  background: rgba(229, 83, 55, 0.09);
+  background: rgba(132, 204, 22, 0.09);
   border-left: 3px solid var(--accent);
   font-size: 0.78rem;
   color: rgba(255, 255, 255, 0.88);
@@ -1952,7 +2047,7 @@
 }
 
 .lifecycleSampleLabel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.54rem;
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.5);
@@ -1976,12 +2071,12 @@
 }
 
 .lifecycleTimelineDotDone {
-  background: rgba(229, 83, 55, 0.4);
+  background: rgba(132, 204, 22, 0.4);
 }
 
 .lifecycleTimelineDotActive {
   background: var(--accent);
-  box-shadow: 0 0 10px rgba(229, 83, 55, 0.45);
+  box-shadow: 0 0 10px rgba(132, 204, 22, 0.45);
 }
 
 /* ============ Other products (full end-to-end) ============ */
@@ -2026,7 +2121,7 @@
   box-shadow:
     0 22px 56px -20px rgba(10, 10, 10, 0.22),
     0 6px 18px rgba(10, 10, 10, 0.08);
-  border-color: rgba(229, 83, 55, 0.3);
+  border-color: rgba(132, 204, 22, 0.3);
 }
 
 .productPreview {
@@ -2100,7 +2195,7 @@
 }
 
 .monkwayStreak {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.58rem;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -2163,7 +2258,7 @@
 }
 
 .monkwayTime {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.55rem;
   color: #8a8a8a;
   letter-spacing: 0.03em;
@@ -2188,7 +2283,7 @@
 }
 
 .sprintHeadline {
-  font-family: "Fraunces", "Instrument Serif", serif;
+  font-family: "Fraunces", "Geist", sans-serif;
   font-weight: 500;
   font-size: 0.95rem;
   line-height: 1.2;
@@ -2249,7 +2344,7 @@
 }
 
 .sprintCallMeta {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.55rem;
   color: #7A6E5E;
   letter-spacing: 0.04em;
@@ -2314,7 +2409,7 @@
 }
 
 .sprintChannel {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.55rem;
   letter-spacing: 0.05em;
   color: #6B4B2E;
@@ -2337,7 +2432,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   color: var(--muted);
@@ -2354,7 +2449,7 @@
 }
 
 .productName {
-  font-family: "Instrument Serif", serif;
+  font-family: "Geist", sans-serif;
   font-style: italic;
   font-size: clamp(1.65rem, 2.4vw, 2.05rem);
   line-height: 1.1;
@@ -2387,7 +2482,7 @@
 }
 
 .productMetaItem {
-  font-family: "JetBrains Mono", monospace;
+  font-family: "Geist Mono", monospace;
   font-size: 0.68rem;
   letter-spacing: 0.05em;
   color: var(--muted);
