@@ -1319,19 +1319,7 @@ export default function App() {
         </section>
 
         {/* ============ CASE STUDIES ============ */}
-        <section id="work" className={styles.section} aria-labelledby="work-heading">
-          <div className={styles.sectionHead}>
-            <span className={styles.eyebrow}>Selected work</span>
-            <h2 id="work-heading" className={styles.sectionTitle}>
-              Seven programs, <em>one playbook</em> — from ad-hoc launches to fully automated
-              lifecycles.
-            </h2>
-            <p className={styles.sectionLede}>
-              Every case below reflects real CRM systems I designed, built or scaled — across
-              live experiences, cinema, tourism and loyalty verticals.
-            </p>
-          </div>
-
+        <section id="work" className={styles.section} aria-label="Case studies">
           <div className={styles.cases}>
             {/* CASE 1 */}
             <article className={styles.caseCard}>
