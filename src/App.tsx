@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./App.module.css";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
@@ -1057,6 +1057,109 @@ function LifecycleCarousel() {
 }
 
 /* ============ Sticky scroll progress + back-to-top FAB ============ */
+/* ============ Stack-as-graph (wire diagram per group) ============ */
+function StackGraph({ group }: { group: StackGroup }) {
+  const startY = 18;
+  const stepGap = 32;
+  const totalHeight = startY + group.items.length * stepGap + 4;
+  const lineX = 22;
+  return (
+    <div className={styles.stackGraphCol}>
+      <p className={styles.stackGroupLabel}>{group.label}</p>
+      <svg
+        viewBox={`0 0 280 ${totalHeight}`}
+        className={styles.stackGraphSvg}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        {/* Vertical dashed wire */}
+        <line
+          x1={lineX}
+          y1="6"
+          x2={lineX}
+          y2={totalHeight - 4}
+          stroke="rgba(255,255,255,0.18)"
+          strokeWidth="1"
+          strokeDasharray="2 4"
+        />
+        {/* Animated pulse traveling down */}
+        <circle cx={lineX} r="2.5" className={styles.stackGraphPulse}>
+          <animate
+            attributeName="cy"
+            from="6"
+            to={totalHeight - 4}
+            dur={`${group.items.length * 0.65 + 1.5}s`}
+            repeatCount="indefinite"
+          />
+          <animate
+            attributeName="opacity"
+            values="0;0.85;0.85;0"
+            keyTimes="0;0.06;0.94;1"
+            dur={`${group.items.length * 0.65 + 1.5}s`}
+            repeatCount="indefinite"
+          />
+        </circle>
+        {group.items.map((item, i) => {
+          const y = startY + i * stepGap;
+          return (
+            <g key={item}>
+              <line
+                x1={lineX}
+                y1={y}
+                x2={lineX + 14}
+                y2={y}
+                stroke="rgba(255,255,255,0.22)"
+                strokeWidth="1"
+              />
+              <circle
+                cx={lineX}
+                cy={y}
+                r="3.2"
+                className={styles.stackGraphNode}
+              />
+              <text x={lineX + 22} y={y + 3.6} className={styles.stackGraphLabel}>
+                {item}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+/* ============ Reveal-on-scroll wrapper ============ */
+function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShown(true);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={`${styles.reveal} ${shown ? styles.revealShown : ""}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
 /* ============ Activity ticker (top of page) ============ */
 const tickerEvents = [
   { icon: "→", text: "Email sent · onboarding day 3", ch: "ES-Madrid" },
@@ -1267,32 +1370,34 @@ export default function App() {
         </section>
 
         {/* ============ STATS ============ */}
-        <section className={styles.stats} aria-label="Impact">
-          <div className={styles.stat}>
-            <p className={styles.statNumber}>
-              <em><StatNumber value={40_000_000} suffix="+" /></em>
-            </p>
-            <p className={styles.statLabel}>Users in the CRM databases I've worked with</p>
-          </div>
-          <div className={styles.stat}>
-            <p className={styles.statNumber}>
-              <em><StatNumber value={25} suffix="+" /></em>
-            </p>
-            <p className={styles.statLabel}>Languages handled across lifecycle communications</p>
-          </div>
-          <div className={styles.stat}>
-            <p className={styles.statNumber}>
-              <em><StatNumber value={150} suffix="+" /></em>
-            </p>
-            <p className={styles.statLabel}>Cities with dynamic, locally-aware content</p>
-          </div>
-          <div className={styles.stat}>
-            <p className={styles.statNumber}>
-              <em><StatNumber value={30} suffix="+" /></em>
-            </p>
-            <p className={styles.statLabel}>Automated flows shipped across the lifecycle</p>
-          </div>
-        </section>
+        <Reveal>
+          <section className={styles.stats} aria-label="Impact">
+            <div className={styles.stat}>
+              <p className={styles.statNumber}>
+                <em><StatNumber value={40_000_000} suffix="+" /></em>
+              </p>
+              <p className={styles.statLabel}>Users in the CRM databases I've worked with</p>
+            </div>
+            <div className={styles.stat}>
+              <p className={styles.statNumber}>
+                <em><StatNumber value={25} suffix="+" /></em>
+              </p>
+              <p className={styles.statLabel}>Languages handled across lifecycle communications</p>
+            </div>
+            <div className={styles.stat}>
+              <p className={styles.statNumber}>
+                <em><StatNumber value={150} suffix="+" /></em>
+              </p>
+              <p className={styles.statLabel}>Cities with dynamic, locally-aware content</p>
+            </div>
+            <div className={styles.stat}>
+              <p className={styles.statNumber}>
+                <em><StatNumber value={30} suffix="+" /></em>
+              </p>
+              <p className={styles.statLabel}>Automated flows shipped across the lifecycle</p>
+            </div>
+          </section>
+        </Reveal>
 
         {/* ============ SERVICES ============ */}
         <section id="services" className={styles.section} aria-labelledby="services-heading">
@@ -1825,33 +1930,26 @@ export default function App() {
         </section>
 
         {/* ============ STACK ============ */}
-        <section id="stack" aria-labelledby="stack-heading">
-          <div className={styles.stack}>
-            <div className={styles.stackHead}>
-              <h2 id="stack-heading" className={styles.stackTitle}>
-                The stack behind the <em>systems</em>.
-              </h2>
-              <p className={styles.stackLede}>
-                A hands-on toolkit honed in production: dynamic content, data activation,
-                journey orchestration and multichannel delivery.
-              </p>
+        <Reveal>
+          <section id="stack" aria-labelledby="stack-heading">
+            <div className={styles.stack}>
+              <div className={styles.stackHead}>
+                <h2 id="stack-heading" className={styles.stackTitle}>
+                  The stack behind the <em>systems</em>.
+                </h2>
+                <p className={styles.stackLede}>
+                  A hands-on toolkit honed in production: dynamic content, data activation,
+                  journey orchestration and multichannel delivery.
+                </p>
+              </div>
+              <div className={styles.stackGroups}>
+                {stackGroups.map((group) => (
+                  <StackGraph key={group.label} group={group} />
+                ))}
+              </div>
             </div>
-            <div className={styles.stackGroups}>
-              {stackGroups.map((group) => (
-                <div key={group.label} className={styles.stackGroup}>
-                  <p className={styles.stackGroupLabel}>{group.label}</p>
-                  <ul className={styles.stackChips}>
-                    {group.items.map((item) => (
-                      <li key={item} className={styles.stackChip}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* ============ PHILOSOPHY / QUOTE ============ */}
         <section id="about" className={styles.pullquote} aria-label="Philosophy">

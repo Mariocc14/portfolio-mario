@@ -135,6 +135,64 @@
   to { transform: translateX(-200%); }
 }
 
+/* ============ Reveal on scroll ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.revealShown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============ Stack-as-graph ============ */
+.stackGraphCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stackGraphSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.stackGraphPulse {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 4px rgba(132, 204, 22, 0.6));
+}
+
+.stackGraphLabel {
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  fill: rgba(255, 255, 255, 0.78);
+  letter-spacing: -0.005em;
+  font-weight: 400;
+}
+
+.stackGraphNode {
+  fill: var(--dark);
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.2;
+}
+
 .tickerEventIcon {
   font-size: 0.85rem;
 }
@@ -881,13 +939,18 @@
   border: 1px solid var(--line);
   border-radius: 18px;
   overflow: hidden;
-  transition: all 0.25s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .caseCard:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 20px 40px -20px rgba(10, 10, 10, 0.1);
-  transform: translateY(-2px);
+  border-color: rgba(132, 204, 22, 0.5);
+  box-shadow:
+    0 24px 48px -24px rgba(10, 10, 10, 0.18),
+    0 0 0 1px rgba(132, 204, 22, 0.12);
+  transform: translateY(-3px);
 }
 
 .caseTop {
