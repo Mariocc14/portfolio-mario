@@ -1295,9 +1295,6 @@ export default function App() {
     <div className={styles.page}>
       <StickyChrome />
 
-      {/* ============ ACTIVITY TICKER ============ */}
-      <ActivityTicker />
-
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
         <div className={styles.navInner}>
