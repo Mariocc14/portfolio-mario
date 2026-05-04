@@ -1,0 +1,508 @@
+/* Mario Calvo · Portfolio v2 — Perry-inspired editorial layout
+   Off-white + ink, Geist sans + Geist mono, large work cards, no chrome. */
+
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap");
+
+.page {
+  --bg: #f4f3ef;
+  --surface: #fafaf7;
+  --ink: #161513;
+  --ink-2: #3a3835;
+  --muted: #8a8884;
+  --line: #e3e0d8;
+  --line-strong: #cfccc3;
+  --accent: #1a1a1a;
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Geist", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============ Nav ============ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(244, 243, 239, 0.82);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.navInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .navInner {
+    padding: 1.1rem 2.5rem;
+  }
+}
+
+.navLogo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+
+.navLogoMark {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.navLinks a {
+  font-size: 0.85rem;
+  color: var(--ink-2);
+  text-decoration: none;
+  letter-spacing: -0.005em;
+  transition: color 0.18s ease;
+}
+
+.navLinks a:hover {
+  color: var(--ink);
+}
+
+/* ============ Main ============ */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding: 0 2.5rem;
+  }
+}
+
+/* ============ Hero ============ */
+.hero {
+  padding: 5rem 0 4rem;
+  max-width: 720px;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 7rem 0 6rem;
+  }
+}
+
+.avatarWrap {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+@media (min-width: 768px) {
+  .avatarWrap {
+    width: 96px;
+    height: 96px;
+  }
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.headline {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin: 0 0 2rem;
+  color: var(--ink);
+}
+
+.creds {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 2.25rem;
+  letter-spacing: -0.005em;
+  max-width: 36rem;
+}
+
+.credBold {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.heroLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+}
+
+.heroLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 3px;
+  transition: border-color 0.18s ease;
+  letter-spacing: -0.005em;
+}
+
+.heroLink:hover {
+  border-color: var(--ink);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+
+.heroLink:hover .arrow,
+.card:hover .arrow {
+  transform: translate(2px, -1px);
+}
+
+/* ============ Section labels ============ */
+.workSection {
+  padding: 3rem 0 5rem;
+  border-top: 1px solid var(--line);
+}
+
+.sectionLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.sectionLine {
+  width: 28px;
+  height: 1px;
+  background: var(--ink);
+}
+
+.sectionLabel {
+  font-family: "Geist Mono", monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ============ Work list ============ */
+.workList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5rem;
+}
+
+@media (min-width: 768px) {
+  .workList {
+    gap: 7rem;
+  }
+}
+
+/* ============ Project card ============ */
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+@media (min-width: 900px) {
+  .card {
+    grid-template-columns: 1fr 1.3fr;
+    gap: 4rem;
+    align-items: center;
+  }
+}
+
+a.card {
+  cursor: pointer;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.cardNum {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.cardCompany {
+  letter-spacing: 0.08em;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.4rem;
+}
+
+.cardTitle {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.018em;
+  margin: 0;
+  color: var(--ink);
+  transition: color 0.18s ease;
+}
+
+a.card:hover .cardTitle {
+  color: var(--ink-2);
+}
+
+.cardDesc {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+  letter-spacing: -0.003em;
+  max-width: 32rem;
+}
+
+@media (min-width: 900px) {
+  .cardMeta,
+  .cardBody {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+  }
+  .cardMeta {
+    margin-bottom: 1.25rem;
+  }
+  .cardThumb {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 899px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.cardThumb {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  aspect-ratio: 4 / 3;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+a.card:hover .cardThumb {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+  box-shadow: 0 18px 36px -18px rgba(0, 0, 0, 0.18);
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+a.card:hover .cardImg {
+  transform: scale(1.025);
+}
+
+.cardThumbCorner {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+/* ============ Contact ============ */
+.contactSection {
+  padding: 3rem 0 5rem;
+  border-top: 1px solid var(--line);
+}
+
+.contactHeadline {
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  margin: 0 0 1.25rem;
+  color: var(--ink);
+  max-width: 32rem;
+}
+
+.contactSub {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0 0 2.5rem;
+  max-width: 32rem;
+  letter-spacing: -0.005em;
+}
+
+.contactLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 36rem;
+}
+
+.contactLink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+  transition: padding-left 0.25s ease;
+}
+
+.contactLink:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.contactLink:hover {
+  padding-left: 0.6rem;
+}
+
+.contactLinkLabel {
+  font-family: "Geist Mono", monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.contactLinkValue {
+  flex: 1;
+  font-size: 1rem;
+  letter-spacing: -0.005em;
+}
+
+/* ============ Footer ============ */
+.footer {
+  padding: 3rem 0 3rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.footerNote {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 36rem;
+  letter-spacing: -0.005em;
+}
+
+.footerHeart {
+  color: #c0392b;
+  display: inline-block;
+  animation: heart 2.4s ease-in-out infinite;
+}
+
+@keyframes heart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.footerBottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.footerCorner {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footerHeart { animation: none; }
+  .arrow,
+  .cardThumb,
+  .cardImg,
+  .heroLink,
+  .contactLink {
+    transition: none;
+  }
+}
