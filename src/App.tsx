@@ -1611,51 +1611,7 @@ export default function App() {
               </div>
             </article>
 
-            {/* CASE 5 */}
-            <article className={styles.caseCard}>
-              <div className={styles.caseTop}>
-                <div className={styles.caseCopy}>
-                  <span className={styles.caseTag}>
-                    <span className={styles.caseTagNum}>05</span> · Cinema · Geo-targeting
-                  </span>
-                  <div>
-                    <h3 className={styles.caseTitle}>
-                      Automated Cinema Launch System
-                    </h3>
-                    <div className={styles.caseBlock}>
-                      <p className={styles.caseLabel}>Challenge</p>
-                      <p className={styles.caseText}>
-                        Cinema releases required localized communication depending on theater
-                        availability. Manually managing each movie and city was inefficient and
-                        didn’t scale.
-                      </p>
-                    </div>
-                    <div className={styles.caseBlock}>
-                      <p className={styles.caseLabel}>Solution</p>
-                      <ul className={styles.caseList}>
-                        <li>Generic waitlist and launch flows per premiere</li>
-                        <li>Cinema location and availability integrated into the CRM layer</li>
-                        <li>Users matched to screenings dynamically by proximity</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className={styles.caseImpact}>
-                    <span className={styles.impactPill}>Zero manual setup per city</span>
-                    <span className={styles.impactPill}>More relevant sends</span>
-                  </div>
-                </div>
-                <div className={`${styles.caseVisual} ${styles.bgMidnight}`}>
-                  <Carousel
-                    frameMeta="email · cinema · geo-targeted"
-                    slides={[
-                      { src: img.newsletter, alt: "Automated cinema newsletter — dynamic per market" },
-                    ]}
-                  />
-                </div>
-              </div>
-            </article>
-
-            {/* CASE 6 */}
+            {/* CASE 5 — merged from old Cinema case into Newsletter */}
             <article className={styles.caseCard}>
               <div className={`${styles.caseTop} ${styles.caseTopReverse}`}>
                 <div className={`${styles.caseVisual} ${styles.bgForest}`}>
@@ -1665,12 +1621,13 @@ export default function App() {
                       { src: img.loyalty, alt: "Loyalty points expiration email" },
                       { src: img.churn, alt: "Churn re-engagement — personalized coupon" },
                       { src: img.reactivation, alt: "Reactivation — Candlelight Bridgerton" },
+                      { src: img.newsletter, alt: "Cinema newsletter — geo-targeted by city" },
                     ]}
                   />
                 </div>
                 <div className={styles.caseCopy}>
                   <span className={styles.caseTag}>
-                    <span className={styles.caseTagNum}>06</span> · Newsletter · Personalization
+                    <span className={styles.caseTagNum}>05</span> · Newsletter · Personalization
                   </span>
                   <div>
                     <h3 className={styles.caseTitle}>
@@ -1699,7 +1656,7 @@ export default function App() {
               <div className={styles.caseTop}>
                 <div className={styles.caseCopy}>
                   <span className={styles.caseTag}>
-                    <span className={styles.caseTagNum}>07</span> · Tourism · Strategy
+                    <span className={styles.caseTagNum}>06</span> · Tourism · Strategy
                   </span>
                   <div>
                     <h3 className={styles.caseTitle}>
@@ -1741,7 +1698,7 @@ export default function App() {
                 </div>
                 <div className={styles.caseCopy}>
                   <span className={styles.caseTag}>
-                    <span className={styles.caseTagNum}>08</span> · In-app · Braze · Content Cards
+                    <span className={styles.caseTagNum}>07</span> · In-app · Braze · Content Cards
                   </span>
                   <div>
                     <h3 className={styles.caseTitle}>
