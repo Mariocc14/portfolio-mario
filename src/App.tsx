@@ -1160,42 +1160,6 @@ function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }
   );
 }
 
-/* ============ Activity ticker (top of page) ============ */
-const tickerEvents = [
-  { icon: "→", text: "Email sent · onboarding day 3", ch: "ES-Madrid" },
-  { icon: "✓", text: "Purchase confirmed · €49.50", ch: "Candlelight" },
-  { icon: "↗", text: "Journey trigger · cart abandoned", ch: "SFMC" },
-  { icon: "✓", text: "Push delivered", ch: "Braze · iOS" },
-  { icon: "→", text: "Audience refreshed · 1.2M users", ch: "SQL" },
-  { icon: "✓", text: "In-app card surfaced", ch: "Magnific" },
-  { icon: "↗", text: "Reactivation flow · day 30", ch: "Bridgerton" },
-  { icon: "→", text: "WhatsApp HSM · ticket reminder", ch: "Twilio" },
-  { icon: "✓", text: "AMPscript rendered · 14 markets", ch: "Content" },
-];
-
-function ActivityTicker() {
-  // Render 2x to make the loop seamless
-  const sequence = [...tickerEvents, ...tickerEvents];
-  return (
-    <div className={styles.ticker} role="status" aria-live="off">
-      <div className={styles.tickerInner}>
-        <span className={styles.tickerLabel}>Live · CRM events</span>
-        <div className={styles.tickerTrack} aria-hidden="true">
-          <span className={styles.tickerEvent}>
-            {sequence.map((e, i) => (
-              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginRight: "2.5rem" }}>
-                <span className={styles.tickerEventIcon}>{e.icon}</span>
-                <span>{e.text}</span>
-                <span className={styles.tickerEventCh}>{e.ch}</span>
-              </span>
-            ))}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ============ Animated stat number (count-up on enter) ============ */
 function StatNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
   const [display, setDisplay] = useState(0);
