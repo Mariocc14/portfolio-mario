@@ -21,39 +21,6 @@ const img = {
   giftcard: "/work-samples/14-giftcard.png",
 };
 
-const services = [
-  {
-    num: "01",
-    title: "Lifecycle Strategy",
-    body: "End-to-end journey design — from acquisition and onboarding to retention, reactivation and referral. Built around real user behavior, not channels.",
-  },
-  {
-    num: "02",
-    title: "CRM Automation",
-    body: "Scalable SFMC systems with reusable journeys, dynamic content and modular campaign structures. Less manual work, more personalization.",
-  },
-  {
-    num: "03",
-    title: "Data Activation",
-    body: "Audience segmentation via SQL and Automation Studio. Connect behavioral data to messaging that actually lands at the right moment.",
-  },
-  {
-    num: "04",
-    title: "Multichannel Orchestration",
-    body: "Coordinated email, push and in-app programs that stay consistent across markets, products and verticals.",
-  },
-  {
-    num: "05",
-    title: "Product × CRM Integration",
-    body: "Translate product features — flexible booking, wallet, referrals — into transactional flows that drive repeat purchase.",
-  },
-  {
-    num: "06",
-    title: "Campaign Optimization",
-    body: "Testing frameworks, performance diagnostics and iteration loops that turn one-off wins into systems that scale.",
-  },
-];
-
 // Stack grouped by domain. Minimalist — no proficiency levels.
 type StackGroup = { label: string; items: string[] };
 const stackGroups: StackGroup[] = [
@@ -1056,78 +1023,6 @@ function LifecycleCarousel() {
   );
 }
 
-/* ============ Sticky scroll progress + back-to-top FAB ============ */
-/* ============ Stack-as-graph (wire diagram per group) ============ */
-function StackGraph({ group }: { group: StackGroup }) {
-  const startY = 18;
-  const stepGap = 32;
-  const totalHeight = startY + group.items.length * stepGap + 4;
-  const lineX = 22;
-  return (
-    <div className={styles.stackGraphCol}>
-      <p className={styles.stackGroupLabel}>{group.label}</p>
-      <svg
-        viewBox={`0 0 280 ${totalHeight}`}
-        className={styles.stackGraphSvg}
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        {/* Vertical dashed wire */}
-        <line
-          x1={lineX}
-          y1="6"
-          x2={lineX}
-          y2={totalHeight - 4}
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth="1"
-          strokeDasharray="2 4"
-        />
-        {/* Animated pulse traveling down */}
-        <circle cx={lineX} r="2.5" className={styles.stackGraphPulse}>
-          <animate
-            attributeName="cy"
-            from="6"
-            to={totalHeight - 4}
-            dur={`${group.items.length * 0.65 + 1.5}s`}
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="opacity"
-            values="0;0.85;0.85;0"
-            keyTimes="0;0.06;0.94;1"
-            dur={`${group.items.length * 0.65 + 1.5}s`}
-            repeatCount="indefinite"
-          />
-        </circle>
-        {group.items.map((item, i) => {
-          const y = startY + i * stepGap;
-          return (
-            <g key={item}>
-              <line
-                x1={lineX}
-                y1={y}
-                x2={lineX + 14}
-                y2={y}
-                stroke="rgba(255,255,255,0.22)"
-                strokeWidth="1"
-              />
-              <circle
-                cx={lineX}
-                cy={y}
-                r="3.2"
-                className={styles.stackGraphNode}
-              />
-              <text x={lineX + 22} y={y + 3.6} className={styles.stackGraphLabel}>
-                {item}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
-  );
-}
-
 /* ============ Reveal-on-scroll wrapper ============ */
 function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -1302,15 +1197,18 @@ export default function App() {
               </div>
             </div>
             <h1 id="hero-heading" className={styles.headline}>
-              Lifecycle systems that <em>scale</em> across markets, channels and products.
+              Lifecycle systems that <em>scale</em>.
             </h1>
-            <p className={styles.heroLede}>
-              CRM specialist turning fragmented campaigns into scalable lifecycle systems —
-              SFMC · AMPscript · SQL · Braze · in-app.
+            <p className={styles.heroCreds}>
+              CRM &amp; Lifecycle Consultant. Based in Madrid. Currently freelance.
+              Worked across Fever, Candlelight, Fever Originals, Freepik and Magnific.
             </p>
             <div className={styles.heroActions}>
-              <a href="#work" className={`${styles.btn} ${styles.btnPrimary}`}>
-                See case studies <span className={styles.arrow}>→</span>
+              <a href="#work" className={styles.heroLink}>
+                Selected work <span className={styles.arrow}>→</span>
+              </a>
+              <a href="#contact" className={styles.heroLink}>
+                Contact <span className={styles.arrow}>↗</span>
               </a>
             </div>
           </div>
@@ -1330,59 +1228,35 @@ export default function App() {
           </div>
         </section>
 
-        {/* ============ STATS ============ */}
+        {/* ============ NUMBERS STRIP ============ */}
         <Reveal>
-          <section className={styles.stats} aria-label="Impact">
-            <div className={styles.stat}>
-              <p className={styles.statNumber}>
-                <em><StatNumber value={40_000_000} suffix="+" /></em>
-              </p>
-              <p className={styles.statLabel}>Users in the CRM databases I've worked with</p>
+          <section className={styles.numbersStrip} aria-label="By the numbers">
+            <div className={styles.numberItem}>
+              <span className={styles.numberValue}>
+                <StatNumber value={40_000_000} suffix="+" />
+              </span>
+              <span className={styles.numberLabel}>users</span>
             </div>
-            <div className={styles.stat}>
-              <p className={styles.statNumber}>
-                <em><StatNumber value={25} suffix="+" /></em>
-              </p>
-              <p className={styles.statLabel}>Languages handled across lifecycle communications</p>
+            <div className={styles.numberItem}>
+              <span className={styles.numberValue}>
+                <StatNumber value={25} suffix="+" />
+              </span>
+              <span className={styles.numberLabel}>languages</span>
             </div>
-            <div className={styles.stat}>
-              <p className={styles.statNumber}>
-                <em><StatNumber value={150} suffix="+" /></em>
-              </p>
-              <p className={styles.statLabel}>Cities with dynamic, locally-aware content</p>
+            <div className={styles.numberItem}>
+              <span className={styles.numberValue}>
+                <StatNumber value={150} suffix="+" />
+              </span>
+              <span className={styles.numberLabel}>cities</span>
             </div>
-            <div className={styles.stat}>
-              <p className={styles.statNumber}>
-                <em><StatNumber value={30} suffix="+" /></em>
-              </p>
-              <p className={styles.statLabel}>Automated flows shipped across the lifecycle</p>
+            <div className={styles.numberItem}>
+              <span className={styles.numberValue}>
+                <StatNumber value={30} suffix="+" />
+              </span>
+              <span className={styles.numberLabel}>automated flows</span>
             </div>
           </section>
         </Reveal>
-
-        {/* ============ SERVICES ============ */}
-        <section id="services" className={styles.section} aria-labelledby="services-heading">
-          <div className={styles.sectionHead}>
-            <span className={styles.eyebrow}>What I do</span>
-            <h2 id="services-heading" className={styles.sectionTitle}>
-              CRM done like a <em>system</em>, not a campaign calendar.
-            </h2>
-            <p className={styles.sectionLede}>
-              Six practices I combine on every engagement. The mix depends on where your CRM is
-              today — and how fast you need to move.
-            </p>
-          </div>
-
-          <div className={styles.services}>
-            {services.map((s) => (
-              <article key={s.num} className={styles.serviceCard}>
-                <p className={styles.serviceNum}>{s.num} /</p>
-                <h3 className={styles.serviceTitle}>{s.title}</h3>
-                <p className={styles.serviceBody}>{s.body}</p>
-              </article>
-            ))}
-          </div>
-        </section>
 
         {/* ============ CASE STUDIES ============ */}
         <section id="work" className={styles.section} aria-labelledby="work-heading">
@@ -1847,27 +1721,13 @@ export default function App() {
           </div>
         </section>
 
-        {/* ============ STACK ============ */}
-        <Reveal>
-          <section id="stack" aria-labelledby="stack-heading">
-            <div className={styles.stack}>
-              <div className={styles.stackHead}>
-                <h2 id="stack-heading" className={styles.stackTitle}>
-                  The stack behind the <em>systems</em>.
-                </h2>
-                <p className={styles.stackLede}>
-                  A hands-on toolkit honed in production: dynamic content, data activation,
-                  journey orchestration and multichannel delivery.
-                </p>
-              </div>
-              <div className={styles.stackGroups}>
-                {stackGroups.map((group) => (
-                  <StackGraph key={group.label} group={group} />
-                ))}
-              </div>
-            </div>
-          </section>
-        </Reveal>
+        {/* ============ STACK (compact mono line) ============ */}
+        <section id="stack" className={styles.stackLine} aria-label="Stack">
+          <p className={styles.stackLineLabel}>Stack</p>
+          <p className={styles.stackLineList}>
+            {stackGroups.flatMap((g) => g.items).join(" · ")}
+          </p>
+        </section>
 
         {/* ============ PHILOSOPHY / QUOTE ============ */}
         <section id="about" className={styles.pullquote} aria-label="Philosophy">
@@ -1919,16 +1779,21 @@ export default function App() {
         </section>
 
         <footer className={styles.footer}>
-          <span>© {new Date().getFullYear()} Mario Calvo · CRM &amp; Lifecycle consulting</span>
-          <div className={styles.footerLinks}>
-            <a href="mailto:mariocalvocst@gmail.com">Email</a>
-            <a
-              href="https://www.linkedin.com/in/mariocalvocastillo/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
+          <p className={styles.footerNote}>
+            Built between Madrid commutes and AMPscript queries — and the occasional Bridgerton ticket.
+          </p>
+          <div className={styles.footerBottom}>
+            <span>© {new Date().getFullYear()} Mario Calvo</span>
+            <div className={styles.footerLinks}>
+              <a href="mailto:mariocalvocst@gmail.com">Email</a>
+              <a
+                href="https://www.linkedin.com/in/mariocalvocastillo/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
+            </div>
           </div>
         </footer>
       </div>
