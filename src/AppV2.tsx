@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./AppV2.module.css";
-import { projects, type Phase, type ProjectDetail } from "./v2-projects";
+import { projects, type ProjectDetail } from "./v2-projects";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
@@ -98,7 +98,11 @@ export default function AppV2() {
 }
 
 function ProjectCard({ project }: { project: ProjectDetail }) {
-  // Show up to 3 mockups from the gallery (or fall back to the thumb)
+  if (project.visualKind === "lifecycle" && project.phases) {
+    return <LifecycleProjectCard project={project} />;
+  }
+
+  // Regular card with mockups
   const mockups =
     project.gallery && project.gallery.length > 0
       ? project.gallery.slice(0, 3)
@@ -121,40 +125,36 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
           →
         </span>
       </div>
-      {project.visualKind === "lifecycle" && project.phases ? (
-        <LifecycleScroll phases={project.phases} />
-      ) : (
-        <div className={styles.projectMockup} data-count={mockups.length}>
-          {mockups.map((m, i) => (
-            <div
-              key={`${m.src}-${i}`}
-              className={`${styles.emailFrame} ${m.dark ? styles.emailFrameDark : ""}`}
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              <div className={styles.emailFrameHeader}>
-                <span className={`${styles.emailDot} ${styles.emailDotR}`} />
-                <span className={`${styles.emailDot} ${styles.emailDotY}`} />
-                <span className={`${styles.emailDot} ${styles.emailDotG}`} />
-                <span className={styles.emailMeta}>
-                  {project.company} · {project.year}
-                </span>
-              </div>
-              <img
-                src={m.src}
-                alt={m.alt}
-                className={styles.emailImg}
-                loading="lazy"
-              />
+      <div className={styles.projectMockup} data-count={mockups.length}>
+        {mockups.map((m, i) => (
+          <div
+            key={`${m.src}-${i}`}
+            className={`${styles.emailFrame} ${m.dark ? styles.emailFrameDark : ""}`}
+            style={{ animationDelay: `${i * 80}ms` }}
+          >
+            <div className={styles.emailFrameHeader}>
+              <span className={`${styles.emailDot} ${styles.emailDotR}`} />
+              <span className={`${styles.emailDot} ${styles.emailDotY}`} />
+              <span className={`${styles.emailDot} ${styles.emailDotG}`} />
+              <span className={styles.emailMeta}>
+                {project.company} · {project.year}
+              </span>
             </div>
-          ))}
-        </div>
-      )}
+            <img
+              src={m.src}
+              alt={m.alt}
+              className={styles.emailImg}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
     </a>
   );
 }
 
-function LifecycleScroll({ phases }: { phases: Phase[] }) {
-  const ref = useRef<HTMLDivElement>(null);
+function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
+  const ref = useRef<HTMLAnchorElement>(null);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -162,9 +162,13 @@ function LifecycleScroll({ phases }: { phases: Phase[] }) {
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
       const vh = window.innerHeight;
-      // Progress is 0 when section enters from bottom of viewport,
-      // 1 when its top reaches the top of the viewport.
-      const p = Math.max(0, Math.min(1, 1 - rect.top / vh));
+      const range = rect.height - vh;
+      if (range <= 0) {
+        setProgress(0);
+        return;
+      }
+      const scrolled = Math.max(0, -rect.top);
+      const p = Math.min(1, scrolled / range);
       setProgress(p);
     };
     onScroll();
@@ -176,47 +180,85 @@ function LifecycleScroll({ phases }: { phases: Phase[] }) {
     };
   }, []);
 
+  const phases = project.phases!;
   const N = phases.length;
   const currentIdx = Math.min(N - 1, Math.floor(progress * N));
   const phase = phases[currentIdx];
 
   return (
-    <div className={styles.lifeScroll} ref={ref}>
-      <div className={styles.lifeScrollHeader} key={currentIdx}>
-        <span className={styles.lifeScrollNum}>
-          Phase {phase.num} of {String(N).padStart(2, "0")}
-        </span>
-        <h4 className={styles.lifeScrollTitle}>{phase.title}</h4>
-        <p className={styles.lifeScrollDesc}>{phase.desc}</p>
-      </div>
+    <a
+      ref={ref}
+      className={`${styles.project} ${styles.projectLifecycle}`}
+      href={`/v2/${project.slug}`}
+    >
+      <div className={styles.lifecycleSticky}>
+        <div className={styles.projectHead}>
+          <div className={styles.projectTitleBlock}>
+            <h3 className={styles.projectTitle}>{project.title}</h3>
+            <p className={styles.projectMeta}>
+              <strong>
+                {project.company}, {project.year}
+              </strong>{" "}
+              — {project.shortDesc}
+            </p>
+          </div>
+          <span className={styles.projectArrow} aria-hidden="true">
+            →
+          </span>
+        </div>
+        <div className={styles.lifeScroll}>
+          <div className={styles.lifeScrollHeader} key={currentIdx}>
+            <span className={styles.lifeScrollNum}>
+              Phase {phase.num} of {String(N).padStart(2, "0")}
+            </span>
+            <h4 className={styles.lifeScrollTitle}>{phase.title}</h4>
+            <p className={styles.lifeScrollDesc}>{phase.desc}</p>
+          </div>
 
-      <div className={styles.lifeScrollTimeline}>
-        <div className={styles.lifeScrollTrack}>
-          <div
-            className={styles.lifeScrollFill}
-            style={{ width: `${progress * 100}%` }}
-          />
-          {phases.map((p, i) => {
-            const pos = ((i + 0.5) / N) * 100;
-            const threshold = (i + 0.5) / N;
-            const isActive = progress >= threshold;
-            return (
+          <div className={styles.lifeScrollTimeline}>
+            <div className={styles.lifeScrollTrack}>
               <div
-                key={p.num}
-                className={`${styles.lifeScrollPoint} ${
-                  isActive ? styles.lifeScrollPointActive : ""
-                }`}
-                style={{ left: `${pos}%` }}
-                aria-hidden="true"
-              >
-                <span className={styles.lifeScrollPointDot} />
-                <span className={styles.lifeScrollPointLabel}>{p.num}</span>
-                <span className={styles.lifeScrollPointName}>{p.title}</span>
-              </div>
-            );
-          })}
+                className={styles.lifeScrollFill}
+                style={{ width: `${progress * 100}%` }}
+              />
+              {phases.map((p, i) => {
+                const pos = ((i + 0.5) / N) * 100;
+                const isActive = progress >= (i + 0.5) / N;
+                return (
+                  <div
+                    key={p.num}
+                    className={`${styles.lifeScrollPoint} ${
+                      isActive ? styles.lifeScrollPointActive : ""
+                    }`}
+                    style={{ left: `${pos}%` }}
+                    aria-hidden="true"
+                  >
+                    <span className={styles.lifeScrollPointDot} />
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.lifeScrollLabels}>
+              {phases.map((p, i) => {
+                const pos = ((i + 0.5) / N) * 100;
+                const isActive = progress >= (i + 0.5) / N;
+                return (
+                  <div
+                    key={p.num}
+                    className={`${styles.lifeScrollLabel} ${
+                      isActive ? styles.lifeScrollLabelActive : ""
+                    }`}
+                    style={{ left: `${pos}%` }}
+                  >
+                    <span className={styles.lifeScrollLabelNum}>{p.num}</span>
+                    <span className={styles.lifeScrollLabelName}>{p.title}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   );
 }

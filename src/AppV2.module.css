@@ -498,24 +498,54 @@
   }
 }
 
-/* ============ Lifecycle scroll-driven view (replaces the mockup row) ============ */
+/* ============ Lifecycle project card (scroll-driven, sticky inner) ============ */
+.project.projectLifecycle {
+  min-height: 250vh;
+  padding: 0;
+  scroll-snap-align: none;
+  cursor: default;
+  transform: none !important;
+  box-shadow: none;
+}
+
+.project.projectLifecycle:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+.lifecycleSticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2.75rem 2.75rem 2rem;
+  z-index: 1;
+}
+
+@media (max-width: 720px) {
+  .project.projectLifecycle {
+    min-height: 220vh;
+  }
+  .lifecycleSticky {
+    padding: 1.75rem 1.75rem 1.5rem;
+  }
+}
+
 .lifeScroll {
-  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 3rem;
-  padding: 4rem 1rem 3rem;
-  margin-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 25%);
+  justify-content: center;
+  align-items: center;
+  gap: 3.5rem;
+  padding: 1rem 0;
 }
 
 @media (max-width: 720px) {
   .lifeScroll {
-    padding: 2.5rem 0 2rem;
-    gap: 2rem;
+    gap: 2.25rem;
   }
 }
 
@@ -524,10 +554,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  max-width: 640px;
+  gap: 0.85rem;
+  max-width: 620px;
   margin: 0 auto;
-  animation: phaseRise 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation: phaseRise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 @keyframes phaseRise {
@@ -541,12 +571,12 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .lifeScrollTitle {
   font-family: "Geist", sans-serif;
-  font-size: clamp(1.7rem, 4vw, 2.8rem);
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: 1.05;
@@ -570,9 +600,9 @@
 /* Horizontal timeline */
 .lifeScrollTimeline {
   width: 100%;
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 1rem 1.5rem 3.5rem;
+  padding: 0 1rem;
   position: relative;
 }
 
@@ -590,21 +620,18 @@
   width: 0;
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
-  transition: width 0.18s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: width 0.12s linear;
 }
 
 .lifeScrollPoint {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   pointer-events: none;
-  user-select: none;
 }
 
 .lifeScrollPointDot {
+  display: block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -616,28 +643,6 @@
     box-shadow 0.3s ease;
 }
 
-.lifeScrollPointLabel {
-  margin-top: 1rem;
-  font-family: "Geist Mono", monospace;
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.32);
-  transition: color 0.3s ease, transform 0.35s ease;
-}
-
-.lifeScrollPointName {
-  margin-top: 0.25rem;
-  font-family: "Geist", sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: -0.005em;
-  color: rgba(255, 255, 255, 0);
-  white-space: nowrap;
-  max-width: 9rem;
-  text-align: center;
-  transition: color 0.4s ease;
-}
-
 .lifeScrollPointActive .lifeScrollPointDot {
   width: 11px;
   height: 11px;
@@ -647,18 +652,56 @@
     0 0 18px rgba(255, 255, 255, 0.45);
 }
 
-.lifeScrollPointActive .lifeScrollPointLabel {
+/* Labels live in their own row underneath the track */
+.lifeScrollLabels {
+  position: relative;
+  height: 3.5rem;
+  margin-top: 1.5rem;
+}
+
+.lifeScrollLabel {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+.lifeScrollLabelNum {
+  font-family: "Geist Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.32);
+  transition: color 0.3s ease;
+}
+
+.lifeScrollLabelName {
+  font-family: "Geist", sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0);
+  white-space: nowrap;
+  text-align: center;
+  transition: color 0.4s ease;
+}
+
+.lifeScrollLabelActive .lifeScrollLabelNum {
   color: rgba(255, 255, 255, 0.92);
 }
 
-.lifeScrollPointActive .lifeScrollPointName {
+.lifeScrollLabelActive .lifeScrollLabelName {
   color: rgba(255, 255, 255, 0.55);
 }
 
 @media (max-width: 720px) {
-  .lifeScrollPointName { display: none; }
-  .lifeScrollPointLabel { font-size: 0.58rem; }
-  .lifeScrollTimeline { padding: 0.5rem 0.75rem 3rem; }
+  .lifeScrollLabelName { display: none; }
+  .lifeScrollLabels { height: 2rem; margin-top: 1rem; }
+  .lifeScrollLabelNum { font-size: 0.6rem; }
 }
 
 .emailFrame::after {
