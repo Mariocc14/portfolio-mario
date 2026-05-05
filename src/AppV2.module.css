@@ -409,9 +409,23 @@
   width: 100%;
   max-width: 540px;
   overflow: hidden;
+  max-height: 380px;
   box-shadow:
     0 30px 60px -20px rgba(0, 0, 0, 0.5),
     0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.emailFrame::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 80px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(250, 250, 250, 0) 0%, #fafafa 90%);
+}
+
+.emailFrameDark::after {
+  background: linear-gradient(180deg, rgba(20, 20, 26, 0) 0%, #14141a 90%);
 }
 
 .emailFrameHeader {
@@ -448,6 +462,8 @@
   display: block;
   height: auto;
   background: #fff;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .emailFrameDark {
