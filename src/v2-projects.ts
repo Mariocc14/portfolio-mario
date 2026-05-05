@@ -1,11 +1,20 @@
 // Project data for /v2 — used by both the list page and project detail pages.
 
+export type PhaseArtifact = {
+  channel: "email" | "push" | "whatsapp" | "in-app";
+  title: string;
+  body: string;
+  meta?: string;
+  cta?: string;
+};
+
 export type Phase = {
   num: string;
   title: string;
   desc: string;
   channels: string[];
   sample: { label: string; text: string };
+  artifacts?: PhaseArtifact[];
 };
 
 export type ProjectDetail = {
@@ -41,43 +50,111 @@ const lifecyclePhases: Phase[] = [
       label: "Welcome",
       text: "Thanks for joining the waitlist. You'll be the first to know.",
     },
+    artifacts: [
+      {
+        channel: "email",
+        meta: "Fever · Welcome",
+        title: "You're on the waitlist",
+        body: "Thanks for joining. You'll be the first to know when tickets go live in your city.",
+        cta: "Set reminders",
+      },
+      {
+        channel: "in-app",
+        meta: "In-app · Saved",
+        title: "Saved to your list",
+        body: "We'll send you a heads-up the moment this experience drops.",
+        cta: "View list",
+      },
+    ],
   },
   {
     num: "02",
-    title: "Pre-sale notification",
+    title: "Pre-launch expectation",
     desc:
-      "Alert the waitlist exactly when their early access opens — minutes count, so timing is choreographed.",
+      "Build expectation in the days before tickets drop. Warm the audience so the launch lands hot.",
     channels: ["Email", "Push"],
     sample: {
-      label: "Pre-sale open",
-      text: "Your pre-sale window starts in 1 hour. Don't miss it.",
+      label: "Heads up",
+      text: "Tickets drop tomorrow — your early access starts at 09:00.",
     },
+    artifacts: [
+      {
+        channel: "email",
+        meta: "Fever · Tomorrow",
+        title: "Tickets drop in 24h",
+        body: "Your waitlist priority means you get a 60-minute window before the rest.",
+        cta: "Add to calendar",
+      },
+      {
+        channel: "push",
+        meta: "Fever · 1h ago",
+        title: "Heads up — pre-sale opens at 09:00",
+        body: "Set a reminder. You'll have a 60-minute jump on everyone else.",
+      },
+    ],
   },
   {
     num: "03",
     title: "Sales launch",
     desc:
       "Open the gates to the broader audience. Pre-warmed segments convert at higher rates than cold sends.",
-    channels: ["Email", "Push", "In-app"],
+    channels: ["Email", "Push", "WhatsApp"],
     sample: {
       label: "Tickets live",
       text: "Tickets are live for every city. Pick your night.",
     },
+    artifacts: [
+      {
+        channel: "email",
+        meta: "Fever · Live now",
+        title: "Tickets are live",
+        body: "Pick your night across every city. Pre-warmed seats, pre-saved dates.",
+        cta: "Book now",
+      },
+      {
+        channel: "push",
+        meta: "Fever · Just now",
+        title: "Tickets just dropped",
+        body: "Your waitlist link is open for the next 60 minutes.",
+      },
+      {
+        channel: "whatsapp",
+        meta: "Fever · WhatsApp",
+        title: "Hey 👋",
+        body: "Tickets for Candlelight in Madrid just went live. Want me to send you the link?",
+      },
+    ],
   },
   {
     num: "04",
     title: "Open gates",
     desc:
       "Inventory opens to all markets and segments after waitlist and pre-sale phases run their course.",
-    channels: ["Email"],
+    channels: ["Email", "In-app"],
     sample: {
       label: "Now public",
       text: "Doors are open — book yours before they close.",
     },
+    artifacts: [
+      {
+        channel: "email",
+        meta: "Fever · Now public",
+        title: "Doors are open",
+        body: "Tickets are now public for every city. Find your night before they close.",
+        cta: "Browse dates",
+      },
+      {
+        channel: "in-app",
+        meta: "In-app · Featured",
+        title: "Just opened — book yours",
+        body: "Tickets for the most-saved experiences this week are live.",
+        cta: "View all",
+      },
+    ],
   },
   {
     num: "05",
-    title: "Dates extension",
+    title: "Date extension",
     desc:
       "When demand extends, new dates reactivate the existing audience with zero friction — one journey, repeatable.",
     channels: ["Email", "Push"],
@@ -85,17 +162,53 @@ const lifecyclePhases: Phase[] = [
       label: "Announcement",
       text: "More dates just added — pick your evening.",
     },
+    artifacts: [
+      {
+        channel: "email",
+        meta: "Fever · Just added",
+        title: "More dates just added",
+        body: "Pick your evening — three new shows just announced for Madrid.",
+        cta: "See new dates",
+      },
+      {
+        channel: "push",
+        meta: "Fever · 9m ago",
+        title: "✨ More dates just added",
+        body: "Pick your evening — your saved city has 3 new shows.",
+      },
+    ],
   },
   {
     num: "06",
     title: "FOMO last days",
     desc:
       "Final-days messaging tuned to convert hesitant users — scarcity, social proof and a clear deadline.",
-    channels: ["Email", "Push"],
+    channels: ["Email", "Push", "WhatsApp"],
     sample: {
       label: "Closing soon",
       text: "Only a handful of seats left — closing this Friday.",
     },
+    artifacts: [
+      {
+        channel: "email",
+        meta: "Fever · Closing Friday",
+        title: "Closing this Friday",
+        body: "Only a handful of seats left across all cities. Last call before the run ends.",
+        cta: "Grab the last seats",
+      },
+      {
+        channel: "push",
+        meta: "Fever · 1h ago",
+        title: "⏳ Closing soon — final seats",
+        body: "Only 12 seats left in Madrid. Final 48h.",
+      },
+      {
+        channel: "whatsapp",
+        meta: "Fever · WhatsApp",
+        title: "Last call",
+        body: "Closing this Friday — only a handful of seats left in Madrid. Want yours?",
+      },
+    ],
   },
 ];
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styles from "./AppV2Project.module.css";
-import { getProjectBySlug, getNeighbours } from "./v2-projects";
+import { getProjectBySlug, getNeighbours, type Phase, type PhaseArtifact } from "./v2-projects";
 
 export default function AppV2Project({ slug }: { slug: string }) {
   const project = getProjectBySlug(slug);
@@ -91,19 +91,26 @@ export default function AppV2Project({ slug }: { slug: string }) {
         </section>
 
         {/* ============ GALLERY ============ */}
-        <section className={styles.gallery}>
-          <p className={styles.sectionLabel}>Gallery</p>
-          <div className={styles.galleryGrid}>
-            {project.gallery.map((g, i) => (
-              <figure
-                key={`${g.src}-${i}`}
-                className={`${styles.galleryItem} ${g.dark ? styles.galleryItemDark : ""}`}
-              >
-                <img src={g.src} alt={g.alt} loading="lazy" />
-              </figure>
-            ))}
-          </div>
-        </section>
+        {project.phases ? (
+          <section className={styles.gallery}>
+            <p className={styles.sectionLabel}>Sample messages by phase</p>
+            <PhaseGallery phases={project.phases} />
+          </section>
+        ) : (
+          <section className={styles.gallery}>
+            <p className={styles.sectionLabel}>Gallery</p>
+            <div className={styles.galleryGrid}>
+              {project.gallery.map((g, i) => (
+                <figure
+                  key={`${g.src}-${i}`}
+                  className={`${styles.galleryItem} ${g.dark ? styles.galleryItemDark : ""}`}
+                >
+                  <img src={g.src} alt={g.alt} loading="lazy" />
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ============ PREV / NEXT ============ */}
         <nav className={styles.pager} aria-label="Project navigation">
@@ -138,5 +145,54 @@ export default function AppV2Project({ slug }: { slug: string }) {
         </footer>
       </main>
     </div>
+  );
+}
+
+/* ============ Phase gallery (artifacts per phase, no real assets needed) ============ */
+function PhaseGallery({ phases }: { phases: Phase[] }) {
+  return (
+    <div className={styles.phaseGallery}>
+      {phases
+        .filter((p) => p.artifacts && p.artifacts.length > 0)
+        .map((phase) => (
+          <div key={phase.num} className={styles.phaseRow}>
+            <div className={styles.phaseRowHead}>
+              <span className={styles.phaseRowNum}>{phase.num}</span>
+              <span className={styles.phaseRowName}>{phase.title}</span>
+            </div>
+            <div className={styles.phaseArtifacts}>
+              {phase.artifacts!.map((art, i) => (
+                <ArtifactCard key={i} artifact={art} />
+              ))}
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+}
+
+function ArtifactCard({ artifact }: { artifact: PhaseArtifact }) {
+  const channelLabel: Record<PhaseArtifact["channel"], string> = {
+    email: "Email",
+    push: "Push",
+    whatsapp: "WhatsApp",
+    "in-app": "In-app",
+  };
+  return (
+    <article className={styles.artifact} data-channel={artifact.channel}>
+      <div className={styles.artifactHead}>
+        <span className={styles.artifactDot} aria-hidden="true" />
+        <span className={styles.artifactChannel}>{channelLabel[artifact.channel]}</span>
+        {artifact.meta && (
+          <>
+            <span className={styles.artifactSep}>·</span>
+            <span className={styles.artifactMeta}>{artifact.meta.replace(/^.*·\s*/, "")}</span>
+          </>
+        )}
+      </div>
+      <p className={styles.artifactTitle}>{artifact.title}</p>
+      <p className={styles.artifactBody}>{artifact.body}</p>
+      {artifact.cta && <span className={styles.artifactCta}>{artifact.cta} →</span>}
+    </article>
   );
 }
