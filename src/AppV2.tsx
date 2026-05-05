@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./AppV2.module.css";
 import { projects, type Phase, type ProjectDetail } from "./v2-projects";
 
@@ -122,7 +122,7 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
         </span>
       </div>
       {project.visualKind === "lifecycle" && project.phases ? (
-        <LifecycleCarouselV2 phases={project.phases} />
+        <LifecycleScroll phases={project.phases} />
       ) : (
         <div className={styles.projectMockup} data-count={mockups.length}>
           {mockups.map((m, i) => (
@@ -153,85 +153,68 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
   );
 }
 
-function LifecycleCarouselV2({ phases }: { phases: Phase[] }) {
-  const [index, setIndex] = useState(0);
-  const phase = phases[index];
-  const total = phases.length;
+function LifecycleScroll({ phases }: { phases: Phase[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
 
-  const stop = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+  useEffect(() => {
+    const onScroll = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // Progress is 0 when section enters from bottom of viewport,
+      // 1 when its top reaches the top of the viewport.
+      const p = Math.max(0, Math.min(1, 1 - rect.top / vh));
+      setProgress(p);
+    };
+    onScroll();
+    document.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      document.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  const N = phases.length;
+  const currentIdx = Math.min(N - 1, Math.floor(progress * N));
+  const phase = phases[currentIdx];
 
   return (
-    <div className={styles.lifecycle} onClick={stop}>
-      <div className={styles.lifecycleCard}>
-        <div className={styles.lifecyclePhase}>
-          <span className={styles.lifecycleDot} />
-          PHASE {phase.num} / {String(total).padStart(2, "0")}
-        </div>
-        <h4 className={styles.lifecycleTitle}>{phase.title}</h4>
-        <p className={styles.lifecycleDesc}>{phase.desc}</p>
-        <div className={styles.lifecycleChannels}>
-          {phase.channels.map((ch) => (
-            <span key={ch} className={styles.lifecycleChannel}>
-              {ch}
-            </span>
-          ))}
-        </div>
-        <div className={styles.lifecycleSample}>
-          <span className={styles.lifecycleSampleLabel}>{phase.sample.label}</span>
-          <span className={styles.lifecycleSampleText}>{phase.sample.text}</span>
-        </div>
-        <div className={styles.lifecycleProgress}>
-          {phases.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIndex(i);
-              }}
-              className={`${styles.lifecycleProgressBar} ${
-                i === index ? styles.lifecycleProgressBarActive : ""
-              } ${i < index ? styles.lifecycleProgressBarDone : ""}`}
-              aria-label={`Phase ${i + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-      <div className={styles.lifecycleControls}>
-        <span className={styles.lifecycleCounter}>
-          {phase.num} <span className={styles.lifecycleCounterMuted}>/ {String(total).padStart(2, "0")}</span>
+    <div className={styles.lifeScroll} ref={ref}>
+      <div className={styles.lifeScrollHeader} key={currentIdx}>
+        <span className={styles.lifeScrollNum}>
+          Phase {phase.num} of {String(N).padStart(2, "0")}
         </span>
-        <div className={styles.lifecycleArrows}>
-          <button
-            type="button"
-            className={styles.lifecycleArrow}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIndex((i) => Math.max(0, i - 1));
-            }}
-            disabled={index === 0}
-            aria-label="Previous phase"
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            className={styles.lifecycleArrow}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIndex((i) => Math.min(total - 1, i + 1));
-            }}
-            disabled={index === total - 1}
-            aria-label="Next phase"
-          >
-            →
-          </button>
+        <h4 className={styles.lifeScrollTitle}>{phase.title}</h4>
+        <p className={styles.lifeScrollDesc}>{phase.desc}</p>
+      </div>
+
+      <div className={styles.lifeScrollTimeline}>
+        <div className={styles.lifeScrollTrack}>
+          <div
+            className={styles.lifeScrollFill}
+            style={{ width: `${progress * 100}%` }}
+          />
+          {phases.map((p, i) => {
+            const pos = ((i + 0.5) / N) * 100;
+            const threshold = (i + 0.5) / N;
+            const isActive = progress >= threshold;
+            return (
+              <div
+                key={p.num}
+                className={`${styles.lifeScrollPoint} ${
+                  isActive ? styles.lifeScrollPointActive : ""
+                }`}
+                style={{ left: `${pos}%` }}
+                aria-hidden="true"
+              >
+                <span className={styles.lifeScrollPointDot} />
+                <span className={styles.lifeScrollPointLabel}>{p.num}</span>
+                <span className={styles.lifeScrollPointName}>{p.title}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
