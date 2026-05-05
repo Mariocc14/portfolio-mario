@@ -1,5 +1,13 @@
 // Project data for /v2 — used by both the list page and project detail pages.
 
+export type Phase = {
+  num: string;
+  title: string;
+  desc: string;
+  channels: string[];
+  sample: { label: string; text: string };
+};
+
 export type ProjectDetail = {
   slug: string;
   num: string;
@@ -17,12 +25,122 @@ export type ProjectDetail = {
   thumb: string;
   thumbDark?: boolean;
   gallery: { src: string; alt: string; dark?: boolean }[];
+  // Optional custom visual instead of the mockup row
+  visualKind?: "lifecycle";
+  phases?: Phase[];
 };
+
+const lifecyclePhases: Phase[] = [
+  {
+    num: "01",
+    title: "Waitlist launch",
+    desc:
+      "Capture interest the moment the event is announced. The audience starts forming before tickets exist.",
+    channels: ["Email", "In-app"],
+    sample: {
+      label: "Welcome",
+      text: "Thanks for joining the waitlist. You'll be the first to know.",
+    },
+  },
+  {
+    num: "02",
+    title: "Pre-sale notification",
+    desc:
+      "Alert the waitlist exactly when their early access opens — minutes count, so timing is choreographed.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Pre-sale open",
+      text: "Your pre-sale window starts in 1 hour. Don't miss it.",
+    },
+  },
+  {
+    num: "03",
+    title: "Sales launch",
+    desc:
+      "Open the gates to the broader audience. Pre-warmed segments convert at higher rates than cold sends.",
+    channels: ["Email", "Push", "In-app"],
+    sample: {
+      label: "Tickets live",
+      text: "Tickets are live for every city. Pick your night.",
+    },
+  },
+  {
+    num: "04",
+    title: "Open gates",
+    desc:
+      "Inventory opens to all markets and segments after waitlist and pre-sale phases run their course.",
+    channels: ["Email"],
+    sample: {
+      label: "Now public",
+      text: "Doors are open — book yours before they close.",
+    },
+  },
+  {
+    num: "05",
+    title: "Dates extension",
+    desc:
+      "When demand extends, new dates reactivate the existing audience with zero friction — one journey, repeatable.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Announcement",
+      text: "More dates just added — pick your evening.",
+    },
+  },
+  {
+    num: "06",
+    title: "FOMO last days",
+    desc:
+      "Final-days messaging tuned to convert hesitant users — scarcity, social proof and a clear deadline.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Closing soon",
+      text: "Only a handful of seats left — closing this Friday.",
+    },
+  },
+];
 
 export const projects: ProjectDetail[] = [
   {
-    slug: "lifecycle-automation",
+    slug: "premium-live-experiences",
     num: "01",
+    title: "Premium Live Experiences",
+    company: "Fever Originals",
+    year: "'23",
+    shortDesc:
+      "A six-phase lifecycle blueprint for live event launches — waitlist, pre-sale, launch, sold-out and FOMO orchestrated end to end.",
+    longDesc:
+      "A full lifecycle blueprint for Fever's premium event verticals — Candlelight, Stranger Things experiences, Van Gogh, Bridgerton — that could be cloned per launch and adapted to local markets and dates.",
+    role: "CRM Lead · Lifecycle strategy & delivery",
+    tools: ["SFMC", "Journey Builder", "AMPscript", "SQL", "Looker"],
+    timeline: "Ongoing — multiple launches",
+    challenge:
+      "Each event launch required bespoke communications. Without a system, every premiere meant reinventing waitlist, pre-sale, launch, FOMO and post-event flows from scratch.",
+    solution: [
+      "Six-phase lifecycle template: waitlist → pre-sale → launch → open gates → dates extension → FOMO",
+      "Modular AMPscript content blocks personalized per event and city",
+      "Automation Studio orchestrating timing across markets",
+      "Reusable QA flows ensuring multilingual content lands clean",
+    ],
+    outcome: [
+      "Repeatable launch playbook used across every premiere",
+      "Faster setup per event, dramatically less ops work",
+      "Higher engagement on time-sensitive launch moments",
+    ],
+    thumb: "/work-samples/01-event-cabaret.png",
+    thumbDark: true,
+    visualKind: "lifecycle",
+    phases: lifecyclePhases,
+    gallery: [
+      { src: "/work-samples/01-event-cabaret.png", alt: "Cabaret event email", dark: true },
+      { src: "/work-samples/02-event-neon.png", alt: "Neon event email", dark: true },
+      { src: "/work-samples/03-event-jury.png", alt: "Jury event launch", dark: true },
+      { src: "/work-samples/04-event-wcib.png", alt: "WCIB event email", dark: true },
+      { src: "/work-samples/05-event-ditd.png", alt: "DITD event email", dark: true },
+    ],
+  },
+  {
+    slug: "lifecycle-automation",
+    num: "02",
     title: "Lifecycle Automation System",
     company: "Fever",
     year: "'23",
@@ -51,42 +169,6 @@ export const projects: ProjectDetail[] = [
       { src: "/work-samples/06-onboarding-email.png", alt: "Onboarding email — dynamic content per market" },
       { src: "/work-samples/12-newsletter-movies.png", alt: "Automated cinema newsletter", dark: true },
       { src: "/work-samples/10-churn-winback.png", alt: "Churn re-engagement flow" },
-    ],
-  },
-  {
-    slug: "premium-live-experiences",
-    num: "02",
-    title: "Premium Live Experiences",
-    company: "Fever Originals",
-    year: "'23",
-    shortDesc:
-      "Lifecycle communications for branded live events — waitlist, pre-sale, launch, sold-out and FOMO orchestrated end to end.",
-    longDesc:
-      "A full lifecycle blueprint for Fever's premium event verticals — Candlelight, Stranger Things experiences, Van Gogh, Bridgerton — that could be cloned per launch and adapted to local markets and dates.",
-    role: "CRM Lead · Lifecycle strategy & delivery",
-    tools: ["SFMC", "Journey Builder", "AMPscript", "SQL", "Looker"],
-    timeline: "Ongoing — multiple launches",
-    challenge:
-      "Each event launch required bespoke communications. Without a system, every premiere meant reinventing waitlist, pre-sale, launch, FOMO and post-event flows from scratch.",
-    solution: [
-      "Six-phase lifecycle template: waitlist → pre-sale notification → sales launch → open gates → dates extension → final-days FOMO",
-      "Modular AMPscript content blocks personalized per event and city",
-      "Automation Studio orchestrating timing across markets",
-      "Reusable QA flows ensuring multilingual content lands clean",
-    ],
-    outcome: [
-      "Repeatable launch playbook used across every premiere",
-      "Faster setup per event, dramatically less ops work",
-      "Higher engagement on time-sensitive launch moments",
-    ],
-    thumb: "/work-samples/01-event-cabaret.png",
-    thumbDark: true,
-    gallery: [
-      { src: "/work-samples/01-event-cabaret.png", alt: "Cabaret event email", dark: true },
-      { src: "/work-samples/02-event-neon.png", alt: "Neon event email", dark: true },
-      { src: "/work-samples/03-event-jury.png", alt: "Jury event launch", dark: true },
-      { src: "/work-samples/04-event-wcib.png", alt: "WCIB event email", dark: true },
-      { src: "/work-samples/05-event-ditd.png", alt: "DITD event email", dark: true },
     ],
   },
   {

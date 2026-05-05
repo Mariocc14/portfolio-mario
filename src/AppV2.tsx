@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./AppV2.module.css";
-import { projects, type ProjectDetail } from "./v2-projects";
+import { projects, type Phase, type ProjectDetail } from "./v2-projects";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
@@ -121,30 +121,119 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
           →
         </span>
       </div>
-      <div className={styles.projectMockup} data-count={mockups.length}>
-        {mockups.map((m, i) => (
-          <div
-            key={`${m.src}-${i}`}
-            className={`${styles.emailFrame} ${m.dark ? styles.emailFrameDark : ""}`}
-            style={{ animationDelay: `${i * 80}ms` }}
-          >
-            <div className={styles.emailFrameHeader}>
-              <span className={`${styles.emailDot} ${styles.emailDotR}`} />
-              <span className={`${styles.emailDot} ${styles.emailDotY}`} />
-              <span className={`${styles.emailDot} ${styles.emailDotG}`} />
-              <span className={styles.emailMeta}>
-                {project.company} · {project.year}
-              </span>
+      {project.visualKind === "lifecycle" && project.phases ? (
+        <LifecycleCarouselV2 phases={project.phases} />
+      ) : (
+        <div className={styles.projectMockup} data-count={mockups.length}>
+          {mockups.map((m, i) => (
+            <div
+              key={`${m.src}-${i}`}
+              className={`${styles.emailFrame} ${m.dark ? styles.emailFrameDark : ""}`}
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <div className={styles.emailFrameHeader}>
+                <span className={`${styles.emailDot} ${styles.emailDotR}`} />
+                <span className={`${styles.emailDot} ${styles.emailDotY}`} />
+                <span className={`${styles.emailDot} ${styles.emailDotG}`} />
+                <span className={styles.emailMeta}>
+                  {project.company} · {project.year}
+                </span>
+              </div>
+              <img
+                src={m.src}
+                alt={m.alt}
+                className={styles.emailImg}
+                loading="lazy"
+              />
             </div>
-            <img
-              src={m.src}
-              alt={m.alt}
-              className={styles.emailImg}
-              loading="lazy"
-            />
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </a>
+  );
+}
+
+function LifecycleCarouselV2({ phases }: { phases: Phase[] }) {
+  const [index, setIndex] = useState(0);
+  const phase = phases[index];
+  const total = phases.length;
+
+  const stop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  return (
+    <div className={styles.lifecycle} onClick={stop}>
+      <div className={styles.lifecycleCard}>
+        <div className={styles.lifecyclePhase}>
+          <span className={styles.lifecycleDot} />
+          PHASE {phase.num} / {String(total).padStart(2, "0")}
+        </div>
+        <h4 className={styles.lifecycleTitle}>{phase.title}</h4>
+        <p className={styles.lifecycleDesc}>{phase.desc}</p>
+        <div className={styles.lifecycleChannels}>
+          {phase.channels.map((ch) => (
+            <span key={ch} className={styles.lifecycleChannel}>
+              {ch}
+            </span>
+          ))}
+        </div>
+        <div className={styles.lifecycleSample}>
+          <span className={styles.lifecycleSampleLabel}>{phase.sample.label}</span>
+          <span className={styles.lifecycleSampleText}>{phase.sample.text}</span>
+        </div>
+        <div className={styles.lifecycleProgress}>
+          {phases.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIndex(i);
+              }}
+              className={`${styles.lifecycleProgressBar} ${
+                i === index ? styles.lifecycleProgressBarActive : ""
+              } ${i < index ? styles.lifecycleProgressBarDone : ""}`}
+              aria-label={`Phase ${i + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+      <div className={styles.lifecycleControls}>
+        <span className={styles.lifecycleCounter}>
+          {phase.num} <span className={styles.lifecycleCounterMuted}>/ {String(total).padStart(2, "0")}</span>
+        </span>
+        <div className={styles.lifecycleArrows}>
+          <button
+            type="button"
+            className={styles.lifecycleArrow}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIndex((i) => Math.max(0, i - 1));
+            }}
+            disabled={index === 0}
+            aria-label="Previous phase"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            className={styles.lifecycleArrow}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIndex((i) => Math.min(total - 1, i + 1));
+            }}
+            disabled={index === total - 1}
+            aria-label="Next phase"
+          >
+            →
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
