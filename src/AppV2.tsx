@@ -98,6 +98,12 @@ export default function AppV2() {
 }
 
 function ProjectCard({ project }: { project: ProjectDetail }) {
+  // Show up to 3 mockups from the gallery (or fall back to the thumb)
+  const mockups =
+    project.gallery && project.gallery.length > 0
+      ? project.gallery.slice(0, 3)
+      : [{ src: project.thumb, alt: project.title, dark: project.thumbDark }];
+
   return (
     <a className={styles.project} href={`/v2/${project.slug}`}>
       <div className={styles.projectGlow} aria-hidden="true" />
@@ -115,27 +121,29 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
           →
         </span>
       </div>
-      <div className={styles.projectMockup}>
-        <div
-          className={`${styles.emailFrame} ${
-            project.thumbDark ? styles.emailFrameDark : ""
-          }`}
-        >
-          <div className={styles.emailFrameHeader}>
-            <span className={`${styles.emailDot} ${styles.emailDotR}`} />
-            <span className={`${styles.emailDot} ${styles.emailDotY}`} />
-            <span className={`${styles.emailDot} ${styles.emailDotG}`} />
-            <span className={styles.emailMeta}>
-              {project.company} · {project.year}
-            </span>
+      <div className={styles.projectMockup} data-count={mockups.length}>
+        {mockups.map((m, i) => (
+          <div
+            key={`${m.src}-${i}`}
+            className={`${styles.emailFrame} ${m.dark ? styles.emailFrameDark : ""}`}
+            style={{ animationDelay: `${i * 80}ms` }}
+          >
+            <div className={styles.emailFrameHeader}>
+              <span className={`${styles.emailDot} ${styles.emailDotR}`} />
+              <span className={`${styles.emailDot} ${styles.emailDotY}`} />
+              <span className={`${styles.emailDot} ${styles.emailDotG}`} />
+              <span className={styles.emailMeta}>
+                {project.company} · {project.year}
+              </span>
+            </div>
+            <img
+              src={m.src}
+              alt={m.alt}
+              className={styles.emailImg}
+              loading="lazy"
+            />
           </div>
-          <img
-            src={project.thumb}
-            alt={`${project.title} mockup`}
-            className={styles.emailImg}
-            loading="lazy"
-          />
-        </div>
+        ))}
       </div>
     </a>
   );

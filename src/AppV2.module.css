@@ -26,6 +26,13 @@
   letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Page becomes the scroll container so we can snap each card to center */
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 5rem;
 }
 
 /* ============ Nav ============ */
@@ -303,20 +310,30 @@
 }
 
 .project {
-  display: block;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 22px;
-  padding: 2.5rem 2.5rem 0;
+  border-radius: 24px;
+  padding: 2.75rem 2.75rem 0;
   text-decoration: none;
   color: inherit;
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  min-height: 90vh;
+  scroll-snap-align: center;
   transition:
     transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
     border-color 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+@media (max-width: 720px) {
+  .project {
+    min-height: 80vh;
+    padding: 1.75rem 1.75rem 0;
+  }
 }
 
 .projectGlow {
@@ -418,19 +435,34 @@
   transform: scale(1.06);
 }
 
-/* ============ Project mockup (email frame) ============ */
+/* ============ Project mockup row (2-3 email frames) ============ */
 .projectMockup {
   position: relative;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 30%);
-  padding: 2rem 1.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex: 1;
   display: flex;
+  gap: 1.25rem;
   justify-content: center;
+  align-items: flex-end;
+  padding: 3rem 0 0;
+  margin-top: 2.5rem;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 30%);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 @media (min-width: 768px) {
   .projectMockup {
-    padding: 3rem 2.5rem 0;
+    gap: 1.75rem;
+    padding: 4rem 1.5rem 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .projectMockup {
+    padding: 2.5rem 0 0;
+    margin-top: 1.75rem;
+  }
+  .emailFrame:nth-child(n+2) {
+    display: none;
   }
 }
 
@@ -438,13 +470,32 @@
   position: relative;
   background: #fafafa;
   border-radius: 14px 14px 0 0;
-  width: 100%;
-  max-width: 540px;
+  flex: 1 1 0;
+  max-width: 360px;
   overflow: hidden;
-  max-height: 380px;
+  max-height: 60vh;
   box-shadow:
     0 30px 60px -20px rgba(0, 0, 0, 0.5),
     0 5px 20px rgba(0, 0, 0, 0.3);
+  animation: frameRise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+
+@keyframes frameRise {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 1100px) {
+  .emailFrame {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 720px) {
+  .emailFrame {
+    max-width: 100%;
+    max-height: 50vh;
+  }
 }
 
 .emailFrame::after {
