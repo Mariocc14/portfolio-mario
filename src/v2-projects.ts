@@ -465,36 +465,33 @@ export const projects: ProjectDetail[] = [
   {
     slug: "content-cards",
     num: "04",
-    title: "In-app Content Cards",
-    company: "Magnific",
+    title: "In-app & In-product Notifications",
+    company: "In-product · Notifications",
     year: "'25",
     shortDesc:
-      "Always-on owned channel inside the app via Braze SDK. Same SQL + SFMC segmentation as email, modular templates, editorial calendar synced.",
+      "An always-on owned channel inside the app, the product and the web — content cards, in-app messages and in-product nudges in multiple sizes, all driven by the same CRM segmentation as email.",
     longDesc:
-      "Email reach plateaued for time-sensitive launches. The app had a captive audience but no CRM-driven surface to activate it in real time. Solution: Braze Content Cards delivered through the app SDK, sharing every audience and trigger with the email program.",
-    role: "CRM × Product · In-app activation",
+      "Email reach plateaued for time-sensitive launches. The app, the product and the web had captive audiences but no CRM-driven surfaces to activate them in real time. Solution: a notification system across in-app cards, in-product messages and web prompts of multiple sizes, all sharing audiences and triggers with the email program.",
+    role: "CRM × Product · In-product activation",
     tools: ["Braze", "SDK integration", "SQL", "SFMC", "Figma"],
-    timeline: "2 months",
+    timeline: "Ongoing — multiple surfaces",
     challenge:
-      "Email reach plateaued for time-sensitive launches. The app had a captive audience but no CRM-driven surface to activate it in real time.",
+      "Email reach plateaued for time-sensitive launches. The app, the product and the web had captive audiences but no CRM-driven surfaces to activate them in real time.",
     solution: [
-      "Braze Content Cards delivered through the app SDK",
+      "Content Cards delivered through the app + web SDK",
+      "Multiple in-product sizes — small banner, medium card, full takeover",
       "Shared segmentation logic with email (SQL + SFMC)",
-      "Modular templates: image · headline · body · deep-link",
-      "Editorial calendar synced across email, push and in-app",
+      "Editorial calendar synced across email, push, in-app and web",
     ],
     outcome: [
       "New always-on owned channel",
       "Higher reach on launch announcements",
-      "Cross-vertical promotion at zero send cost",
+      "Multiple in-product surfaces for any launch context",
     ],
     thumb: "/magnific/notifications-panel.png",
     thumbDark: true,
     gallery: [
-      { src: "/magnific/notifications-panel.png", alt: "Notification panel — full feed", dark: true },
-      { src: "/magnific/freepik-magnific.png", alt: "Freepik is now Magnific" },
-      { src: "/magnific/kling-3-4k.png", alt: "Kling 3.0 4K announcement" },
-      { src: "/magnific/gpt-2.png", alt: "GPT 2 announcement" },
+      { src: "/magnific/notifications-panel.png", alt: "Magnific notification panel — full feed", dark: true },
     ],
   },
 ];

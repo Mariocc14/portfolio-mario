@@ -246,6 +246,10 @@
   .galleryGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .galleryGrid:has(> figure:only-child) {
+    grid-template-columns: minmax(0, 620px);
+    justify-content: center;
+  }
 }
 
 .galleryItem {
