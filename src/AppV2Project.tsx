@@ -91,7 +91,7 @@ export default function AppV2Project({ slug }: { slug: string }) {
         </section>
 
         {/* ============ GALLERY ============ */}
-        {project.galleryKind === "transactional" && project.transactionalEmails ? (
+        {project.galleryKind === "none" ? null : project.galleryKind === "transactional" && project.transactionalEmails ? (
           <section className={styles.gallery}>
             <p className={styles.sectionLabel}>Transactional emails</p>
             <TransactionalEmails emails={project.transactionalEmails} />

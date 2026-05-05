@@ -38,7 +38,7 @@ export type ProjectDetail = {
   visualKind?: "lifecycle";
   phases?: Phase[];
   // For the detail page: transactional case shows 4 email mockups
-  galleryKind?: "channels" | "transactional";
+  galleryKind?: "channels" | "transactional" | "none";
   transactionalEmails?: { src: string; label: string; subject: string }[];
 };
 
@@ -271,6 +271,17 @@ const tourismPhases: Phase[] = [
       text: "You've got 2 nights left. 3 experiences open in your area.",
     },
   },
+  {
+    num: "06",
+    title: "Re-engage",
+    desc:
+      "Months later, bring the user back — fresh trips, saved cities and a reminder the door is still open.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Plan your next",
+      text: "Your saved cities just dropped 12 new experiences. Time to pack again?",
+    },
+  },
 ];
 
 const transactionalPhases: Phase[] = [
@@ -448,11 +459,8 @@ export const projects: ProjectDetail[] = [
     thumbDark: true,
     visualKind: "lifecycle",
     phases: tourismPhases,
-    gallery: [
-      { src: "/work-samples/13-reactivation-bridgerton.png", alt: "Reactivation — Candlelight Bridgerton", dark: true },
-      { src: "/work-samples/09-reminder-qr.png", alt: "Pre-trip reminder" },
-      { src: "/work-samples/08-purchase-candlelight.png", alt: "Purchase confirmation — tourism" },
-    ],
+    galleryKind: "none",
+    gallery: [],
   },
   {
     slug: "content-cards",
