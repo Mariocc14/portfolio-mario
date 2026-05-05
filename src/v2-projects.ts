@@ -101,30 +101,30 @@ const lifecyclePhases: Phase[] = [
 
 export const projects: ProjectDetail[] = [
   {
-    slug: "premium-live-experiences",
+    slug: "event-lifecycle-automation",
     num: "01",
-    title: "Premium Live Experiences",
-    company: "Fever Originals",
+    title: "Event Lifecycle Design & Automation at Scale",
+    company: "Lifecycle Design · SFMC",
     year: "'23",
     shortDesc:
-      "A six-phase lifecycle blueprint for live event launches — waitlist, pre-sale, launch, sold-out and FOMO orchestrated end to end.",
+      "Event communication was fragmented and dependent on manual execution. Built a six-phase lifecycle — waitlist, pre-launch, launch, open gates, date extension and FOMO — fully automated in SFMC.",
     longDesc:
-      "A full lifecycle blueprint for Fever's premium event verticals — Candlelight, Stranger Things experiences, Van Gogh, Bridgerton — that could be cloned per launch and adapted to local markets and dates.",
+      "Later fully automated in Salesforce Marketing Cloud with dynamic templates and reusable journey structures adapting to city, event and engagement.",
     role: "CRM Lead · Lifecycle strategy & delivery",
     tools: ["SFMC", "Journey Builder", "AMPscript", "SQL", "Looker"],
     timeline: "Ongoing — multiple launches",
     challenge:
-      "Each event launch required bespoke communications. Without a system, every premiere meant reinventing waitlist, pre-sale, launch, FOMO and post-event flows from scratch.",
+      "Event communication was fragmented and heavily dependent on manual execution. Scalability across cities was limited and consistency suffered, especially during high-demand launches.",
     solution: [
-      "Six-phase lifecycle template: waitlist → pre-sale → launch → open gates → dates extension → FOMO",
-      "Modular AMPscript content blocks personalized per event and city",
-      "Automation Studio orchestrating timing across markets",
-      "Reusable QA flows ensuring multilingual content lands clean",
+      "Waitlist acquisition and audience building",
+      "Pre-launch expectation campaigns",
+      "Launch communications and \"open gates\" activation",
+      "Date extensions and FOMO-driven re-engagement",
     ],
     outcome: [
-      "Repeatable launch playbook used across every premiere",
-      "Faster setup per event, dramatically less ops work",
-      "Higher engagement on time-sensitive launch moments",
+      "~60% faster campaign setup",
+      "Global rollout across cities and verticals",
+      "Consistent UX across every launch",
     ],
     thumb: "/work-samples/01-event-cabaret.png",
     thumbDark: true,
