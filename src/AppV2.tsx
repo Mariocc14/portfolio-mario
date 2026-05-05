@@ -1,69 +1,8 @@
 import { useEffect } from "react";
 import styles from "./AppV2.module.css";
+import { projects, type ProjectDetail } from "./v2-projects";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
-
-type Project = {
-  num: string;
-  title: string;
-  company: string;
-  year: string;
-  description: string;
-  thumb: string;
-  thumbDark?: boolean; // dark email frame variant
-  href?: string;
-};
-
-const work: Project[] = [
-  {
-    num: "01",
-    title: "Lifecycle Automation System",
-    company: "Fever",
-    year: "'23",
-    description:
-      "Reusable SFMC journeys, AMPscript dynamic content and SQL-driven audiences — cutting ~50% of manual campaign work.",
-    thumb: "/work-samples/06-onboarding-email.png",
-  },
-  {
-    num: "02",
-    title: "Premium Live Experiences",
-    company: "Fever Originals",
-    year: "'23",
-    description:
-      "Lifecycle communications for branded live events — waitlist, pre-sale, launch, sold-out and FOMO orchestrated end to end.",
-    thumb: "/work-samples/01-event-cabaret.png",
-    thumbDark: true,
-  },
-  {
-    num: "03",
-    title: "Purchase Confirmation Redesign",
-    company: "Fever",
-    year: "'24",
-    description:
-      "Transactional emails turned into product surfaces — flexible booking, Apple Wallet, referrals and cross-sell entry points.",
-    thumb: "/work-samples/08-purchase-candlelight.png",
-  },
-  {
-    num: "04",
-    title: "Tourism Lifecycle Strategy",
-    company: "Fever",
-    year: "'24",
-    description:
-      "Lifecycle built from scratch for a new tourism vertical. Pre-trip, in-trip and post-trip stages with re-purchase moments along the way.",
-    thumb: "/work-samples/13-reactivation-bridgerton.png",
-    thumbDark: true,
-  },
-  {
-    num: "05",
-    title: "In-app Content Cards",
-    company: "Magnific",
-    year: "'25",
-    description:
-      "Always-on owned channel inside the app via Braze SDK. Same SQL + SFMC segmentation as email, modular templates, editorial calendar synced.",
-    thumb: "/magnific/notifications-panel.png",
-    thumbDark: true,
-  },
-];
 
 export default function AppV2() {
   useEffect(() => {
@@ -74,7 +13,7 @@ export default function AppV2() {
     <div className={styles.page}>
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
-        <a href="#top" className={styles.navIdentity}>
+        <a href="/v2" className={styles.navIdentity}>
           <span className={styles.navName}>Mario Calvo</span>
           <span className={styles.navRole}>CRM &amp; Lifecycle</span>
         </a>
@@ -123,8 +62,8 @@ export default function AppV2() {
 
         {/* ============ WORK ============ */}
         <section id="work" className={styles.work}>
-          {work.map((p) => (
-            <ProjectCard key={p.num} project={p} />
+          {projects.map((p) => (
+            <ProjectCard key={p.slug} project={p} />
           ))}
         </section>
 
@@ -158,14 +97,10 @@ export default function AppV2() {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
-  const Tag = project.href ? "a" : "div";
-  const tagProps = project.href
-    ? { href: project.href, target: "_blank" as const, rel: "noopener noreferrer" }
-    : {};
-  const meta = `${project.company}, ${project.year} — ${project.description}`;
+function ProjectCard({ project }: { project: ProjectDetail }) {
   return (
-    <Tag className={styles.project} {...tagProps}>
+    <a className={styles.project} href={`/v2/${project.slug}`}>
+      <div className={styles.projectGlow} aria-hidden="true" />
       <div className={styles.projectHead}>
         <div className={styles.projectTitleBlock}>
           <h3 className={styles.projectTitle}>{project.title}</h3>
@@ -173,9 +108,8 @@ function ProjectCard({ project }: { project: Project }) {
             <strong>
               {project.company}, {project.year}
             </strong>{" "}
-            — {project.description}
+            — {project.shortDesc}
           </p>
-          <span className={styles.srOnly}>{meta}</span>
         </div>
         <span className={styles.projectArrow} aria-hidden="true">
           →
@@ -203,6 +137,6 @@ function ProjectCard({ project }: { project: Project }) {
           />
         </div>
       </div>
-    </Tag>
+    </a>
   );
 }

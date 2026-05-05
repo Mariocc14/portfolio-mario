@@ -312,18 +312,41 @@
   color: inherit;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
   transition:
     transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
     border-color 0.3s ease,
     box-shadow 0.3s ease;
 }
 
+.projectGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  background:
+    radial-gradient(900px circle at 50% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 55%),
+    radial-gradient(600px circle at 50% 100%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+}
+
 .project:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px);
   box-shadow:
-    0 30px 60px -25px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(255, 255, 255, 0.04);
+    0 40px 80px -30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 60px -20px rgba(255, 255, 255, 0.08);
+}
+
+.project:hover .projectGlow {
+  opacity: 1;
+}
+
+.project:hover .projectTitle {
+  text-shadow:
+    0 0 30px rgba(255, 255, 255, 0.35),
+    0 0 60px rgba(255, 255, 255, 0.18);
 }
 
 @media (max-width: 720px) {
@@ -353,6 +376,15 @@
   margin: 0;
   color: var(--ink);
   line-height: 1.1;
+  transition: text-shadow 0.4s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.projectHead,
+.projectMockup {
+  position: relative;
+  z-index: 1;
 }
 
 .projectMeta {
