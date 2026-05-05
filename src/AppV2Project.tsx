@@ -168,7 +168,13 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
             style={{ background: "#28c840" }}
           />
           <span className={styles.mockupChromeMeta}>
-            Fever · Tickets are live
+            <img
+              src="/fever-logo.png"
+              alt="Fever"
+              className={styles.mockupChromeLogo}
+            />
+            <span className={styles.mockupChromeSep}>·</span>
+            Tickets are live
           </span>
         </div>
         <img
@@ -183,7 +189,9 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
       {/* Push — iOS-style notification card on a dark glass surface */}
       <article className={`${styles.mockup} ${styles.mockupPush}`}>
         <div className={styles.mockupPushTop}>
-          <span className={styles.mockupPushIcon}>f</span>
+          <span className={styles.mockupPushIcon}>
+            <img src="/fever-icon.png" alt="" />
+          </span>
           <span className={styles.mockupPushApp}>FEVER</span>
           <span className={styles.mockupPushTime}>now</span>
         </div>
@@ -198,7 +206,9 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
       {/* WhatsApp — green-themed message bubble in a chat client frame */}
       <article className={`${styles.mockup} ${styles.mockupWa}`}>
         <div className={styles.mockupWaHeader}>
-          <span className={styles.mockupWaAvatar}>F</span>
+          <span className={styles.mockupWaAvatar}>
+            <img src="/fever-icon.png" alt="" />
+          </span>
           <div className={styles.mockupWaHeaderText}>
             <span className={styles.mockupWaName}>Fever</span>
             <span className={styles.mockupWaStatus}>online</span>
