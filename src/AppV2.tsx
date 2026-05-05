@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./AppV2.module.css";
 import { projects, type ProjectDetail } from "./v2-projects";
 
@@ -10,7 +10,7 @@ export default function AppV2() {
   }, []);
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-scroll-root>
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
         <a href="/v2" className={styles.navIdentity}>
@@ -155,30 +155,84 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
 
 function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
   const ref = useRef<HTMLAnchorElement>(null);
-  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
+  const [progress, setProgressState] = useState(0);
+
+  const setProgress = useCallback((updater: (p: number) => number) => {
+    const next = Math.max(0, Math.min(1, updater(progressRef.current)));
+    if (next !== progressRef.current) {
+      progressRef.current = next;
+      setProgressState(next);
+    }
+  }, []);
 
   useEffect(() => {
-    const onScroll = () => {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
+    const card = ref.current;
+    if (!card) return;
+    const root = card.closest<HTMLElement>("[data-scroll-root]");
+    if (!root) return;
+
+    // True when the card is roughly centered in the viewport (within 80px of midline)
+    const isCentered = () => {
+      const rect = card.getBoundingClientRect();
       const vh = window.innerHeight;
-      const range = rect.height - vh;
-      if (range <= 0) {
-        setProgress(0);
-        return;
+      const cardCenter = rect.top + rect.height / 2;
+      return Math.abs(cardCenter - vh / 2) < 80;
+    };
+
+    // Wheel hijack — only intervene when card is centered AND there's room
+    // to advance/retreat in the user's scroll direction.
+    const onWheel = (e: WheelEvent) => {
+      if (!isCentered()) return;
+      const p = progressRef.current;
+      if (e.deltaY > 0 && p < 1) {
+        e.preventDefault();
+        e.stopPropagation();
+        setProgress((curr) => curr + e.deltaY / 1500);
+      } else if (e.deltaY < 0 && p > 0) {
+        e.preventDefault();
+        e.stopPropagation();
+        setProgress((curr) => curr + e.deltaY / 1500);
       }
-      const scrolled = Math.max(0, -rect.top);
-      const p = Math.min(1, scrolled / range);
-      setProgress(p);
     };
-    onScroll();
-    document.addEventListener("scroll", onScroll, { passive: true, capture: true });
-    window.addEventListener("resize", onScroll);
+
+    // Touch hijack
+    let lastTouchY: number | null = null;
+    const onTouchStart = (e: TouchEvent) => {
+      if (!isCentered()) return;
+      lastTouchY = e.touches[0].clientY;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (lastTouchY === null || !isCentered()) return;
+      const currentY = e.touches[0].clientY;
+      const deltaY = lastTouchY - currentY;
+      const p = progressRef.current;
+      if ((deltaY > 0 && p < 1) || (deltaY < 0 && p > 0)) {
+        e.preventDefault();
+        const vh = window.innerHeight;
+        setProgress((curr) => curr + deltaY / vh);
+        lastTouchY = currentY;
+      } else {
+        // Reached boundary — release touch tracking so normal scroll resumes
+        lastTouchY = null;
+      }
+    };
+    const onTouchEnd = () => {
+      lastTouchY = null;
+    };
+
+    root.addEventListener("wheel", onWheel, { passive: false });
+    root.addEventListener("touchstart", onTouchStart, { passive: false });
+    root.addEventListener("touchmove", onTouchMove, { passive: false });
+    root.addEventListener("touchend", onTouchEnd);
+
     return () => {
-      document.removeEventListener("scroll", onScroll, true);
-      window.removeEventListener("resize", onScroll);
+      root.removeEventListener("wheel", onWheel);
+      root.removeEventListener("touchstart", onTouchStart);
+      root.removeEventListener("touchmove", onTouchMove);
+      root.removeEventListener("touchend", onTouchEnd);
     };
-  }, []);
+  }, [setProgress]);
 
   const phases = project.phases!;
   const N = phases.length;
