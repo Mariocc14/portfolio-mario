@@ -215,6 +215,64 @@ const lifecyclePhases: Phase[] = [
   },
 ];
 
+const tourismPhases: Phase[] = [
+  {
+    num: "01",
+    title: "Trip planning",
+    desc:
+      "Research and inspiration. The user is comparing destinations and dates — pre-event upsell opens.",
+    channels: ["Email", "In-app"],
+    sample: {
+      label: "Discover",
+      text: "Plan your weekend in Madrid — dates, neighborhoods, must-sees.",
+    },
+  },
+  {
+    num: "02",
+    title: "Purchase",
+    desc:
+      "Booking moment — match origin to destination, lead time to inventory. Cross-sell shows in-cart.",
+    channels: ["Email"],
+    sample: {
+      label: "Confirmation",
+      text: "Your Madrid trip is booked. Want to add Candlelight while you're here?",
+    },
+  },
+  {
+    num: "03",
+    title: "Travel",
+    desc:
+      "Journey to the city — pre-arrival comms with practical info and local activities offer.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Almost there",
+      text: "Madrid in 24h. We've handpicked tonight's experiences for you.",
+    },
+  },
+  {
+    num: "04",
+    title: "Event",
+    desc:
+      "The live experience — reminders, QR access, last-minute info. Loyalty path opens.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Tonight",
+      text: "Your Candlelight experience starts at 19:30. Doors at 19:00.",
+    },
+  },
+  {
+    num: "05",
+    title: "City stay",
+    desc:
+      "Extended visit — local activities, loyalty hooks and next-event teasers to extend the trip.",
+    channels: ["Email"],
+    sample: {
+      label: "While you're here",
+      text: "You've got 2 nights left. 3 experiences open in your area.",
+    },
+  },
+];
+
 const transactionalPhases: Phase[] = [
   {
     num: "01",
@@ -388,6 +446,8 @@ export const projects: ProjectDetail[] = [
     ],
     thumb: "/work-samples/13-reactivation-bridgerton.png",
     thumbDark: true,
+    visualKind: "lifecycle",
+    phases: tourismPhases,
     gallery: [
       { src: "/work-samples/13-reactivation-bridgerton.png", alt: "Reactivation — Candlelight Bridgerton", dark: true },
       { src: "/work-samples/09-reminder-qr.png", alt: "Pre-trip reminder" },
