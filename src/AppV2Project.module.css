@@ -270,142 +270,270 @@
   display: block;
 }
 
-/* ============ Phase gallery (artifacts) ============ */
-.phaseGallery {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  margin-top: 2rem;
-}
-
-.phaseRow {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.phaseRowHead {
-  display: flex;
-  align-items: baseline;
-  gap: 0.85rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.phaseRowNum {
-  font-family: "Geist Mono", monospace;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid var(--line);
-}
-
-.phaseRowName {
-  font-family: "Geist", sans-serif;
-  font-size: 1.05rem;
-  font-weight: 500;
-  letter-spacing: -0.012em;
-  color: var(--ink);
-}
-
-.phaseArtifacts {
+/* ============ Channel mockups (email + push + whatsapp) ============ */
+.mockups {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  align-items: start;
 }
 
-@media (max-width: 720px) {
-  .phaseArtifacts {
-    grid-template-columns: 1fr;
+@media (min-width: 720px) {
+  .mockups {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.25rem;
   }
 }
 
-.artifact {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+.mockup {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 28px 60px -24px rgba(0, 0, 0, 0.7),
+    0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.mockupChannelTag {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* === Email === */
+.mockupEmail {
+  background: #fafafa;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 1.1rem 1.2rem 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
-.artifact:hover {
-  border-color: var(--line-strong);
-  transform: translateY(-2px);
-}
-
-.artifactHead {
+.mockupEmailChrome {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: "Geist Mono", monospace;
-  font-size: 0.62rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-  margin-bottom: 0.2rem;
+  padding: 0.7rem 0.95rem;
+  background: linear-gradient(180deg, #f0f0f0 0%, #e6e6e6 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.artifactDot {
-  width: 7px;
-  height: 7px;
+.mockupChromeDot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.45);
-  flex-shrink: 0;
 }
 
-.artifact[data-channel="email"] .artifactDot { background: #6ea8ff; }
-.artifact[data-channel="push"] .artifactDot { background: #f5a623; }
-.artifact[data-channel="whatsapp"] .artifactDot { background: #25d366; }
-.artifact[data-channel="in-app"] .artifactDot { background: #c084fc; }
-
-.artifactChannel {
-  color: var(--ink-2);
+.mockupChromeMeta {
+  margin-left: 0.5rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
 }
 
-.artifactSep {
-  opacity: 0.5;
+.mockupEmailImg {
+  width: 100%;
+  display: block;
+  max-height: 360px;
+  object-fit: cover;
+  object-position: top center;
+  background: #fafafa;
 }
 
-.artifactMeta {
-  text-transform: none;
-  letter-spacing: 0;
-  color: var(--muted);
-  font-size: 0.66rem;
+/* On larger screens the email mockup gets a bit more vertical room */
+@media (min-width: 720px) {
+  .mockupEmailImg {
+    max-height: 420px;
+  }
 }
 
-.artifactTitle {
+.mockupEmail .mockupChannelTag {
+  background: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* === Push === */
+.mockupPush {
+  background: linear-gradient(180deg, rgba(34, 34, 34, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.1rem 1.2rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  align-self: start;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.mockupPushTop {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mockupPushIcon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ffffff 0%, #d8d8d8 100%);
+  color: #1a1a1a;
   font-family: "Geist", sans-serif;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
   font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--ink);
-  margin: 0;
-  letter-spacing: -0.005em;
-  line-height: 1.3;
+  letter-spacing: -0.04em;
+  font-style: italic;
 }
 
-.artifactBody {
+.mockupPushApp {
+  font-family: "Geist", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mockupPushTime {
+  margin-left: auto;
+  font-family: "Geist", sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.mockupPushTitle {
+  font-family: "Geist", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fafafa;
+  margin: 0.4rem 0 0;
+  letter-spacing: -0.005em;
+}
+
+.mockupPushBody {
   font-family: "Geist", sans-serif;
   font-size: 0.85rem;
-  color: var(--ink-2);
+  color: rgba(255, 255, 255, 0.65);
   margin: 0;
   letter-spacing: -0.005em;
   line-height: 1.45;
 }
 
-.artifactCta {
-  margin-top: 0.4rem;
+/* === WhatsApp === */
+.mockupWa {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.012) 0,
+      rgba(255, 255, 255, 0.012) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+    linear-gradient(180deg, #0b141a 0%, #0a1015 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.mockupWaHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.95rem;
+  background: #1f2c34;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mockupWaAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: #fff;
+  display: grid;
+  place-items: center;
   font-family: "Geist", sans-serif;
-  font-size: 0.78rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.mockupWaHeaderText {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 1.15;
+}
+
+.mockupWaName {
+  font-family: "Geist", sans-serif;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--ink);
+  color: #fafafa;
+  letter-spacing: -0.005em;
+}
+
+.mockupWaStatus {
+  font-family: "Geist", sans-serif;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: -0.005em;
+}
+
+.mockupWaBody {
+  padding: 1rem 0.85rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mockupWaBubble {
+  background: #1f2c34;
+  border-radius: 4px 12px 12px 12px;
+  padding: 0.55rem 0.75rem 0.6rem;
+  max-width: 86%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-self: flex-start;
+}
+
+.mockupWaBubble p {
+  font-family: "Geist", sans-serif;
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+}
+
+.mockupWaBubble strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.mockupWaTime {
+  font-family: "Geist", sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 0.15rem;
+  align-self: flex-end;
   letter-spacing: -0.005em;
 }
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styles from "./AppV2Project.module.css";
-import { getProjectBySlug, getNeighbours, type Phase, type PhaseArtifact } from "./v2-projects";
+import { getProjectBySlug, getNeighbours } from "./v2-projects";
 
 export default function AppV2Project({ slug }: { slug: string }) {
   const project = getProjectBySlug(slug);
@@ -93,8 +93,8 @@ export default function AppV2Project({ slug }: { slug: string }) {
         {/* ============ GALLERY ============ */}
         {project.phases ? (
           <section className={styles.gallery}>
-            <p className={styles.sectionLabel}>Sample messages by phase</p>
-            <PhaseGallery phases={project.phases} />
+            <p className={styles.sectionLabel}>Channel mockups</p>
+            <ChannelMockups emailImg={project.gallery[0]?.src ?? project.thumb} />
           </section>
         ) : (
           <section className={styles.gallery}>
@@ -148,51 +148,74 @@ export default function AppV2Project({ slug }: { slug: string }) {
   );
 }
 
-/* ============ Phase gallery (artifacts per phase, no real assets needed) ============ */
-function PhaseGallery({ phases }: { phases: Phase[] }) {
+/* ============ Channel mockups (email + push + whatsapp) ============ */
+function ChannelMockups({ emailImg }: { emailImg: string }) {
   return (
-    <div className={styles.phaseGallery}>
-      {phases
-        .filter((p) => p.artifacts && p.artifacts.length > 0)
-        .map((phase) => (
-          <div key={phase.num} className={styles.phaseRow}>
-            <div className={styles.phaseRowHead}>
-              <span className={styles.phaseRowNum}>{phase.num}</span>
-              <span className={styles.phaseRowName}>{phase.title}</span>
-            </div>
-            <div className={styles.phaseArtifacts}>
-              {phase.artifacts!.map((art, i) => (
-                <ArtifactCard key={i} artifact={art} />
-              ))}
-            </div>
-          </div>
-        ))}
-    </div>
-  );
-}
+    <div className={styles.mockups}>
+      {/* Email — uses a real event email image inside browser-style chrome */}
+      <article className={`${styles.mockup} ${styles.mockupEmail}`}>
+        <div className={styles.mockupEmailChrome}>
+          <span
+            className={styles.mockupChromeDot}
+            style={{ background: "#ff5f57" }}
+          />
+          <span
+            className={styles.mockupChromeDot}
+            style={{ background: "#febc2e" }}
+          />
+          <span
+            className={styles.mockupChromeDot}
+            style={{ background: "#28c840" }}
+          />
+          <span className={styles.mockupChromeMeta}>
+            Fever · Tickets are live
+          </span>
+        </div>
+        <img
+          src={emailImg}
+          alt="Email mockup"
+          className={styles.mockupEmailImg}
+          loading="lazy"
+        />
+        <span className={styles.mockupChannelTag}>Email</span>
+      </article>
 
-function ArtifactCard({ artifact }: { artifact: PhaseArtifact }) {
-  const channelLabel: Record<PhaseArtifact["channel"], string> = {
-    email: "Email",
-    push: "Push",
-    whatsapp: "WhatsApp",
-    "in-app": "In-app",
-  };
-  return (
-    <article className={styles.artifact} data-channel={artifact.channel}>
-      <div className={styles.artifactHead}>
-        <span className={styles.artifactDot} aria-hidden="true" />
-        <span className={styles.artifactChannel}>{channelLabel[artifact.channel]}</span>
-        {artifact.meta && (
-          <>
-            <span className={styles.artifactSep}>·</span>
-            <span className={styles.artifactMeta}>{artifact.meta.replace(/^.*·\s*/, "")}</span>
-          </>
-        )}
-      </div>
-      <p className={styles.artifactTitle}>{artifact.title}</p>
-      <p className={styles.artifactBody}>{artifact.body}</p>
-      {artifact.cta && <span className={styles.artifactCta}>{artifact.cta} →</span>}
-    </article>
+      {/* Push — iOS-style notification card on a dark glass surface */}
+      <article className={`${styles.mockup} ${styles.mockupPush}`}>
+        <div className={styles.mockupPushTop}>
+          <span className={styles.mockupPushIcon}>f</span>
+          <span className={styles.mockupPushApp}>FEVER</span>
+          <span className={styles.mockupPushTime}>now</span>
+        </div>
+        <p className={styles.mockupPushTitle}>Tickets just dropped 🎟</p>
+        <p className={styles.mockupPushBody}>
+          Your waitlist link is open for the next 60 minutes. Pick your night
+          before the rest.
+        </p>
+        <span className={styles.mockupChannelTag}>Push</span>
+      </article>
+
+      {/* WhatsApp — green-themed message bubble in a chat client frame */}
+      <article className={`${styles.mockup} ${styles.mockupWa}`}>
+        <div className={styles.mockupWaHeader}>
+          <span className={styles.mockupWaAvatar}>F</span>
+          <div className={styles.mockupWaHeaderText}>
+            <span className={styles.mockupWaName}>Fever</span>
+            <span className={styles.mockupWaStatus}>online</span>
+          </div>
+        </div>
+        <div className={styles.mockupWaBody}>
+          <div className={styles.mockupWaBubble}>
+            <p>Hey 👋</p>
+            <p>
+              Tickets for <strong>Candlelight in Madrid</strong> just went live.
+              Want me to send the link?
+            </p>
+            <span className={styles.mockupWaTime}>14:23 ✓✓</span>
+          </div>
+        </div>
+        <span className={styles.mockupChannelTag}>WhatsApp</span>
+      </article>
+    </div>
   );
 }
