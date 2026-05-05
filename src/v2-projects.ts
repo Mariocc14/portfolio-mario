@@ -218,17 +218,6 @@ const lifecyclePhases: Phase[] = [
 const transactionalPhases: Phase[] = [
   {
     num: "01",
-    title: "Purchase confirmation",
-    desc:
-      "The order lands. The receipt becomes the product surface — wallet, referrals, transfers and cross-sell, all inline.",
-    channels: ["Email"],
-    sample: {
-      label: "Confirmation",
-      text: "Your tickets for Candlelight: Tributo ai Queen are ready.",
-    },
-  },
-  {
-    num: "02",
     title: "Abandoned cart",
     desc:
       "Users who dropped at checkout get pulled back with the right context — same event, same city, easier path.",
@@ -236,6 +225,17 @@ const transactionalPhases: Phase[] = [
     sample: {
       label: "Reminder",
       text: "Your next great experience awaits — Broadway Sings Taylor Swift.",
+    },
+  },
+  {
+    num: "02",
+    title: "Purchase confirmation",
+    desc:
+      "The order lands. The receipt becomes the product surface — wallet, referrals, transfers and cross-sell, all inline.",
+    channels: ["Email"],
+    sample: {
+      label: "Confirmation",
+      text: "Your tickets for Candlelight: Tributo ai Queen are ready.",
     },
   },
   {
@@ -317,8 +317,8 @@ export const projects: ProjectDetail[] = [
     challenge:
       "Transactional emails were underutilized and misaligned with product capabilities and revenue opportunities — no personalization, no brand, no cross-sell. Each email was a dead end instead of a doorway back into the product.",
     solution: [
-      "Purchase confirmation — wallet, referral, ticket transfer and cross-sell inline",
       "Abandoned cart — context-aware recovery with the same event in their city",
+      "Purchase confirmation — wallet, referral, ticket transfer and cross-sell inline",
       "Pre-event reminder — QR ticket, time, address and last instructions",
       "Post-event review — rate, share photos, surface what to book next",
     ],
@@ -333,14 +333,14 @@ export const projects: ProjectDetail[] = [
     galleryKind: "transactional",
     transactionalEmails: [
       {
-        src: "/work-samples/08-purchase-candlelight.png",
-        label: "Purchase confirmation",
-        subject: "Candlelight · Tickets confirmed",
-      },
-      {
         src: "/work-samples/15-abandoned-cart.png",
         label: "Abandoned cart",
         subject: "Fever · Your next great experience awaits",
+      },
+      {
+        src: "/work-samples/08-purchase-candlelight.png",
+        label: "Purchase confirmation",
+        subject: "Candlelight · Tickets confirmed",
       },
       {
         src: "/work-samples/16-reminder-qr.png",
@@ -354,8 +354,8 @@ export const projects: ProjectDetail[] = [
       },
     ],
     gallery: [
-      { src: "/work-samples/08-purchase-candlelight.png", alt: "Candlelight purchase confirmation" },
       { src: "/work-samples/15-abandoned-cart.png", alt: "Abandoned cart recovery" },
+      { src: "/work-samples/08-purchase-candlelight.png", alt: "Candlelight purchase confirmation" },
       { src: "/work-samples/16-reminder-qr.png", alt: "Van Gogh pre-event reminder with QR" },
       { src: "/work-samples/17-reviews-candlelight.png", alt: "Candlelight post-event review" },
     ],
