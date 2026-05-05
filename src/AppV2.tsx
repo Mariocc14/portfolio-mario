@@ -10,6 +10,7 @@ type Project = {
   year: string;
   description: string;
   thumb: string;
+  thumbDark?: boolean; // dark email frame variant
   href?: string;
 };
 
@@ -20,17 +21,18 @@ const work: Project[] = [
     company: "Fever",
     year: "'23",
     description:
-      "Reusable SFMC journeys, dynamic content powered by AMPscript, and SQL-driven audiences — cutting ~50% of manual campaign work.",
+      "Reusable SFMC journeys, AMPscript dynamic content and SQL-driven audiences — cutting ~50% of manual campaign work.",
     thumb: "/work-samples/06-onboarding-email.png",
   },
   {
     num: "02",
     title: "Premium Live Experiences",
-    company: "Fever",
+    company: "Fever Originals",
     year: "'23",
     description:
-      "Lifecycle communications designed for branded live events. Waitlist, pre-sale, launch, sold-out and FOMO phases — orchestrated as one.",
+      "Lifecycle communications for branded live events — waitlist, pre-sale, launch, sold-out and FOMO orchestrated end to end.",
     thumb: "/work-samples/01-event-cabaret.png",
+    thumbDark: true,
   },
   {
     num: "03",
@@ -38,7 +40,7 @@ const work: Project[] = [
     company: "Fever",
     year: "'24",
     description:
-      "Transactional emails turned into product surfaces — flexible booking, Apple Wallet, referrals, and cross-sell entry points.",
+      "Transactional emails turned into product surfaces — flexible booking, Apple Wallet, referrals and cross-sell entry points.",
     thumb: "/work-samples/08-purchase-candlelight.png",
   },
   {
@@ -47,8 +49,9 @@ const work: Project[] = [
     company: "Fever",
     year: "'24",
     description:
-      "Lifecycle built from scratch for a new tourism vertical — pre-trip, in-trip and post-trip stages with re-purchase moments along the way.",
+      "Lifecycle built from scratch for a new tourism vertical. Pre-trip, in-trip and post-trip stages with re-purchase moments along the way.",
     thumb: "/work-samples/13-reactivation-bridgerton.png",
+    thumbDark: true,
   },
   {
     num: "05",
@@ -58,29 +61,7 @@ const work: Project[] = [
     description:
       "Always-on owned channel inside the app via Braze SDK. Same SQL + SFMC segmentation as email, modular templates, editorial calendar synced.",
     thumb: "/magnific/notifications-panel.png",
-  },
-];
-
-const sideProjects: Project[] = [
-  {
-    num: "06",
-    title: "Monkway",
-    company: "Founder · Product · CRM",
-    year: "'25",
-    description:
-      "A habits app I built end-to-end — concept, product, CRM and live service.",
-    thumb: "/work-samples/11-loyalty-points.png",
-    href: "https://monkway.app/",
-  },
-  {
-    num: "07",
-    title: "Sprint",
-    company: "Co-founder · Product · CRM",
-    year: "'25",
-    description:
-      "AI voice assistant for SMBs. ElevenLabs + Google Calendar, with a customer app and an internal CMS.",
-    thumb: "/work-samples/12-newsletter-movies.png",
-    href: "https://web-production-98b02b.up.railway.app/",
+    thumbDark: true,
   },
 ];
 
@@ -93,119 +74,83 @@ export default function AppV2() {
     <div className={styles.page}>
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
-        <div className={styles.navInner}>
-          <a href="#top" className={styles.navLogo}>
-            <span className={styles.navLogoMark}>MC</span>
-            <span>Mario Calvo</span>
+        <a href="#top" className={styles.navIdentity}>
+          <span className={styles.navName}>Mario Calvo</span>
+          <span className={styles.navRole}>CRM &amp; Lifecycle</span>
+        </a>
+        <div className={styles.navPill}>
+          <a href="#work" className={styles.navPillActive}>Work</a>
+          <a href="#info">Info</a>
+        </div>
+        <div className={styles.navSocials}>
+          <a
+            href="https://www.linkedin.com/in/mariocalvocastillo/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn <span className={styles.tinyArrow}>↗</span>
           </a>
-          <div className={styles.navLinks}>
-            <a href="#work">Work</a>
-            <a href="#projects">Projects</a>
-            <a href="#contact">Contact</a>
-          </div>
+          <a href="mailto:mariocalvocst@gmail.com">
+            Email <span className={styles.tinyArrow}>↗</span>
+          </a>
         </div>
       </nav>
 
       <main className={styles.main} id="top">
         {/* ============ HERO ============ */}
         <section className={styles.hero}>
-          <div className={styles.avatarWrap}>
-            <img
-              src="/imagen_perfil/mario-avatar.png"
-              alt="Mario Calvo"
-              className={styles.avatar}
-              loading="eager"
-            />
-          </div>
-          <h1 className={styles.headline}>
-            I build CRM systems, lifecycle journeys &amp; automation.
-          </h1>
-          <p className={styles.creds}>
-            CRM &amp; Lifecycle Consultant. Based in Madrid. Currently freelance.
-            <br />
-            Worked across <span className={styles.credBold}>Fever</span>,{" "}
-            <span className={styles.credBold}>Candlelight</span>,{" "}
-            <span className={styles.credBold}>Fever Originals</span>,{" "}
-            <span className={styles.credBold}>Freepik</span> and{" "}
-            <span className={styles.credBold}>Magnific</span>.
-          </p>
-          <div className={styles.heroLinks}>
-            <a href="#work" className={styles.heroLink}>
-              Selected work <span className={styles.arrow}>→</span>
-            </a>
-            <a href="#contact" className={styles.heroLink}>
-              Get in touch <span className={styles.arrow}>↗</span>
-            </a>
+          <div className={styles.heroWindow}>
+            <div className={styles.heroChrome}>
+              <span className={`${styles.heroDot} ${styles.heroDotR}`} />
+              <span className={`${styles.heroDot} ${styles.heroDotY}`} />
+              <span className={`${styles.heroDot} ${styles.heroDotG}`} />
+              <span className={styles.heroPlus}>+</span>
+            </div>
+            <div className={styles.heroBody}>
+              <h1 className={styles.heroHeadline}>
+                I build systems, journeys &amp; <em>automation.</em>
+              </h1>
+              <p className={styles.heroSub}>
+                CRM &amp; Lifecycle Consultant. Based in Madrid.
+                <span className={styles.heroSubMuted}>
+                  Worked across Fever, Candlelight, Freepik and Magnific.
+                </span>
+              </p>
+              <span className={styles.heroScroll} aria-hidden="true">↓</span>
+            </div>
           </div>
         </section>
 
-        {/* ============ SELECTED WORK ============ */}
-        <section id="work" className={styles.workSection}>
-          <div className={styles.sectionLabelRow}>
-            <span className={styles.sectionLine} />
-            <span className={styles.sectionLabel}>Selected Work '23 — '25</span>
-          </div>
-          <div className={styles.workList}>
-            {work.map((p) => (
-              <ProjectCard key={p.num} project={p} />
-            ))}
-          </div>
-        </section>
-
-        {/* ============ SIDE PROJECTS ============ */}
-        <section id="projects" className={styles.workSection}>
-          <div className={styles.sectionLabelRow}>
-            <span className={styles.sectionLine} />
-            <span className={styles.sectionLabel}>Personal Projects '25</span>
-          </div>
-          <div className={styles.workList}>
-            {sideProjects.map((p) => (
-              <ProjectCard key={p.num} project={p} />
-            ))}
-          </div>
-        </section>
-
-        {/* ============ CONTACT ============ */}
-        <section id="contact" className={styles.contactSection}>
-          <div className={styles.sectionLabelRow}>
-            <span className={styles.sectionLine} />
-            <span className={styles.sectionLabel}>Contact</span>
-          </div>
-          <h2 className={styles.contactHeadline}>
-            Got a CRM program that needs to grow up?
-          </h2>
-          <p className={styles.contactSub}>
-            I take on a small number of engagements each quarter — lifecycle audits,
-            SFMC build-outs, automation migrations and hands-on CRM leadership.
-          </p>
-          <div className={styles.contactLinks}>
-            <a className={styles.contactLink} href="mailto:mariocalvocst@gmail.com">
-              <span className={styles.contactLinkLabel}>Email</span>
-              <span className={styles.contactLinkValue}>mariocalvocst@gmail.com</span>
-              <span className={styles.arrow}>→</span>
-            </a>
-            <a
-              className={styles.contactLink}
-              href="https://www.linkedin.com/in/mariocalvocastillo/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className={styles.contactLinkLabel}>LinkedIn</span>
-              <span className={styles.contactLinkValue}>/in/mariocalvocastillo</span>
-              <span className={styles.arrow}>↗</span>
-            </a>
-          </div>
+        {/* ============ WORK ============ */}
+        <section id="work" className={styles.work}>
+          {work.map((p) => (
+            <ProjectCard key={p.num} project={p} />
+          ))}
         </section>
 
         {/* ============ FOOTER ============ */}
-        <footer className={styles.footer}>
-          <p className={styles.footerNote}>
-            Made with <span className={styles.footerHeart}>♥</span> between Madrid commutes and
-            AMPscript queries — and the occasional Bridgerton ticket.
-          </p>
+        <footer id="info" className={styles.footer}>
+          <div className={styles.footerTop}>
+            <p className={styles.footerNote}>
+              Made with <span className={styles.heart}>♥</span> between Madrid commutes
+              and AMPscript queries — and the occasional Bridgerton ticket.
+            </p>
+            <div className={styles.footerLinks}>
+              <a href="mailto:mariocalvocst@gmail.com">
+                Email <span className={styles.tinyArrow}>↗</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/mariocalvocastillo/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn <span className={styles.tinyArrow}>↗</span>
+              </a>
+            </div>
+          </div>
           <div className={styles.footerBottom}>
             <span>© {new Date().getFullYear()} Mario Calvo</span>
-            <span className={styles.footerCorner}>v2 · /v2</span>
+            <span>v2 · Built with React + Vite</span>
           </div>
         </footer>
       </main>
@@ -216,32 +161,47 @@ export default function AppV2() {
 function ProjectCard({ project }: { project: Project }) {
   const Tag = project.href ? "a" : "div";
   const tagProps = project.href
-    ? { href: project.href, target: "_blank", rel: "noopener noreferrer" as const }
+    ? { href: project.href, target: "_blank" as const, rel: "noopener noreferrer" }
     : {};
+  const meta = `${project.company}, ${project.year} — ${project.description}`;
   return (
-    <Tag className={styles.card} {...tagProps}>
-      <div className={styles.cardMeta}>
-        <span className={styles.cardNum}>{project.num}</span>
-        <span className={styles.cardCompany}>
-          {project.company} {project.year}
+    <Tag className={styles.project} {...tagProps}>
+      <div className={styles.projectHead}>
+        <div className={styles.projectTitleBlock}>
+          <h3 className={styles.projectTitle}>{project.title}</h3>
+          <p className={styles.projectMeta}>
+            <strong>
+              {project.company}, {project.year}
+            </strong>{" "}
+            — {project.description}
+          </p>
+          <span className={styles.srOnly}>{meta}</span>
+        </div>
+        <span className={styles.projectArrow} aria-hidden="true">
+          →
         </span>
       </div>
-      <div className={styles.cardBody}>
-        <h3 className={styles.cardTitle}>{project.title}</h3>
-        <p className={styles.cardDesc}>{project.description}</p>
-      </div>
-      <div className={styles.cardThumb}>
-        <img
-          src={project.thumb}
-          alt=""
-          className={styles.cardImg}
-          loading="lazy"
-        />
-        {project.href && (
-          <span className={styles.cardThumbCorner}>
-            <span className={styles.arrow}>↗</span>
-          </span>
-        )}
+      <div className={styles.projectMockup}>
+        <div
+          className={`${styles.emailFrame} ${
+            project.thumbDark ? styles.emailFrameDark : ""
+          }`}
+        >
+          <div className={styles.emailFrameHeader}>
+            <span className={`${styles.emailDot} ${styles.emailDotR}`} />
+            <span className={`${styles.emailDot} ${styles.emailDotY}`} />
+            <span className={`${styles.emailDot} ${styles.emailDotG}`} />
+            <span className={styles.emailMeta}>
+              {project.company} · {project.year}
+            </span>
+          </div>
+          <img
+            src={project.thumb}
+            alt={`${project.title} mockup`}
+            className={styles.emailImg}
+            loading="lazy"
+          />
+        </div>
       </div>
     </Tag>
   );
