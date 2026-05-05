@@ -37,6 +37,9 @@ export type ProjectDetail = {
   // Optional custom visual instead of the mockup row
   visualKind?: "lifecycle";
   phases?: Phase[];
+  // For the detail page: transactional case shows 4 email mockups
+  galleryKind?: "channels" | "transactional";
+  transactionalEmails?: { src: string; label: string; subject: string }[];
 };
 
 const lifecyclePhases: Phase[] = [
@@ -212,6 +215,53 @@ const lifecyclePhases: Phase[] = [
   },
 ];
 
+const transactionalPhases: Phase[] = [
+  {
+    num: "01",
+    title: "Purchase confirmation",
+    desc:
+      "The order lands. The receipt becomes the product surface — wallet, referrals, transfers and cross-sell, all inline.",
+    channels: ["Email"],
+    sample: {
+      label: "Confirmation",
+      text: "Your tickets for Candlelight: Tributo ai Queen are ready.",
+    },
+  },
+  {
+    num: "02",
+    title: "Abandoned cart",
+    desc:
+      "Users who dropped at checkout get pulled back with the right context — same event, same city, easier path.",
+    channels: ["Email"],
+    sample: {
+      label: "Reminder",
+      text: "Your next great experience awaits — Broadway Sings Taylor Swift.",
+    },
+  },
+  {
+    num: "03",
+    title: "Pre-event reminder",
+    desc:
+      "Hours before the show: ticket QR, time, address, last instructions. Calm, useful, no friction.",
+    channels: ["Email", "Push"],
+    sample: {
+      label: "Tomorrow",
+      text: "It's coming soon — Van Gogh: The Immersive Experience tomorrow at 5:00 PM.",
+    },
+  },
+  {
+    num: "04",
+    title: "Post-event review",
+    desc:
+      "Hours after: rate the experience, share photos, surface what to book next. Loop the lifecycle back into the CRM.",
+    channels: ["Email"],
+    sample: {
+      label: "Rate",
+      text: "How was Candlelight: A Tribute to Coldplay? Tap to rate.",
+    },
+  },
+];
+
 export const projects: ProjectDetail[] = [
   {
     slug: "event-lifecycle-automation",
@@ -252,74 +302,67 @@ export const projects: ProjectDetail[] = [
     ],
   },
   {
-    slug: "lifecycle-automation",
+    slug: "transactional-comms-redesign",
     num: "02",
-    title: "Lifecycle Automation System",
-    company: "Fever",
-    year: "'23",
-    shortDesc:
-      "Reusable SFMC journeys, AMPscript dynamic content and SQL-driven audiences — cutting ~50% of manual campaign work.",
-    longDesc:
-      "An end-to-end automation system that took Fever's lifecycle program from a calendar of one-off campaigns to a portfolio of versioned, reusable journeys. The shift unlocked faster launches, deeper personalization and a CRM team that finally had time to optimize.",
-    role: "CRM Specialist · Lifecycle architect",
-    tools: ["Salesforce Marketing Cloud", "Journey Builder", "Automation Studio", "AMPscript", "SQL", "Content Builder"],
-    timeline: "12 months",
-    challenge:
-      "Manual campaign execution became unsustainable as the number of events and markets grew. Scaling without multiplying operational complexity was the brief.",
-    solution: [
-      "Reusable journeys designed and versioned in SFMC",
-      "Dynamic content powered by AMPscript at render time",
-      "Audience segmentation via SQL + Automation Studio",
-      "Modular campaign structures adaptable across markets",
-    ],
-    outcome: [
-      "~50% reduction in manual campaign setup time",
-      "Faster expansion across new markets",
-      "More personalization per send, less ops overhead",
-    ],
-    thumb: "/work-samples/06-onboarding-email.png",
-    gallery: [
-      { src: "/work-samples/06-onboarding-email.png", alt: "Onboarding email — dynamic content per market" },
-      { src: "/work-samples/12-newsletter-movies.png", alt: "Automated cinema newsletter", dark: true },
-      { src: "/work-samples/10-churn-winback.png", alt: "Churn re-engagement flow" },
-    ],
-  },
-  {
-    slug: "purchase-confirmation",
-    num: "03",
-    title: "Purchase Confirmation Redesign",
-    company: "Fever",
+    title: "Transactional Comms Redesign & Product Integration",
+    company: "Transactional · Product × CRM",
     year: "'24",
     shortDesc:
-      "Transactional emails turned into product surfaces — flexible booking, Apple Wallet, referrals and cross-sell entry points.",
+      "End-to-end redesign of the four highest-traffic transactional emails — purchase confirmation, abandoned cart, pre-event reminder and post-event review — turning each into a product surface.",
     longDesc:
-      "A redesign of the highest-traffic emails in Fever's lifecycle. Every confirmation became a product surface — bookings could be edited, tickets transferred, friends invited, and the next experience teased before the user ever left their inbox.",
+      "A full overhaul of the post-purchase lifecycle: every transactional touch-point — confirmation, recovery, reminder and review — was rebuilt as a product surface. Bookings can be edited, tickets transferred, referrals shared, and the next experience teased before the user ever leaves the inbox.",
     role: "CRM × Product · Lifecycle integration",
     tools: ["SFMC", "AMPscript", "Apple Wallet APIs", "SQL", "Figma"],
-    timeline: "4 months",
+    timeline: "6 months",
     challenge:
-      "Transactional emails were underutilized and misaligned with product capabilities and revenue opportunities — no personalization, no brand, no cross-sell.",
+      "Transactional emails were underutilized and misaligned with product capabilities and revenue opportunities — no personalization, no brand, no cross-sell. Each email was a dead end instead of a doorway back into the product.",
     solution: [
-      "Flexible booking (date / time changes) embedded in the email",
-      "Ticket transfers and Apple Wallet integration",
-      "Referral programs wired into the confirmation flow",
-      "Cross-sell and repeat-purchase entry points contextual to the event type",
+      "Purchase confirmation — wallet, referral, ticket transfer and cross-sell inline",
+      "Abandoned cart — context-aware recovery with the same event in their city",
+      "Pre-event reminder — QR ticket, time, address and last instructions",
+      "Post-event review — rate, share photos, surface what to book next",
     ],
     outcome: [
-      "Repeat purchase lift",
+      "Repeat purchase lift across the post-purchase journey",
       "Stronger product × CRM alignment",
-      "New revenue surface in a previously \"functional\" email",
+      "New revenue surfaces in previously \"functional\" emails",
     ],
     thumb: "/work-samples/08-purchase-candlelight.png",
+    visualKind: "lifecycle",
+    phases: transactionalPhases,
+    galleryKind: "transactional",
+    transactionalEmails: [
+      {
+        src: "/work-samples/08-purchase-candlelight.png",
+        label: "Purchase confirmation",
+        subject: "Candlelight · Tickets confirmed",
+      },
+      {
+        src: "/work-samples/15-abandoned-cart.png",
+        label: "Abandoned cart",
+        subject: "Fever · Your next great experience awaits",
+      },
+      {
+        src: "/work-samples/16-reminder-qr.png",
+        label: "Pre-event reminder",
+        subject: "Van Gogh · It's coming soon",
+      },
+      {
+        src: "/work-samples/17-reviews-candlelight.png",
+        label: "Post-event review",
+        subject: "Candlelight · Rate your experience",
+      },
+    ],
     gallery: [
       { src: "/work-samples/08-purchase-candlelight.png", alt: "Candlelight purchase confirmation" },
-      { src: "/work-samples/14-giftcard.png", alt: "Gift card confirmation redesign" },
-      { src: "/work-samples/09-reminder-qr.png", alt: "Event reminder with QR ticket" },
+      { src: "/work-samples/15-abandoned-cart.png", alt: "Abandoned cart recovery" },
+      { src: "/work-samples/16-reminder-qr.png", alt: "Van Gogh pre-event reminder with QR" },
+      { src: "/work-samples/17-reviews-candlelight.png", alt: "Candlelight post-event review" },
     ],
   },
   {
     slug: "tourism-lifecycle",
-    num: "04",
+    num: "03",
     title: "Tourism Lifecycle Strategy",
     company: "Fever",
     year: "'24",
@@ -353,7 +396,7 @@ export const projects: ProjectDetail[] = [
   },
   {
     slug: "content-cards",
-    num: "05",
+    num: "04",
     title: "In-app Content Cards",
     company: "Magnific",
     year: "'25",

@@ -91,7 +91,12 @@ export default function AppV2Project({ slug }: { slug: string }) {
         </section>
 
         {/* ============ GALLERY ============ */}
-        {project.phases ? (
+        {project.galleryKind === "transactional" && project.transactionalEmails ? (
+          <section className={styles.gallery}>
+            <p className={styles.sectionLabel}>Transactional emails</p>
+            <TransactionalEmails emails={project.transactionalEmails} />
+          </section>
+        ) : project.phases ? (
           <section className={styles.gallery}>
             <p className={styles.sectionLabel}>Channel mockups</p>
             <ChannelMockups emailImg={project.gallery[0]?.src ?? project.thumb} />
@@ -226,6 +231,39 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
         </div>
         <span className={styles.mockupChannelTag}>WhatsApp</span>
       </article>
+    </div>
+  );
+}
+
+/* ============ Transactional emails (4 email frames) ============ */
+function TransactionalEmails({
+  emails,
+}: {
+  emails: { src: string; label: string; subject: string }[];
+}) {
+  return (
+    <div className={styles.txEmails}>
+      {emails.map((email) => (
+        <article key={email.src} className={styles.txEmail}>
+          <div className={styles.txEmailChrome}>
+            <span className={styles.mockupChromeDot} style={{ background: "#ff5f57" }} />
+            <span className={styles.mockupChromeDot} style={{ background: "#febc2e" }} />
+            <span className={styles.mockupChromeDot} style={{ background: "#28c840" }} />
+            <span className={styles.txEmailMeta}>
+              <img src="/fever-logo.png" alt="Fever" className={styles.mockupChromeLogo} />
+              <span className={styles.mockupChromeSep}>·</span>
+              {email.subject}
+            </span>
+          </div>
+          <img
+            src={email.src}
+            alt={email.label}
+            className={styles.txEmailImg}
+            loading="lazy"
+          />
+          <span className={styles.txEmailLabel}>{email.label}</span>
+        </article>
+      ))}
     </div>
   );
 }

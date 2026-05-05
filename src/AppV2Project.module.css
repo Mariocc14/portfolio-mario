@@ -657,3 +657,80 @@
 .notFound a:hover {
   color: var(--ink);
 }
+
+/* ============ Transactional emails (4-up grid for case 02) ============ */
+.txEmails {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 720px) {
+  .txEmails {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.txEmail {
+  position: relative;
+  background: #fafafa;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 28px 60px -24px rgba(0, 0, 0, 0.7),
+    0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.txEmailChrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 0.95rem;
+  background: linear-gradient(180deg, #f0f0f0 0%, #e6e6e6 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.txEmailMeta {
+  margin-left: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.txEmailImg {
+  width: 100%;
+  display: block;
+  max-height: 460px;
+  object-fit: cover;
+  object-position: top center;
+  background: #fafafa;
+}
+
+.txEmailLabel {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+  z-index: 2;
+}
