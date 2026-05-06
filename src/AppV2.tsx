@@ -18,8 +18,8 @@ export default function AppV2() {
           <span className={styles.navRole}>CRM &amp; Lifecycle</span>
         </a>
         <div className={styles.navPill}>
-          <a href="#work" className={styles.navPillActive}>Work</a>
-          <a href="#info">Info</a>
+          <a href="/v2" className={styles.navPillActive}>Work</a>
+          <a href="/v2/info">Info</a>
         </div>
         <div className={styles.navSocials}>
           <a
