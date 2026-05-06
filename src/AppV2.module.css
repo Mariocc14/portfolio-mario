@@ -27,11 +27,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Page becomes the scroll container so we can snap each card to center */
+  /* Page is the scroll container; snap removed so the footer is reachable
+     and doesn't get yanked back to the previous card. */
   height: 100dvh;
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-snap-type: y proximity;
   scroll-padding-top: 5rem;
 }
 
