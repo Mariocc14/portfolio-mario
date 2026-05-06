@@ -50,9 +50,9 @@ export default function AppV2() {
                 I build systems, journeys &amp; <em>automation.</em>
               </h1>
               <p className={styles.heroSub}>
-                CRM &amp; Lifecycle Consultant. Based in Madrid.
+                CRM &amp; Lifecycle Consultant. Based in Spain.
                 <span className={styles.heroSubMuted}>
-                  Worked across Fever, Candlelight, Freepik and Magnific.
+                  Currently working at Magnific. Formerly at Fever and Freepik.
                 </span>
               </p>
               <span className={styles.heroScroll} aria-hidden="true">↓</span>
