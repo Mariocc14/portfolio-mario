@@ -306,7 +306,13 @@
   padding: 4rem 0 5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 4rem;
+}
+
+@media (max-width: 720px) {
+  .work {
+    gap: 2.5rem;
+  }
 }
 
 .project {
