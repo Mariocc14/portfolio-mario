@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import styles from "./AppV2Project.module.css";
-import { getProjectBySlug, getNeighbours } from "./v2-projects";
+import styles from "./AppProject.module.css";
+import { getProjectBySlug, getNeighbours } from "./projects";
 
-export default function AppV2Project({ slug }: { slug: string }) {
+export default function AppProject({ slug }: { slug: string }) {
   const project = getProjectBySlug(slug);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function AppV2Project({ slug }: { slug: string }) {
       <div className={styles.page}>
         <div className={styles.notFound}>
           <h1>Project not found</h1>
-          <a href="/v2">← Back to work</a>
+          <a href="/">← Back to work</a>
         </div>
       </div>
     );
@@ -28,7 +28,7 @@ export default function AppV2Project({ slug }: { slug: string }) {
 
   return (
     <div className={styles.page}>
-      <a href="/v2" className={styles.back}>
+      <a href="/" className={styles.back}>
         <span className={styles.backArrow}>←</span> Back
       </a>
 
@@ -120,7 +120,7 @@ export default function AppV2Project({ slug }: { slug: string }) {
         {/* ============ PREV / NEXT ============ */}
         <nav className={styles.pager} aria-label="Project navigation">
           {prev ? (
-            <a className={styles.pagerLink} href={`/v2/${prev.slug}`}>
+            <a className={styles.pagerLink} href={`/${prev.slug}`}>
               <span className={styles.pagerDir}>← Previous</span>
               <span className={styles.pagerTitle}>{prev.title}</span>
             </a>
@@ -128,12 +128,12 @@ export default function AppV2Project({ slug }: { slug: string }) {
             <span />
           )}
           {next ? (
-            <a className={`${styles.pagerLink} ${styles.pagerLinkRight}`} href={`/v2/${next.slug}`}>
+            <a className={`${styles.pagerLink} ${styles.pagerLinkRight}`} href={`/${next.slug}`}>
               <span className={styles.pagerDir}>Next →</span>
               <span className={styles.pagerTitle}>{next.title}</span>
             </a>
           ) : (
-            <a className={`${styles.pagerLink} ${styles.pagerLinkRight}`} href="/v2">
+            <a className={`${styles.pagerLink} ${styles.pagerLinkRight}`} href="/">
               <span className={styles.pagerDir}>All work →</span>
               <span className={styles.pagerTitle}>Back to selected work</span>
             </a>

@@ -1,9 +1,9 @@
 import { useEffect, type ReactNode } from "react";
-import styles from "./AppV2Info.module.css";
+import styles from "./AppInfo.module.css";
 
 const DOC_TITLE = "Info — Mario Calvo";
 
-export default function AppV2Info() {
+export default function AppInfo() {
   useEffect(() => {
     document.title = DOC_TITLE;
   }, []);
@@ -12,13 +12,13 @@ export default function AppV2Info() {
     <div className={styles.page}>
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
-        <a href="/v2" className={styles.navIdentity}>
+        <a href="/" className={styles.navIdentity}>
           <span className={styles.navName}>Mario Calvo</span>
           <span className={styles.navRole}>CRM &amp; Lifecycle</span>
         </a>
         <div className={styles.navPill}>
-          <a href="/v2">Work</a>
-          <a href="/v2/info" className={styles.navPillActive}>Info</a>
+          <a href="/">Work</a>
+          <a href="/info" className={styles.navPillActive}>Info</a>
         </div>
         <div className={styles.navSocials}>
           <a

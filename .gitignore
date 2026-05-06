@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Source screenshots (we keep the cropped versions)
+public/magnific/Captura de pantalla*.png
