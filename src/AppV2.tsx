@@ -70,10 +70,7 @@ export default function AppV2() {
         {/* ============ FOOTER ============ */}
         <footer id="info" className={styles.footer}>
           <div className={styles.footerTop}>
-            <p className={styles.footerNote}>
-              Made with <span className={styles.heart}>♥</span> between Madrid commutes
-              and AMPscript queries — and the occasional Bridgerton ticket.
-            </p>
+            <span>&nbsp;</span>
             <div className={styles.footerLinks}>
               <a href="mailto:mariocalvocst@gmail.com">
                 Email <span className={styles.tinyArrow}>↗</span>
@@ -88,7 +85,12 @@ export default function AppV2() {
             </div>
           </div>
           <div className={styles.footerBottom}>
-            <span>© {new Date().getFullYear()} Mario Calvo</span>
+            <div className={styles.footerSig}>
+              <span>© {new Date().getFullYear()} Mario Calvo</span>
+              <span className={styles.footerNoteSmall}>
+                Made with <span className={styles.heart}>♥</span> and the collaboration of my cat buddy.
+              </span>
+            </div>
             <span>v2 · Built with React + Vite</span>
           </div>
         </footer>

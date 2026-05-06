@@ -837,6 +837,7 @@
 .footerBottom {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   font-family: "Geist", sans-serif;
   font-size: 0.75rem;
   color: var(--muted);
@@ -845,4 +846,28 @@
   letter-spacing: -0.005em;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.footerSig {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.footerNoteSmall {
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  letter-spacing: -0.005em;
+}
+
+.footerNoteSmall .heart {
+  color: #ef4444;
+  display: inline-block;
+  animation: heart 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footerNoteSmall .heart {
+    animation: none;
+  }
 }
