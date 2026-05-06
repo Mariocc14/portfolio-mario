@@ -321,7 +321,7 @@
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  min-height: 90vh;
+  min-height: 72vh;
   scroll-snap-align: center;
   transition:
     transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
@@ -331,7 +331,7 @@
 
 @media (max-width: 720px) {
   .project {
-    min-height: 80vh;
+    min-height: 68vh;
     padding: 1.75rem 1.75rem 0;
   }
 }
@@ -500,8 +500,8 @@
 
 /* ============ Lifecycle project card (scroll-hijacked, exactly 100vh) ============ */
 .project.projectLifecycle {
-  min-height: 100vh;
-  height: 100vh;
+  min-height: 68vh;
+  height: 68vh;
   padding: 0;
   cursor: default;
   transform: none !important;
@@ -520,12 +520,12 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 2.5rem 2.75rem 2rem;
+  padding: 1.5rem 2.5rem 1.25rem;
 }
 
 @media (max-width: 720px) {
   .lifecycleSticky {
-    padding: 1.75rem 1.75rem 1.5rem;
+    padding: 1.25rem 1.5rem 1.25rem;
   }
 }
 
@@ -537,12 +537,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2.5rem;
+  gap: 1.75rem;
 }
 
 @media (max-width: 720px) {
   .lifeScroll {
-    gap: 2rem;
+    gap: 1.4rem;
   }
 }
 
