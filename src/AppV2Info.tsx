@@ -47,7 +47,7 @@ export default function AppV2Info() {
           </div>
           <h1 className={styles.name}>Mario Calvo</h1>
           <p className={styles.role}>
-            CRM &amp; Lifecycle Consultant. Based in Madrid. Currently freelance.
+            CRM &amp; Lifecycle Consultant. Based in Spain.
           </p>
         </header>
 
@@ -71,10 +71,11 @@ export default function AppV2Info() {
           <p>
             For the last several years I've specialised in <strong>CRM</strong> and{" "}
             <strong>lifecycle automation</strong>. I design and ship the
-            communication systems that sit underneath the user journey: built in
-            Salesforce Marketing Cloud, segmented with SQL, templated with HTML
-            and CSS, and orchestrated across email, push and in-app — rolled out
-            across multiple markets and verticals.
+            communication systems that sit underneath the user journey: built
+            across <strong>Salesforce Marketing Cloud</strong>,{" "}
+            <strong>Braze</strong> and <strong>Odoo</strong>, segmented with SQL,
+            templated with HTML and CSS, and orchestrated across email, push and
+            in-app — rolled out across multiple markets and verticals.
           </p>
           <p>
             The approach is the same regardless of the vertical: improve the
@@ -87,9 +88,19 @@ export default function AppV2Info() {
 
         <Section label="Currently">
           <p>
-            I'm pivoting toward freelance work, combining my automation
-            experience with AI tools to ship practical solutions — projects
-            that optimise processes and generate real business impact, fast.
+            Part of the team at{" "}
+            <a
+              href="https://magnific.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.inlineLink}
+            >
+              Magnific
+            </a>
+            , applying my CRM and lifecycle experience to a fast-moving AI
+            product. In parallel, I'm exploring how AI can sharpen automation
+            work — practical solutions that ship fast and generate real business
+            impact.
           </p>
         </Section>
 
@@ -108,16 +119,29 @@ export default function AppV2Info() {
             >
               Monkway
             </a>
-            , a side project I built around it.
+            , a habits app I built around it.
+          </p>
+          <p>
+            On the business side, I'm co-founding{" "}
+            <a
+              href="https://web-production-98b02b.up.railway.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.inlineLink}
+            >
+              Sprintia
+            </a>
+            , an AI voice assistant for small businesses — built on ElevenLabs
+            and Google Calendar, with a customer app and an internal CMS.
           </p>
         </Section>
 
         <Section label="How I work">
           <p>
             Resolute, adaptable, results-oriented. Comfortable in dynamic
-            environments that demand autonomy and strategic thinking. I'm
-            looking for projects where I can add value through automation,
-            process optimisation and improving the user experience.
+            environments that demand autonomy and strategic thinking. I'm always
+            open to collaborate on projects where I can add value through
+            automation, process optimisation and improving the user experience.
           </p>
         </Section>
 
