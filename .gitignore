@@ -31,3 +31,4 @@ public/magnific/Captura de pantalla*.png
 .env
 .env.local
 .env.*.local
+setup-vercel-env.command
