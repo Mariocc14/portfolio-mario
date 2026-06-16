@@ -1,0 +1,407 @@
+/* Resources index — list of downloadable playbooks */
+
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+
+.page {
+  --bg: #060606;
+  --surface: #131313;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --ink: #fafafa;
+  --ink-2: rgba(255, 255, 255, 0.72);
+  --muted: rgba(255, 255, 255, 0.5);
+
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255, 255, 255, 0.06) 0%, transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font-family: "Geist", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-bottom: 3rem;
+}
+
+/* ============ Nav ============ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.4rem 2rem;
+  background: linear-gradient(180deg, rgba(6, 6, 6, 0.85) 0%, rgba(6, 6, 6, 0) 100%);
+}
+
+@media (max-width: 720px) {
+  .nav {
+    grid-template-columns: 1fr auto;
+    padding: 1rem 1.25rem;
+  }
+}
+
+.navIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  text-decoration: none;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.navName {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.navRole {
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+}
+
+.navPill {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.3rem;
+  gap: 0.25rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (max-width: 720px) {
+  .navPill { display: none; }
+}
+
+.navPill a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+.navPill a:hover { color: var(--ink); }
+
+.navPillActive {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.navSocials {
+  justify-self: end;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.navSocials a {
+  font-size: 0.9rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.18s ease;
+}
+
+.navSocials a:hover { color: var(--muted); }
+
+.tinyArrow {
+  font-size: 0.78rem;
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+
+.navSocials a:hover .tinyArrow {
+  transform: translate(2px, -2px);
+}
+
+/* ============ Main ============ */
+.main {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 7rem 1.5rem 4rem;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding: 8rem 2rem 4rem;
+  }
+}
+
+/* ============ Header ============ */
+.header {
+  margin-bottom: 4rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.eyebrowLine {
+  width: 28px;
+  height: 1px;
+  background: var(--ink);
+}
+
+.eyebrowText {
+  font-family: "Geist Mono", monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.title {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.5rem;
+  color: var(--ink);
+}
+
+.title em {
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-weight: 400;
+  background: linear-gradient(180deg, #fff 30%, rgba(255, 255, 255, 0.6) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.25));
+  letter-spacing: -0.015em;
+}
+
+.intro {
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+  letter-spacing: -0.005em;
+  max-width: 38rem;
+}
+
+/* ============ List of cards ============ */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.75rem 1.85rem 1.65rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px circle at 50% -20%, rgba(255, 255, 255, 0.05), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.cardCategory {
+  color: var(--ink-2);
+}
+
+.cardDot {
+  opacity: 0.4;
+}
+
+.cardLang {
+  margin-left: auto;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.1em;
+}
+
+.cardTitle {
+  font-size: clamp(1.25rem, 2.3vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+  margin: 0;
+  color: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+
+.cardSubtitle {
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 0;
+  letter-spacing: -0.005em;
+  position: relative;
+  z-index: 1;
+  max-width: 48rem;
+}
+
+.cardCta {
+  margin-top: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  position: relative;
+  z-index: 1;
+}
+
+.cardArrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.card:hover .cardArrow {
+  transform: translateX(4px);
+}
+
+/* ============ Footer ============ */
+.footer {
+  margin-top: 5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.footerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footerLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.footerLinks a {
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.18s ease;
+}
+
+.footerLinks a:hover { color: var(--muted); }
+
+.footerBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-family: "Geist", sans-serif;
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+  letter-spacing: -0.005em;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footerSig {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.footerNoteSmall {
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  letter-spacing: -0.005em;
+}
+
+.footerNoteSmall .heart {
+  color: #ef4444;
+  display: inline-block;
+  animation: heart 2.4s ease-in-out infinite;
+}
+
+@keyframes heart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footerNoteSmall .heart { animation: none; }
+}

@@ -19,6 +19,7 @@ export default function AppInfo() {
         <div className={styles.navPill}>
           <a href="/">Work</a>
           <a href="/info" className={styles.navPillActive}>Info</a>
+          <a href="/resources">Resources</a>
         </div>
         <div className={styles.navSocials}>
           <a

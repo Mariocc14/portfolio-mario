@@ -20,6 +20,7 @@ export default function App() {
         <div className={styles.navPill}>
           <a href="/" className={styles.navPillActive}>Work</a>
           <a href="/info">Info</a>
+          <a href="/resources">Resources</a>
         </div>
         <div className={styles.navSocials}>
           <a
