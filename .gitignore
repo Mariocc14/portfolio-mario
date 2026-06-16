@@ -26,3 +26,8 @@ dist-ssr
 
 # Source screenshots (we keep the cropped versions)
 public/magnific/Captura de pantalla*.png
+
+# Env files (Vite)
+.env
+.env.local
+.env.*.local

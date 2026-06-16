@@ -1,108 +1,88 @@
-# Wiring the lead form to Supabase
+# Lead capture — Supabase backend
 
-The `/resources/<slug>` download modal collects `{ name, email, role, resourceSlug, resourceTitle }`. Right now the submit handler in `src/submitLead.ts` is a stub that just `console.log`s the payload. This file documents how to wire it up to a real Supabase backend so leads land in a queryable table you can plug into email tools, n8n, Zapier, or your own flow.
+The `/resources/<slug>` download modal writes leads to a Supabase Postgres table called `public.leads`. The frontend uses the publishable (anon) key and submissions are validated by an RLS policy. Reads are dashboard-only.
+
+This file documents what's already wired up so you can recreate it or audit it later.
 
 ---
 
-## 1. Create the project
+## Project
 
-1. Sign up at <https://supabase.com> (free tier is fine).
-2. Create a new project. Pick the region closest to your users (Frankfurt or London for ES audiences).
-3. Once it provisions, grab two values from **Settings → API**:
-   - **Project URL** — `https://xxxxxxxx.supabase.co`
-   - **Anon (public) API key** — long JWT starting with `eyJ...`
+- **Name:** Portfolio Mario
+- **Project ref:** `svqufucizwozcnokskft`
+- **API URL:** `https://svqufucizwozcnokskft.supabase.co`
+- **Region:** `eu-central-1`
 
-## 2. Create the `leads` table
-
-In the Supabase dashboard, open **SQL Editor** and run:
+## Table
 
 ```sql
 create table public.leads (
-  id           uuid primary key default gen_random_uuid(),
-  created_at   timestamptz not null default now(),
-  name         text   not null,
-  email        text   not null,
-  role_kind    text   not null check (role_kind in ('business_owner', 'employee')),
-  role_value   text   not null,
-  resource_slug  text not null,
-  resource_title text not null,
-  user_agent   text,
-  referrer     text
+  id              uuid primary key default gen_random_uuid(),
+  created_at      timestamptz not null default now(),
+  name            text not null,
+  email           text not null,
+  role_kind       text not null check (role_kind in ('business_owner', 'employee')),
+  role_value      text not null,
+  resource_slug   text not null,
+  resource_title  text not null,
+  user_agent      text,
+  referrer        text
 );
 
--- One row per (email, resource) so duplicates don't pile up.
 create unique index leads_email_resource_unique
   on public.leads (lower(email), resource_slug);
+```
 
--- Allow the public anon key to insert, but never read.
+The unique index dedupes re-submissions of the same `(email, resource)` pair so a user clicking download twice doesn't pile up rows.
+
+## RLS
+
+The table has RLS enabled. The only allowed operation from the browser is `INSERT`, and only with valid fields. Reads must go through the dashboard or a server-side service-role client.
+
+```sql
 alter table public.leads enable row level security;
 
-create policy "anyone can submit a lead"
-  on public.leads for insert
-  to anon
-  with check (true);
+create policy "anon can insert valid leads"
+  on public.leads for insert to anon
+  with check (
+    length(trim(name)) between 2 and 120
+    and email ~ '^[^\s@]+@[^\s@]+\.[^\s@]+$'
+    and length(email) <= 254
+    and length(trim(role_value)) between 1 and 60
+    and length(trim(resource_slug)) between 1 and 80
+    and length(trim(resource_title)) between 1 and 200
+  );
 ```
 
-That gives you a write-only table from the browser. Only authenticated users (you, in the dashboard) can read it.
+The same policy exists for the `authenticated` role.
 
-## 3. Add env vars
+## Env vars
 
-Create `.env.local` in the project root (already gitignored by Vite):
+`.env.local` (gitignored) holds the Vite-exposed credentials:
 
 ```
-VITE_SUPABASE_URL=https://xxxxxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJ...
+VITE_SUPABASE_URL=https://svqufucizwozcnokskft.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_GWfhMetBTAV6TAiVGfnUBw_OMYebbOx
 ```
 
-On Vercel, add the same two variables in **Project → Settings → Environment Variables**.
+For Vercel, add the same two variables in **Project → Settings → Environment Variables** (Production + Preview + Development environments).
 
-## 4. Install the client and wire the handler
+## Frontend wiring
 
-```bash
-npm install @supabase/supabase-js
-```
+`src/submitLead.ts` builds a Supabase client and inserts the lead. If the env vars are missing (e.g. local dev without `.env.local`), it falls back to a stub that just resolves so the UI still works.
 
-Replace the body of `src/submitLead.ts` (`submitLead` function) with:
+The handler treats unique-violation (Postgres `23505`) as success: the user already requested this resource with the same email, so the UX shows the confirmation anyway.
 
-```ts
-import { createClient } from "@supabase/supabase-js";
+## Where the leads live
 
-const sb = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-);
+Open the Supabase dashboard → **Table Editor → leads**. From there you can sort, filter, search, export to CSV, or wire downstream automations:
 
-export async function submitLead(payload: LeadPayload): Promise<SubmitResult> {
-  const role_kind = payload.role.kind;
-  const role_value =
-    payload.role.kind === "business_owner"
-      ? payload.role.industry
-      : payload.role.area;
+- **Database Webhooks** (Database → Webhooks) — POST every new row to an n8n / Make / Zapier flow, your ESP, or your own endpoint.
+- **Edge Functions** — trigger via `INSERT` to send the PDF with Resend / Postmark, mirror to Notion, push to a CRM, etc.
+- **Service role** — for any server-side script that needs to read leads, use the service role key (Settings → API).
 
-  const { error } = await sb.from("leads").insert({
-    name: payload.name,
-    email: payload.email,
-    role_kind,
-    role_value,
-    resource_slug: payload.resourceSlug,
-    resource_title: payload.resourceTitle,
-    user_agent: navigator.userAgent,
-    referrer: document.referrer || null,
-  });
+## Next steps (when you have content)
 
-  // Treat unique-violation as success — the user is just re-requesting the same PDF.
-  if (error && error.code !== "23505") {
-    return { ok: false, error: error.message };
-  }
-  return { ok: true };
-}
-```
-
-That's it. Submissions now write to `public.leads` and the UI shows the success state.
-
-## 5. Next steps (optional)
-
-- **Email delivery of the PDF**: add a Supabase Edge Function triggered by an `INSERT` on `leads` that calls Resend / Postmark with the PDF attached.
-- **Notion mirror**: webhook from the Edge Function to a Notion DB so you can pipe leads into your usual workspace.
-- **Welcome series**: export to Brevo / MailerLite / your ESP via their API; trigger an automation per `resource_slug`.
-- **CRM enrichment**: pipe to Clay or Apollo via webhook to enrich `role_value` with company size / industry data before contact.
+- Add the actual PDFs to your hosting (Supabase Storage bucket works well; or just `public/` if they're small) and have the Edge Function attach them on insert.
+- Pipe `(email, resource_slug)` into the welcome series of your ESP per resource so each download triggers a related nurture flow.
+- Add a hidden `utm_source` / `utm_campaign` column if you start running paid acquisition for specific resources.

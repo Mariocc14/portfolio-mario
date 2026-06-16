@@ -1,18 +1,22 @@
-// Lead submit handler — currently a stub.
+// Lead submit handler — writes to Supabase `public.leads`.
 //
-// To wire up Supabase later, see SUPABASE_SETUP.md for the schema and
-// auth setup, then replace the body of `submitLead` with something like:
-//
-//   import { createClient } from "@supabase/supabase-js";
-//   const sb = createClient(
-//     import.meta.env.VITE_SUPABASE_URL!,
-//     import.meta.env.VITE_SUPABASE_ANON_KEY!
-//   );
-//   const { error } = await sb.from("leads").insert(payload);
-//   return { ok: !error, error: error?.message };
-//
-// No other code needs to change — components call submitLead() and
-// react to { ok, error } regardless of the backend.
+// The table is insert-only from the browser via the anon key. Reads
+// happen in the Supabase dashboard (or server-side with the service
+// role key). See SUPABASE_SETUP.md for the SQL and policies.
+
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as
+  | string
+  | undefined;
+
+const sb =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: { persistSession: false },
+      })
+    : null;
 
 export type LeadRole =
   | { kind: "business_owner"; industry: string }
@@ -29,13 +33,41 @@ export type LeadPayload = {
 export type SubmitResult = { ok: true } | { ok: false; error: string };
 
 export async function submitLead(payload: LeadPayload): Promise<SubmitResult> {
-  // STUB — replace with the Supabase (or other backend) call.
-  // Logs the payload and waits 600ms so the UI can show its loading state.
-  if (typeof window !== "undefined") {
-    // eslint-disable-next-line no-console
-    console.log("[lead submit — stub]", payload);
+  if (!sb) {
+    // No Supabase env vars at build time — fall back to the stub so the
+    // UI is still usable in local dev / preview without keys.
+    if (typeof window !== "undefined") {
+      // eslint-disable-next-line no-console
+      console.warn("[lead submit] Supabase env not configured — using stub", payload);
+    }
+    await new Promise((r) => setTimeout(r, 400));
+    return { ok: true };
   }
-  await new Promise((r) => setTimeout(r, 600));
+
+  const role_kind = payload.role.kind;
+  const role_value =
+    payload.role.kind === "business_owner"
+      ? payload.role.industry
+      : payload.role.area;
+
+  const { error } = await sb.from("leads").insert({
+    name: payload.name,
+    email: payload.email,
+    role_kind,
+    role_value,
+    resource_slug: payload.resourceSlug,
+    resource_title: payload.resourceTitle,
+    user_agent:
+      typeof navigator !== "undefined" ? navigator.userAgent : null,
+    referrer:
+      typeof document !== "undefined" ? document.referrer || null : null,
+  });
+
+  // 23505 = unique_violation. The user already requested this resource
+  // with the same email — treat as success so they still get the UX.
+  if (error && error.code !== "23505") {
+    return { ok: false, error: error.message };
+  }
   return { ok: true };
 }
 
