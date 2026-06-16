@@ -270,3 +270,29 @@
 .success .body {
   margin-bottom: 1.5rem;
 }
+
+.success .submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+}
+
+.closeText {
+  margin-top: 0.9rem;
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.closeText:hover {
+  color: rgba(255, 255, 255, 0.85);
+}

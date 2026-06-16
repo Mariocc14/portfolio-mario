@@ -63,9 +63,9 @@ export default function AppResource({ slug }: { slug: string }) {
         {/* ============ DOWNLOAD CTA ============ */}
         <section className={styles.downloadSection}>
           <div className={styles.downloadCard}>
-            <p className={styles.downloadLabel}>Want the full PDF?</p>
+            <p className={styles.downloadLabel}>Get the {resource.format}</p>
             <h2 className={styles.downloadTitle}>
-              I'll send it straight to your inbox.
+              Quick form, direct download.
             </h2>
             <button
               type="button"

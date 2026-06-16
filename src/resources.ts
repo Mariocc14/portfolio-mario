@@ -18,6 +18,10 @@ export type Resource = {
   format: "PDF" | "Notion";
   readingTime: string;
   body: ResourceBlock[];
+  /** Path or URL the user lands on after the lead form is submitted. */
+  downloadHref: string;
+  /** Filename suggested when the browser saves it (PDF only). */
+  downloadFilename?: string;
 };
 
 export const resources: Resource[] = [
@@ -30,6 +34,8 @@ export const resources: Resource[] = [
     category: "Email Deliverability",
     format: "PDF",
     readingTime: "4 min",
+    downloadHref: "/resources/warm-up-de-dominio.pdf",
+    downloadFilename: "warm-up-de-dominio-mario-calvo.pdf",
     body: [
       {
         type: "p",

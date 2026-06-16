@@ -28,6 +28,7 @@ export default function LeadModal({ resource, open, onClose }: Props) {
     "idle" | "submitting" | "success" | "error"
   >("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
 
   // Reset form when modal opens for a new resource
   useEffect(() => {
@@ -95,6 +96,10 @@ export default function LeadModal({ resource, open, onClose }: Props) {
 
     if (result.ok) {
       setStatus("success");
+      // Auto-start the download as soon as the lead lands. Wrapped in a
+      // setTimeout so the success state renders first and the user sees
+      // why their browser kicked into download mode.
+      setTimeout(() => downloadAnchorRef.current?.click(), 250);
     } else {
       setStatus("error");
       setErrorMsg(result.error);
@@ -132,16 +137,27 @@ export default function LeadModal({ resource, open, onClose }: Props) {
           <div className={styles.success}>
             <span className={styles.successIcon}>✓</span>
             <h2 id="lead-modal-title" className={styles.title}>
-              You're in.
+              Your download is ready.
             </h2>
             <p className={styles.body}>
-              We'll send <strong>{resource.title}</strong> to{" "}
-              <strong>{email}</strong> shortly. Check your inbox in a couple
-              of minutes.
+              <strong>{resource.title}</strong> should be saving to your device
+              now. If it doesn't, tap the button below.
             </p>
+            <a
+              ref={downloadAnchorRef}
+              href={resource.downloadHref}
+              download={resource.downloadFilename}
+              className={styles.submit}
+              target={resource.format === "Notion" ? "_blank" : undefined}
+              rel={resource.format === "Notion" ? "noopener noreferrer" : undefined}
+            >
+              {resource.format === "Notion"
+                ? "Open in Notion ↗"
+                : `Download the ${resource.format} ↓`}
+            </a>
             <button
               type="button"
-              className={styles.submit}
+              className={styles.closeText}
               onClick={onClose}
             >
               Close
@@ -155,8 +171,8 @@ export default function LeadModal({ resource, open, onClose }: Props) {
                 {resource.title}
               </h2>
               <p className={styles.body}>
-                Tell me where to send it. I'll only use this to deliver the
-                resource and the occasional related update.
+                Quick details before I hand you the {resource.format}.
+                I'll keep them for occasional related updates — no spam.
               </p>
             </header>
 
@@ -248,11 +264,15 @@ export default function LeadModal({ resource, open, onClose }: Props) {
                 className={styles.submit}
                 disabled={!canSubmit}
               >
-                {status === "submitting" ? "Sending…" : "Send me the PDF →"}
+                {status === "submitting"
+                  ? "Preparing…"
+                  : resource.format === "Notion"
+                    ? "Open in Notion ↗"
+                    : `Download the ${resource.format} ↓`}
               </button>
 
               <p className={styles.footnote}>
-                No spam. Unsubscribe in one click.
+                Direct download. No spam.
               </p>
             </form>
           </>
