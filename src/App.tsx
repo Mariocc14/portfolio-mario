@@ -1,13 +1,56 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+} from "react";
 import styles from "./App.module.css";
 import { projects, type ProjectDetail } from "./projects";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
+const HEADLINE_WORDS = ["I", "build", "systems,", "journeys", "&"];
+
+/* Reveals any element carrying the `reveal` class as it scrolls into view. */
+function useScrollReveal() {
+  useEffect(() => {
+    const els = Array.from(
+      document.querySelectorAll<HTMLElement>(`.${styles.reveal}`)
+    );
+    if (els.length === 0) return;
+
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reduce) {
+      els.forEach((el) => el.classList.add(styles.revealVisible));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.revealVisible);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
 export default function App() {
   useEffect(() => {
     document.title = DOC_TITLE;
   }, []);
+
+  useScrollReveal();
 
   return (
     <div className={styles.page} data-scroll-root>
@@ -48,7 +91,21 @@ export default function App() {
             </div>
             <div className={styles.heroBody}>
               <h1 className={styles.heroHeadline}>
-                I build systems, journeys &amp; <em>automation.</em>
+                {HEADLINE_WORDS.map((word, i) => (
+                  <span
+                    key={word}
+                    className={styles.heroWord}
+                    style={{ animationDelay: `${0.15 + i * 0.09}s` }}
+                  >
+                    {word}{" "}
+                  </span>
+                ))}
+                <span
+                  className={styles.heroWord}
+                  style={{ animationDelay: `${0.15 + HEADLINE_WORDS.length * 0.09}s` }}
+                >
+                  <em>automation.</em>
+                </span>
               </h1>
               <p className={styles.heroSub}>
                 CRM &amp; Lifecycle Consultant. Based in Spain.
@@ -111,8 +168,31 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
       ? project.gallery.slice(0, 3)
       : [{ src: project.thumb, alt: project.title, dark: project.thumbDark }];
 
+  const handlePointerMove = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width; // 0..1
+    const py = (e.clientY - rect.top) / rect.height; // 0..1
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
+    // Tilt: map cursor offset from center to a few degrees
+    el.style.setProperty("--tiltY", `${(px - 0.5) * 8}deg`);
+    el.style.setProperty("--tiltX", `${(0.5 - py) * 6}deg`);
+  };
+
+  const handlePointerLeave = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+    const el = e.currentTarget;
+    el.style.setProperty("--tiltX", "0deg");
+    el.style.setProperty("--tiltY", "0deg");
+  };
+
   return (
-    <a className={styles.project} href={`/${project.slug}`}>
+    <a
+      className={`${styles.project} ${styles.reveal}`}
+      href={`/${project.slug}`}
+      onMouseMove={handlePointerMove}
+      onMouseLeave={handlePointerLeave}
+    >
       <div className={styles.projectGlow} aria-hidden="true" />
       <div className={styles.projectHead}>
         <div className={styles.projectTitleBlock}>
@@ -245,7 +325,7 @@ function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
   return (
     <a
       ref={ref}
-      className={`${styles.project} ${styles.projectLifecycle}`}
+      className={`${styles.project} ${styles.projectLifecycle} ${styles.reveal}`}
       href={`/${project.slug}`}
     >
       <div className={styles.lifecycleSticky}>
