@@ -335,7 +335,7 @@ export const projects: ProjectDetail[] = [
   {
     slug: "event-lifecycle-automation",
     num: "01",
-    title: "Event Lifecycle Design & Automation at Scale",
+    title: "Event Lifecycle: design, build & automation at scale",
     company: "Lifecycle Design · SFMC",
     year: "'23",
     shortDesc:
@@ -373,7 +373,7 @@ export const projects: ProjectDetail[] = [
   {
     slug: "transactional-comms-redesign",
     num: "02",
-    title: "Transactional Comms Redesign & Product Integration",
+    title: "Transactional Comms: design, build & Product Integration",
     company: "Transactional · Product × CRM",
     year: "'24",
     shortDesc:
@@ -432,7 +432,7 @@ export const projects: ProjectDetail[] = [
   {
     slug: "tourism-lifecycle",
     num: "03",
-    title: "Tourism Lifecycle Strategy",
+    title: "New Business Vertical (Tourism): Lifecycle design & build",
     company: "Fever",
     year: "'24",
     shortDesc:
@@ -465,7 +465,7 @@ export const projects: ProjectDetail[] = [
   {
     slug: "content-cards",
     num: "04",
-    title: "In-app & In-product Notifications",
+    title: "In-product Notifications: multi-channel strategy",
     company: "In-product · Notifications",
     year: "'25",
     shortDesc:
