@@ -31,7 +31,7 @@ export default function App() {
           >
             LinkedIn <span className={styles.tinyArrow}>↗</span>
           </a>
-          <a href="mailto:mariocalvocst@gmail.com">
+          <a href="mailto:mariocalvocst@gmail.com" data-analytics-name="Contactar por email - Hero">
             Email <span className={styles.tinyArrow}>↗</span>
           </a>
         </div>
@@ -74,7 +74,7 @@ export default function App() {
           <div className={styles.footerTop}>
             <span>&nbsp;</span>
             <div className={styles.footerLinks}>
-              <a href="mailto:mariocalvocst@gmail.com">
+              <a href="mailto:mariocalvocst@gmail.com" data-analytics-name="Contactar por email - Footer">
                 Email <span className={styles.tinyArrow}>↗</span>
               </a>
               <a

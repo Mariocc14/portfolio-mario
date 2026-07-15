@@ -13,9 +13,24 @@ posthog.init('phc_QPwTqqZbVEIwjiRz7bRvM2W8PXmBEgyjpIjHLq0zJQH', {
 });
 
 document.addEventListener('click', (event) => {
-  const target = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href]');
+  const target = (event.target as HTMLElement).closest<HTMLElement>('a,button,[role="button"]');
   if (!target) return;
   const href = target.getAttribute('href') ?? '';
+  const label = target.dataset.analyticsName
+    || target.getAttribute('aria-label')
+    || target.textContent?.replace(/\s+/g, ' ').trim()
+    || target.getAttribute('title')
+    || target.id
+    || href
+    || 'CTA sin nombre';
+  posthog.capture('cta_clicked', {
+    site: 'marioclv',
+    domain: window.location.hostname,
+    button_name: label.slice(0, 100),
+    element_type: target.tagName.toLowerCase(),
+    destination: href.split('?')[0],
+    source_path: window.location.pathname,
+  });
   if (href.startsWith('mailto:') || href.includes('linkedin.com')) {
     posthog.capture('contact_cta_clicked', {
       site: 'marioclv',
