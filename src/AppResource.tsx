@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import styles from "./AppResource.module.css";
 import { getResourceBySlug, type ResourceBlock } from "./resources";
 import LeadModal from "./LeadModal";
+import { captureEvent } from "./posthog";
 
 export default function AppResource({ slug }: { slug: string }) {
   const resource = getResourceBySlug(slug);
   const [modalOpen, setModalOpen] = useState(false);
+  const openLeadModal = (placement: "top" | "bottom") => {
+    captureEvent("resource_download_clicked", { resource_slug: slug, placement });
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     if (resource) {
@@ -48,7 +53,7 @@ export default function AppResource({ slug }: { slug: string }) {
           <button
             type="button"
             className={styles.downloadCtaTop}
-            onClick={() => setModalOpen(true)}
+            onClick={() => openLeadModal("top")}
           >
             Download the {resource.format}
             <span className={styles.ctaArrow}>↓</span>
@@ -70,7 +75,7 @@ export default function AppResource({ slug }: { slug: string }) {
             <button
               type="button"
               className={styles.downloadCta}
-              onClick={() => setModalOpen(true)}
+              onClick={() => openLeadModal("bottom")}
             >
               Download the {resource.format}
               <span className={styles.ctaArrow}>↓</span>

@@ -6,6 +6,7 @@ import AppInfo from './AppInfo.tsx'
 import AppProject from './AppProject.tsx'
 import AppResources from './AppResources.tsx'
 import AppResource from './AppResource.tsx'
+import './posthog.ts'
 
 const path = window.location.pathname.replace(/\/$/, '') // strip trailing slash
 

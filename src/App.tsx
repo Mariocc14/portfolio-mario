@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
 import { projects, type ProjectDetail } from "./projects";
+import { captureEvent } from "./posthog";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
@@ -112,7 +113,7 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
       : [{ src: project.thumb, alt: project.title, dark: project.thumbDark }];
 
   return (
-    <a className={styles.project} href={`/${project.slug}`}>
+    <a className={styles.project} href={`/${project.slug}`} onClick={() => captureEvent('project_opened', { project_slug: project.slug, project_title: project.title })}>
       <div className={styles.projectGlow} aria-hidden="true" />
       <div className={styles.projectHead}>
         <div className={styles.projectTitleBlock}>
