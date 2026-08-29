@@ -7,6 +7,7 @@ import {
   type LeadRole,
 } from "./submitLead";
 import type { Resource } from "./resources";
+import { captureEvent } from "./posthog";
 
 type Props = {
   resource: Resource;
@@ -80,6 +81,7 @@ export default function LeadModal({ resource, open, onClose }: Props) {
 
     setStatus("submitting");
     setErrorMsg("");
+    captureEvent("lead_form_submitted", { resource_slug: resource.slug, role_kind: roleKind });
 
     const role: LeadRole =
       roleKind === "business_owner"
@@ -96,12 +98,14 @@ export default function LeadModal({ resource, open, onClose }: Props) {
 
     if (result.ok) {
       setStatus("success");
+      captureEvent("lead_created", { resource_slug: resource.slug, role_kind: roleKind, role_value: roleValue });
       // Auto-start the download as soon as the lead lands. Wrapped in a
       // setTimeout so the success state renders first and the user sees
       // why their browser kicked into download mode.
       setTimeout(() => downloadAnchorRef.current?.click(), 250);
     } else {
       setStatus("error");
+      captureEvent("lead_form_failed", { resource_slug: resource.slug });
       setErrorMsg(result.error);
     }
   };
@@ -150,6 +154,7 @@ export default function LeadModal({ resource, open, onClose }: Props) {
               className={styles.submit}
               target={resource.format === "Notion" ? "_blank" : undefined}
               rel={resource.format === "Notion" ? "noopener noreferrer" : undefined}
+              onClick={() => captureEvent("resource_downloaded", { resource_slug: resource.slug, format: resource.format })}
             >
               {resource.format === "Notion"
                 ? "Open in Notion ↗"

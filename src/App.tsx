@@ -8,6 +8,7 @@ import {
 import styles from "./App.module.css";
 import { projects, type ProjectDetail } from "./projects";
 import { spotlight } from "./spotlight";
+import { captureEvent } from "./posthog";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
@@ -101,7 +102,7 @@ export default function App() {
           >
             LinkedIn <span className={styles.tinyArrow}>↗</span>
           </a>
-          <a href="mailto:mariocalvocst@gmail.com">
+          <a href="mailto:mariocalvocst@gmail.com" data-analytics-name="Contactar por email - Hero">
             Email <span className={styles.tinyArrow}>↗</span>
           </a>
         </div>
@@ -190,7 +191,7 @@ export default function App() {
           <div className={styles.footerTop}>
             <span>&nbsp;</span>
             <div className={styles.footerLinks}>
-              <a href="mailto:mariocalvocst@gmail.com">
+              <a href="mailto:mariocalvocst@gmail.com" data-analytics-name="Contactar por email - Footer">
                 Email <span className={styles.tinyArrow}>↗</span>
               </a>
               <a
@@ -252,6 +253,12 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
       href={`/${project.slug}`}
       onMouseMove={handlePointerMove}
       onMouseLeave={handlePointerLeave}
+      onClick={() =>
+        captureEvent("project_opened", {
+          project_slug: project.slug,
+          project_title: project.title,
+        })
+      }
     >
       <div className={styles.projectGlow} aria-hidden="true" />
       <div className={styles.projectHead}>
@@ -355,6 +362,12 @@ function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
       className={`${styles.project} ${styles.projectLifecycle} ${styles.reveal}`}
       href={`/${project.slug}`}
       style={{ "--phases": N } as React.CSSProperties}
+      onClick={() =>
+        captureEvent("project_opened", {
+          project_slug: project.slug,
+          project_title: project.title,
+        })
+      }
     >
       <div className={`${styles.lifecycleSticky} spotlight`} style={{ "--spot-size": "520px" } as React.CSSProperties} {...spotlight}>
         <div className={styles.projectHead}>

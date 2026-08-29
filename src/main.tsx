@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import { routeFor, normalisePath } from './routes.tsx'
+import './posthog.ts'
 
 const container = document.getElementById('root')!
 const tree = <StrictMode>{routeFor(window.location.pathname)}</StrictMode>
