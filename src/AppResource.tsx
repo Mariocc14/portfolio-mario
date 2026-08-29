@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./AppResource.module.css";
+import { spotlight } from "./spotlight";
 import { getResourceBySlug, type ResourceBlock } from "./resources";
 import LeadModal from "./LeadModal";
 
@@ -38,21 +39,27 @@ export default function AppResource({ slug }: { slug: string }) {
           <div className={styles.meta}>
             <span className={styles.metaItem}>{resource.category}</span>
             <span className={styles.metaDot}>·</span>
-            <span className={styles.metaItem}>{resource.format}</span>
-            <span className={styles.metaDot}>·</span>
+            {resource.format && (
+              <>
+                <span className={styles.metaItem}>{resource.format}</span>
+                <span className={styles.metaDot}>·</span>
+              </>
+            )}
             <span className={styles.metaItem}>{resource.readingTime} read</span>
             <span className={styles.metaLang}>{resource.language.toUpperCase()}</span>
           </div>
           <h1 className={styles.title}>{resource.title}</h1>
           <p className={styles.subtitle}>{resource.subtitle}</p>
-          <button
-            type="button"
-            className={styles.downloadCtaTop}
-            onClick={() => setModalOpen(true)}
-          >
-            Download the {resource.format}
-            <span className={styles.ctaArrow}>↓</span>
-          </button>
+          {resource.downloadHref && (
+            <button
+              type="button"
+              className={styles.downloadCtaTop}
+              onClick={() => setModalOpen(true)}
+            >
+              Download the {resource.format}
+              <span className={styles.ctaArrow}>↓</span>
+            </button>
+          )}
         </header>
 
         {/* ============ BODY ============ */}
@@ -61,8 +68,9 @@ export default function AppResource({ slug }: { slug: string }) {
         </article>
 
         {/* ============ DOWNLOAD CTA ============ */}
+        {resource.downloadHref && (
         <section className={styles.downloadSection}>
-          <div className={styles.downloadCard}>
+          <div className={`${styles.downloadCard} spotlight`} style={{ "--spot-size": "420px" } as React.CSSProperties} {...spotlight}>
             <p className={styles.downloadLabel}>Get the {resource.format}</p>
             <h2 className={styles.downloadTitle}>
               Quick form, direct download.
@@ -77,6 +85,7 @@ export default function AppResource({ slug }: { slug: string }) {
             </button>
           </div>
         </section>
+        )}
 
         {/* ============ FOOTER ============ */}
         <footer className={styles.footer}>

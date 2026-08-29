@@ -1,13 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./AppResources.module.css";
 import { resources } from "./resources";
+import { spotlight } from "./spotlight";
 
 const DOC_TITLE = "Resources — Mario Calvo";
 
 export default function AppResources() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     document.title = DOC_TITLE;
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
     <div className={styles.page}>
@@ -34,7 +46,39 @@ export default function AppResources() {
             Email <span className={styles.tinyArrow}>↗</span>
           </a>
         </div>
+        <button
+          type="button"
+          className={styles.navToggle}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </nav>
+
+      <div
+        className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ""}`}
+      >
+        <a href="/" className={styles.mobileMenuLink}>Work</a>
+        <a href="/info" className={styles.mobileMenuLink}>Info</a>
+        <a href="/resources" className={styles.mobileMenuLinkActive}>Resources</a>
+        <div className={styles.mobileMenuDivider} />
+        <a
+          href="https://www.linkedin.com/in/mariocalvocastillo/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.mobileMenuSocial}
+        >
+          LinkedIn <span className={styles.tinyArrow}>↗</span>
+        </a>
+        <a
+          href="mailto:mariocalvocst@gmail.com"
+          className={styles.mobileMenuSocial}
+        >
+          Email <span className={styles.tinyArrow}>↗</span>
+        </a>
+      </div>
 
       <main className={styles.main}>
         {/* ============ HEADER ============ */}
@@ -59,14 +103,19 @@ export default function AppResources() {
             <a
               key={r.slug}
               href={`/resources/${r.slug}`}
-              className={styles.card}
+              className={`${styles.card} spotlight`}
+              {...spotlight}
             >
               <div className={styles.cardHead}>
                 <div className={styles.cardMeta}>
                   <span className={styles.cardCategory}>{r.category}</span>
                   <span className={styles.cardDot}>·</span>
-                  <span>{r.format}</span>
-                  <span className={styles.cardDot}>·</span>
+                  {r.format && (
+                    <>
+                      <span>{r.format}</span>
+                      <span className={styles.cardDot}>·</span>
+                    </>
+                  )}
                   <span>{r.readingTime} read</span>
                   <span className={styles.cardLang}>{r.language.toUpperCase()}</span>
                 </div>
@@ -74,7 +123,8 @@ export default function AppResources() {
               <h2 className={styles.cardTitle}>{r.title}</h2>
               <p className={styles.cardSubtitle}>{r.subtitle}</p>
               <span className={styles.cardCta}>
-                Read &amp; download <span className={styles.cardArrow}>→</span>
+                {r.downloadHref ? "Read & download" : "Read"}{" "}
+                <span className={styles.cardArrow}>→</span>
               </span>
             </a>
           ))}

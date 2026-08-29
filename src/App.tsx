@@ -7,6 +7,7 @@ import {
 } from "react";
 import styles from "./App.module.css";
 import { projects, type ProjectDetail } from "./projects";
+import { spotlight } from "./spotlight";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
@@ -28,6 +29,9 @@ function useScrollReveal() {
       return;
     }
 
+    // Opt in to the hidden start state only now that we know the observer will run.
+    document.documentElement.classList.add("js-reveal");
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -41,19 +45,43 @@ function useScrollReveal() {
     );
 
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // Safety net: if nothing has revealed shortly after mount — a zero-height viewport, a
+    // container the observer cannot measure — show everything rather than leave a blank page.
+    const failsafe = window.setTimeout(() => {
+      const stillHidden = els.filter((el) => !el.classList.contains(styles.revealVisible));
+      if (stillHidden.length === els.length) {
+        document.documentElement.classList.remove("js-reveal");
+      }
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(failsafe);
+      io.disconnect();
+    };
   }, []);
 }
 
 export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     document.title = DOC_TITLE;
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   useScrollReveal();
 
   return (
-    <div className={styles.page} data-scroll-root>
+    <div className={styles.page}>
       {/* ============ NAV ============ */}
       <nav className={styles.nav}>
         <a href="/" className={styles.navIdentity}>
@@ -77,12 +105,44 @@ export default function App() {
             Email <span className={styles.tinyArrow}>↗</span>
           </a>
         </div>
+        <button
+          type="button"
+          className={styles.navToggle}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </nav>
+
+      <div
+        className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ""}`}
+      >
+        <a href="/" className={styles.mobileMenuLinkActive}>Work</a>
+        <a href="/info" className={styles.mobileMenuLink}>Info</a>
+        <a href="/resources" className={styles.mobileMenuLink}>Resources</a>
+        <div className={styles.mobileMenuDivider} />
+        <a
+          href="https://www.linkedin.com/in/mariocalvocastillo/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.mobileMenuSocial}
+        >
+          LinkedIn <span className={styles.tinyArrow}>↗</span>
+        </a>
+        <a
+          href="mailto:mariocalvocst@gmail.com"
+          className={styles.mobileMenuSocial}
+        >
+          Email <span className={styles.tinyArrow}>↗</span>
+        </a>
+      </div>
 
       <main className={styles.main} id="top">
         {/* ============ HERO ============ */}
         <section className={styles.hero}>
-          <div className={styles.heroWindow}>
+          <div className={`${styles.heroWindow} spotlight`} style={{ "--spot-size": "560px", "--spot-strength": "0.10" } as React.CSSProperties} {...spotlight}>
             <div className={styles.heroChrome}>
               <span className={`${styles.heroDot} ${styles.heroDotR}`} />
               <span className={`${styles.heroDot} ${styles.heroDotY}`} />
@@ -252,68 +312,35 @@ function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
   useEffect(() => {
     const card = ref.current;
     if (!card) return;
-    const root = card.closest<HTMLElement>("[data-scroll-root]");
-    if (!root) return;
 
-    // True when the card is roughly centered in the viewport (within 80px of midline)
-    const isCentered = () => {
-      const rect = card.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const cardCenter = rect.top + rect.height / 2;
-      return Math.abs(cardCenter - vh / 2) < 80;
-    };
-
-    // Wheel hijack — only intervene when card is centered AND there's room
-    // to advance/retreat in the user's scroll direction.
-    const onWheel = (e: WheelEvent) => {
-      if (!isCentered()) return;
-      const p = progressRef.current;
-      if (e.deltaY > 0 && p < 1) {
-        e.preventDefault();
-        e.stopPropagation();
-        setProgress((curr) => curr + e.deltaY / 1500);
-      } else if (e.deltaY < 0 && p > 0) {
-        e.preventDefault();
-        e.stopPropagation();
-        setProgress((curr) => curr + e.deltaY / 1500);
+    /* Progress comes from scroll position, not from hijacked events.
+       The card is taller than the viewport and its inner panel is sticky, so scrolling
+       scrubs through the phases while the page keeps moving normally. The previous version
+       called preventDefault on wheel, touchstart and touchmove — which is what made this
+       fight the user on a phone, and would now block the document scroll outright. */
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
+      const r = card.getBoundingClientRect();
+      const scrubbable = r.height - window.innerHeight;
+      if (scrubbable <= 0) {
+        // Card fits the viewport (small screens): show the phases without scrubbing.
+        setProgress(() => 0);
+        return;
       }
+      setProgress(() => -r.top / scrubbable);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute);
     };
 
-    // Touch hijack
-    let lastTouchY: number | null = null;
-    const onTouchStart = (e: TouchEvent) => {
-      if (!isCentered()) return;
-      lastTouchY = e.touches[0].clientY;
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (lastTouchY === null || !isCentered()) return;
-      const currentY = e.touches[0].clientY;
-      const deltaY = lastTouchY - currentY;
-      const p = progressRef.current;
-      if ((deltaY > 0 && p < 1) || (deltaY < 0 && p > 0)) {
-        e.preventDefault();
-        const vh = window.innerHeight;
-        setProgress((curr) => curr + deltaY / vh);
-        lastTouchY = currentY;
-      } else {
-        // Reached boundary — release touch tracking so normal scroll resumes
-        lastTouchY = null;
-      }
-    };
-    const onTouchEnd = () => {
-      lastTouchY = null;
-    };
-
-    root.addEventListener("wheel", onWheel, { passive: false });
-    root.addEventListener("touchstart", onTouchStart, { passive: false });
-    root.addEventListener("touchmove", onTouchMove, { passive: false });
-    root.addEventListener("touchend", onTouchEnd);
-
+    compute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
-      root.removeEventListener("wheel", onWheel);
-      root.removeEventListener("touchstart", onTouchStart);
-      root.removeEventListener("touchmove", onTouchMove);
-      root.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, [setProgress]);
 
@@ -327,8 +354,9 @@ function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
       ref={ref}
       className={`${styles.project} ${styles.projectLifecycle} ${styles.reveal}`}
       href={`/${project.slug}`}
+      style={{ "--phases": N } as React.CSSProperties}
     >
-      <div className={styles.lifecycleSticky}>
+      <div className={`${styles.lifecycleSticky} spotlight`} style={{ "--spot-size": "520px" } as React.CSSProperties} {...spotlight}>
         <div className={styles.projectHead}>
           <div className={styles.projectTitleBlock}>
             <h3 className={styles.projectTitle}>{project.title}</h3>
@@ -344,6 +372,9 @@ function LifecycleProjectCard({ project }: { project: ProjectDetail }) {
           </span>
         </div>
         <div className={styles.lifeScroll}>
+          {project.flowLabel && (
+            <span className={styles.lifeScrollFlow}>{project.flowLabel}</span>
+          )}
           <div className={styles.lifeScrollHeader} key={currentIdx}>
             <span className={styles.lifeScrollNum}>
               Phase {phase.num} of {String(N).padStart(2, "0")}

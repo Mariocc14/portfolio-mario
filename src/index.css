@@ -25,3 +25,50 @@ img {
 #root {
   min-height: 100vh;
 }
+
+/* The document is the scroll container. Smooth-scroll for in-page anchors, and a scroll
+   padding so a target never lands under the fixed nav. */
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ===== Cursor spotlight ===================================================
+   The pointer highlight the project cards had, made available to every surface.
+   Opt in with class="spotlight" + the handlers from src/spotlight.ts.
+   Drawn on ::after so no wrapper element is needed; surfaces already using
+   ::before keep it. Size and strength are tunable per surface. */
+.spotlight {
+  position: relative;
+}
+
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    var(--spot-size, 320px) circle at var(--mx, 50%) var(--my, 50%),
+    rgba(var(--accent-rgb, 139, 123, 255), var(--spot-strength, 0.13)) 0%,
+    transparent 60%
+  );
+}
+
+.spotlight:hover::after {
+  opacity: 1;
+}
+
+/* Touch devices have no cursor to follow, and :hover there sticks after a tap. */
+@media (hover: none) {
+  .spotlight::after {
+    content: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight::after {
+    transition: none;
+  }
+}

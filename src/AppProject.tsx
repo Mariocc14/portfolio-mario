@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import styles from "./AppProject.module.css";
+import { spotlight } from "./spotlight";
 import { getProjectBySlug, getNeighbours } from "./projects";
 
 export default function AppProject({ slug }: { slug: string }) {
@@ -108,7 +109,8 @@ export default function AppProject({ slug }: { slug: string }) {
               {project.gallery.map((g, i) => (
                 <figure
                   key={`${g.src}-${i}`}
-                  className={`${styles.galleryItem} ${g.dark ? styles.galleryItemDark : ""}`}
+                  className={`${styles.galleryItem} ${g.dark ? styles.galleryItemDark : ""} spotlight`}
+                  {...spotlight}
                 >
                   <img src={g.src} alt={g.alt} loading="lazy" />
                 </figure>
@@ -142,10 +144,6 @@ export default function AppProject({ slug }: { slug: string }) {
 
         {/* ============ FOOTER ============ */}
         <footer className={styles.footer}>
-          <p className={styles.footerNote}>
-            Made with <span className={styles.heart}>♥</span> between Madrid commutes
-            and AMPscript queries.
-          </p>
           <span className={styles.footerCopy}>© {new Date().getFullYear()} Mario Calvo</span>
         </footer>
       </main>
@@ -158,7 +156,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
   return (
     <div className={styles.mockups}>
       {/* Email — uses a real event email image inside browser-style chrome */}
-      <article className={`${styles.mockup} ${styles.mockupEmail}`}>
+      <article className={`${styles.mockup} ${styles.mockupEmail} spotlight`} {...spotlight}>
         <div className={styles.mockupEmailChrome}>
           <span
             className={styles.mockupChromeDot}
@@ -192,7 +190,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
       </article>
 
       {/* Push — iOS-style notification card on a dark glass surface */}
-      <article className={`${styles.mockup} ${styles.mockupPush}`}>
+      <article className={`${styles.mockup} ${styles.mockupPush} spotlight`} {...spotlight}>
         <div className={styles.mockupPushTop}>
           <span className={styles.mockupPushIcon}>
             <img src="/fever-icon.png" alt="" />
@@ -209,7 +207,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
       </article>
 
       {/* WhatsApp — green-themed message bubble in a chat client frame */}
-      <article className={`${styles.mockup} ${styles.mockupWa}`}>
+      <article className={`${styles.mockup} ${styles.mockupWa} spotlight`} {...spotlight}>
         <div className={styles.mockupWaHeader}>
           <span className={styles.mockupWaAvatar}>
             <img src="/fever-icon.png" alt="" />
@@ -244,7 +242,7 @@ function TransactionalEmails({
   return (
     <div className={styles.txEmails}>
       {emails.map((email) => (
-        <article key={email.src} className={styles.txEmail}>
+        <article key={email.src} className={`${styles.txEmail} spotlight`} {...spotlight}>
           <div className={styles.txEmailChrome}>
             <span className={styles.mockupChromeDot} style={{ background: "#ff5f57" }} />
             <span className={styles.mockupChromeDot} style={{ background: "#febc2e" }} />

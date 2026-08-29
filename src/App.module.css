@@ -21,6 +21,10 @@
   --accent-rgb: 139, 123, 255;
   --accent-2-rgb: 86, 200, 255;
 
+  /* Height of the fixed nav. Anything else that pins to the top of the viewport has to
+     clear it, so it lives here rather than being re-guessed at each call site. */
+  --nav-h: 5.5rem;
+
   min-height: 100vh;
   background:
     radial-gradient(ellipse at 50% -10%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
@@ -33,20 +37,24 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Page is the scroll container; snap removed so the footer is reachable
-     and doesn't get yanked back to the previous card. */
-  height: 100dvh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-padding-top: 5rem;
+  /* The document scrolls, not this element.
+     It used to be the scroll container, for scroll-snap that has since been removed. A nested
+     scroller with a fixed height is the wrong default on mobile: the browser chrome cannot
+     collapse, iOS overscroll behaves oddly inside it, and anchors and scrollIntoView work on
+     the window rather than on the thing that actually moves. */
+  overflow-x: clip;
 
   /* Route mount fade — gives every navigation a polished transition feel */
   animation: pageEnter 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
+/* Opacity only: this animation uses fill-mode `both`, so whatever the last keyframe sets
+   stays applied for good. A permanent transform would make .page the containing block for
+   its own position:fixed ::before/::after and stretch the atmosphere layer over the entire
+   document instead of the viewport. */
 @keyframes pageEnter {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Fixed atmosphere layer: accent aurora glows + fine grain.
@@ -108,11 +116,25 @@
   padding: 1.4rem 2rem;
 }
 
+/* A soft fade under the nav. Without it, anything pinned to the top of the viewport
+   (the lifecycle panel) reads straight through the wordmark. */
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(6, 6, 6, 0.72) 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+}
+
 @media (max-width: 720px) {
   .nav {
     grid-template-columns: 1fr auto;
     padding: 1rem 1.25rem;
   }
+  .page { --nav-h: 4.5rem; }
 }
 
 .navIdentity {
@@ -193,6 +215,95 @@
 
 .navSocials a:hover {
   color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .navSocials { display: none; }
+}
+
+/* ============ Mobile nav toggle + menu ============ */
+.navToggle {
+  display: none;
+  justify-self: end;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.navToggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--line-strong);
+}
+
+@media (max-width: 720px) {
+  .navToggle { display: inline-flex; }
+}
+
+.mobileMenu {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .mobileMenu {
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    display: flex;
+    flex-direction: column;
+    padding: 6rem 1.5rem 2rem;
+    background: rgba(6, 6, 6, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .mobileMenuOpen {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
+
+.mobileMenuLink,
+.mobileMenuLinkActive {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+  padding: 0.9rem 0.1rem;
+  border-bottom: 1px solid var(--line);
+  letter-spacing: -0.01em;
+}
+
+.mobileMenuLinkActive {
+  color: var(--ink);
+}
+
+.mobileMenuDivider {
+  height: 1.25rem;
+}
+
+.mobileMenuSocial {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.1rem;
 }
 
 .tinyArrow {
@@ -358,6 +469,10 @@
 /* Word-by-word reveal for the headline */
 .heroWord {
   display: inline-block;
+  /* Each word carries its own trailing space, and an inline-block collapses trailing
+     whitespace — which ran every word in the headline together. `pre` keeps the space;
+     lines still break between spans, so wrapping is unaffected. */
+  white-space: pre;
   animation: heroWordIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
@@ -640,15 +755,19 @@
   }
 }
 
-/* ============ Lifecycle project card (scroll-hijacked, exactly 100vh) ============ */
+/* ============ Lifecycle project card (scroll-linked progress, one viewport tall) ============ */
 .project.projectLifecycle {
-  min-height: 68vh;
-  height: 68vh;
+  /* Taller than the viewport so there is room to scrub, with the panel inside pinned.
+     --phases is set from the component, so the scrub length matches the content.
+     overflow must be reset, not just omitted: .project sets overflow:hidden, and any
+     non-visible overflow on an ancestor turns it into the sticky child's scrollport,
+     which never scrolls — so the panel silently stops pinning. */
+  overflow: visible;
+  height: calc(100dvh + (var(--phases, 5) * 55vh));
   padding: 0;
   cursor: default;
   transform: none !important;
   box-shadow: none;
-  overflow: hidden;
 }
 
 .project.projectLifecycle:hover {
@@ -658,17 +777,35 @@
 }
 
 .lifecycleSticky {
-  height: 100%;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 2.5rem 1.25rem;
+  padding: calc(var(--nav-h) + 1.5rem) 2.5rem 1.25rem;
 }
 
 @media (max-width: 720px) {
   .lifecycleSticky {
-    padding: 1.25rem 1.5rem 1.25rem;
+    padding: calc(var(--nav-h) + 1rem) 1.25rem 1.25rem;
   }
+  /* Shorter scrub on a phone: the same gesture covers less screen, so asking for five
+     viewports of scrolling to read five phases reads as the page being stuck. */
+  .project.projectLifecycle {
+    height: calc(100dvh + (var(--phases, 5) * 32vh));
+  }
+}
+
+/* Names the flow the phases belong to, so the steps read as one journey rather than
+   six unrelated moments. Only rendered when the project sets flowLabel. */
+.lifeScrollFlow {
+  font-family: "Geist Mono", monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  opacity: 0.85;
 }
 
 /* Phase header + timeline as a centered group that fills the available space */
@@ -1009,18 +1146,29 @@
 }
 
 /* ============ Scroll reveal (IntersectionObserver toggles .revealVisible) ============ */
+/* Visible by default, and only hidden once JS has confirmed it will animate them back in.
+   The reverse — hidden by default — means any failure of the observer leaves the page blank
+   with no way to recover: no JS, a viewport the observer cannot measure, a script error
+   earlier on the page. Content should never depend on an animation succeeding. */
 .reveal {
-  opacity: 0;
-  transform: translateY(34px);
+  opacity: 1;
+  transform: none;
   transition:
     opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
     transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+:global(html.js-reveal) .reveal {
+  opacity: 0;
+  transform: translateY(34px);
   will-change: opacity, transform;
 }
 
+:global(html.js-reveal) .revealVisible,
 .revealVisible {
   opacity: 1;
   transform: translateY(0);
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

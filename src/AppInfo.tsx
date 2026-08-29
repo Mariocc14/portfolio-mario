@@ -1,12 +1,24 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import styles from "./AppInfo.module.css";
+import { spotlight } from "./spotlight";
 
 const DOC_TITLE = "Info — Mario Calvo";
 
 export default function AppInfo() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     document.title = DOC_TITLE;
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
     <div className={styles.page}>
@@ -33,7 +45,39 @@ export default function AppInfo() {
             Email <span className={styles.tinyArrow}>↗</span>
           </a>
         </div>
+        <button
+          type="button"
+          className={styles.navToggle}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </nav>
+
+      <div
+        className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ""}`}
+      >
+        <a href="/" className={styles.mobileMenuLink}>Work</a>
+        <a href="/info" className={styles.mobileMenuLinkActive}>Info</a>
+        <a href="/resources" className={styles.mobileMenuLink}>Resources</a>
+        <div className={styles.mobileMenuDivider} />
+        <a
+          href="https://www.linkedin.com/in/mariocalvocastillo/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.mobileMenuSocial}
+        >
+          LinkedIn <span className={styles.tinyArrow}>↗</span>
+        </a>
+        <a
+          href="mailto:mariocalvocst@gmail.com"
+          className={styles.mobileMenuSocial}
+        >
+          Email <span className={styles.tinyArrow}>↗</span>
+        </a>
+      </div>
 
       <main className={styles.main}>
         {/* ============ INTRO ============ */}
@@ -148,13 +192,18 @@ export default function AppInfo() {
 
         <Section label="Get in touch">
           <div className={styles.contactLinks}>
-            <a className={styles.contactLink} href="mailto:mariocalvocst@gmail.com">
+            <a
+              className={`${styles.contactLink} spotlight`}
+              href="mailto:mariocalvocst@gmail.com"
+              {...spotlight}
+            >
               <span className={styles.contactLinkLabel}>Email</span>
               <span className={styles.contactLinkValue}>mariocalvocst@gmail.com</span>
               <span className={styles.tinyArrow}>→</span>
             </a>
             <a
-              className={styles.contactLink}
+              className={`${styles.contactLink} spotlight`}
+              {...spotlight}
               href="https://www.linkedin.com/in/mariocalvocastillo/"
               target="_blank"
               rel="noopener noreferrer"
@@ -168,10 +217,6 @@ export default function AppInfo() {
 
         {/* ============ FOOTER ============ */}
         <footer className={styles.footer}>
-          <p className={styles.footerNote}>
-            Made with <span className={styles.heart}>♥</span> between Madrid commutes
-            and AMPscript queries — and the occasional Bridgerton ticket.
-          </p>
           <span className={styles.footerCopy}>© {new Date().getFullYear()} Mario Calvo</span>
         </footer>
       </main>

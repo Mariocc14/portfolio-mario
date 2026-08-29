@@ -7,8 +7,15 @@
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  /* `place-items: center` alone clips both ends once the panel is taller than the
+     viewport — a short phone in landscape, or any phone with the keyboard open — and
+     nothing scrolls, so the submit button becomes unreachable. Aligning to the start and
+     centring with auto margins keeps it centred when it fits and scrollable when it does not. */
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-items: start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 1.5rem;
   animation: backdropIn 0.25s ease forwards;
 }
@@ -22,6 +29,7 @@
   position: relative;
   width: 100%;
   max-width: 460px;
+  margin: auto 0;
   background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
