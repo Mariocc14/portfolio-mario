@@ -1,27 +1,19 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
-import AppInfo from './AppInfo.tsx'
-import AppProject from './AppProject.tsx'
-import AppResources from './AppResources.tsx'
-import AppResource from './AppResource.tsx'
+import { routeFor, normalisePath } from './routes.tsx'
 
-const path = window.location.pathname.replace(/\/$/, '') // strip trailing slash
+const container = document.getElementById('root')!
+const tree = <StrictMode>{routeFor(window.location.pathname)}</StrictMode>
 
-function pickRoot() {
-  if (path === '' || path === '/') return <App />
-  if (path === '/info') return <AppInfo />
-  if (path === '/resources') return <AppResources />
-  if (path.startsWith('/resources/')) {
-    const slug = path.slice('/resources/'.length)
-    return <AppResource slug={slug} />
-  }
-  // Anything else is a project slug, e.g. /event-lifecycle-automation
-  const slug = path.slice(1)
-  return <AppProject slug={slug} />
+/* The build prerenders every known route and stamps which one it rendered. When the
+   served HTML is this page, hydrate it; when it is not — an unknown URL falls through
+   Vercel's catch-all rewrite and gets the homepage shell — render from scratch instead,
+   which avoids a hydration mismatch on a page that was never prerendered. */
+const prerendered = container.dataset.path
+if (prerendered && normalisePath(prerendered) === normalisePath(window.location.pathname)) {
+  hydrateRoot(container, tree)
+} else {
+  container.innerHTML = ''
+  createRoot(container).render(tree)
 }
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>{pickRoot()}</StrictMode>,
-)
