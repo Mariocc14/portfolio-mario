@@ -1,9 +1,32 @@
 {
   "redirects": [
-    { "source": "/v2", "destination": "/", "permanent": true },
-    { "source": "/v2/:path*", "destination": "/:path*", "permanent": true }
+    {
+      "source": "/v2",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/v2/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/bark",
+      "destination": "/bark/index.html"
+    },
+    {
+      "source": "/bark/es",
+      "destination": "/bark/es.html"
+    },
+    {
+      "source": "/bark/ai-demo",
+      "destination": "/bark/ai-demo.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
   ]
 }

@@ -37,6 +37,9 @@ export type ProjectDetail = {
   // Optional custom visual instead of the mockup row
   visualKind?: "lifecycle";
   phases?: Phase[];
+  // Names the flow the phases walk through, shown above the timeline. Optional: the older
+  // lifecycle cards don't set it and render exactly as before.
+  flowLabel?: string;
   // For the detail page: transactional case shows 4 email mockups
   galleryKind?: "channels" | "transactional" | "none";
   transactionalEmails?: { src: string; label: string; subject: string }[];
@@ -331,6 +334,61 @@ const transactionalPhases: Phase[] = [
   },
 ];
 
+/* One concrete Pro, walked end to end: the account is created, the profile goes live,
+   demand shows up, an enquiry lands, and only then is the trial asked for — which is the
+   whole argument of the review. Same spine as the case study's re-mapped journey
+   (content/journey2.js, flow A into flow B), with the branches left out. */
+const barkPhases: Phase[] = [
+  {
+    num: "01",
+    title: "Signs up",
+    desc:
+      "Day 0. Confirm the account and say what happens next — and nothing more, because at this point there is genuinely nothing to show yet.",
+    channels: ["Email"],
+    sample: { label: "Welcome", text: "You're in. Next: finish your profile so customers can find you." },
+  },
+  {
+    num: "02",
+    title: "Goes live in search",
+    desc:
+      "Day 1. The first real milestone: the Pro stops being invisible and becomes findable. This is the moment Bark starts existing for them.",
+    channels: ["Email", "Push"],
+    sample: { label: "Now visible", text: "You're live in search. Here's how customers see you." },
+  },
+  {
+    num: "03",
+    title: "Someone views the profile",
+    desc:
+      "The first objective proof that demand is real — and today this signal exists but is never used. It turns a promise into something the Pro can check.",
+    channels: ["Push"],
+    sample: { label: "Profile view", text: "Someone just viewed your profile. See who's looking." },
+  },
+  {
+    num: "04",
+    title: "First enquiry lands",
+    desc:
+      "The value moment: the product keeps its promise for the first time. It reaches the Pro by push and SMS in minutes, with the job inside — not by email a day later.",
+    channels: ["Push", "SMS"],
+    sample: { label: "New enquiry", text: "New job in your area. Reply now — first to answer usually wins." },
+  },
+  {
+    num: "05",
+    title: "Now the trial is asked for",
+    desc:
+      "The same ask the current flow makes on day 1, moved to after the Pro has seen real demand in their own data. The evidence goes first.",
+    channels: ["Email", "Push"],
+    sample: { label: "Start trial", text: "You've had 3 enquiries. Start your 7-day trial and keep them coming." },
+  },
+  {
+    num: "06",
+    title: "Before the first charge",
+    desc:
+      "Day 5 justifies the price with the Pro's own numbers. Day 6 says what will be charged and what it includes, with cancel as a visible action — which is what keeps chargebacks down.",
+    channels: ["Email", "Push"],
+    sample: { label: "Your week", text: "12 people found you this week. Your plan starts tomorrow." },
+  },
+];
+
 export const projects: ProjectDetail[] = [
   {
     slug: "event-lifecycle-automation",
@@ -492,6 +550,37 @@ export const projects: ProjectDetail[] = [
     thumbDark: true,
     gallery: [
       { src: "/magnific/notifications-panel.png", alt: "Magnific notification panel — full feed", dark: true },
+    ],
+  },
+  // Served as a static page, not through the SPA. /bark is an exception in vercel.json,
+  // so this card links straight to the case study itself rather than a detail route —
+  // the write-up already exists and paraphrasing it here would only let the two drift.
+  {
+    slug: "bark",
+    num: "05",
+    title: "Marketplace onboarding review, and the AI workflow behind it",
+    company: "Marketplace · Lifecycle × AI",
+    year: "'26",
+    // "Interview case study" rides at the end of the muted meta line rather than in the bold
+    // company slot: the card should say what this is without leading with it.
+    shortDesc:
+      "A review of a two-sided marketplace's Pro onboarding, re-mapped around the one thing the current flow never proves: that demand is real. Interview case study.",
+    longDesc: "",
+    role: "CRM strategy · Lifecycle × AI",
+    tools: ["Claude Code", "Notion", "Figma", "MJML", "Iterable (Handlebars)", "Miro"],
+    timeline: "",
+    challenge: "",
+    solution: [],
+    outcome: [],
+    thumb: "/bark/email-approved.png",
+    // The card shows the proposed flow rather than screenshots: two email mockups in a
+    // card this text-heavy left the frames with almost no room and read as broken.
+    visualKind: "lifecycle",
+    flowLabel: "From signup to conversion",
+    phases: barkPhases,
+    gallery: [
+      { src: "/bark/email-draft.png", alt: "First AI-generated design — a strong draft, and too wordy" },
+      { src: "/bark/email-approved.png", alt: "After one human-directed change: the recommendation became the focal point" },
     ],
   },
 ];

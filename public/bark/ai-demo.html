@@ -1,0 +1,194 @@
+<title>Four Commands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* House palette, taken from the case study so the two read as one body of work.
+     Deliberately single-theme: it is a warm paper design and inverting it would not be it. */
+  :root{
+    --bg:#faf9f7; --ink:#1a1a1a; --body:#4a4741; --dim:#75716b;
+    --rule:#e2ded4; --hair:#efece5; --soft:#b8b3a6;
+    --clay:#a04b3c; --sage:#5a6b52; --dark:#16150f;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:Helvetica,'Helvetica Neue',Arial,sans-serif;
+    --display:'Inter',Helvetica,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+       font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:88px 32px 120px}
+  section{padding:0 0 84px}
+  section+section{padding-top:8px}
+
+  .kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+          margin:0 0 22px;font-family:var(--sans)}
+  h1{font-family:var(--display);font-size:clamp(40px,7vw,60px);line-height:1.04;
+     letter-spacing:-.03em;font-weight:600;margin:0 0 26px;max-width:14em;text-wrap:balance}
+  h2{font-family:var(--display);font-size:clamp(26px,4vw,34px);line-height:1.12;
+     letter-spacing:-.02em;font-weight:600;margin:0 0 28px;max-width:17em;text-wrap:balance}
+  h3{font-family:var(--display);font-size:20px;font-weight:600;margin:0 0 6px;line-height:1.2}
+  .lede{font-size:18px;color:var(--body);max-width:72ch;margin:0 0 8px;text-wrap:pretty}
+  p{color:var(--body);max-width:72ch;text-wrap:pretty}
+  .tag{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--dim);
+       text-transform:uppercase}
+  hr{border:0;border-top:1px solid var(--rule);margin:0 0 56px}
+
+  /* the flow band */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:0 0 30px;
+        border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:#fff}
+  .step{flex:1 1 128px;min-width:128px;padding:20px 18px;border-right:1px solid var(--hair)}
+  .step:last-child{border-right:0}
+  .step.claude{background:var(--dark);color:#f4f2ec}
+  .step .who{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+             margin:0 0 8px;color:var(--soft)}
+  .step.claude .who{color:#a8a396}
+  .step .what{font-family:var(--display);font-size:15px;font-weight:500;line-height:1.3;
+              color:var(--ink)}
+  .step.claude .what{color:#f4f2ec}
+  .step .sub{font-size:13px;color:var(--dim);margin-top:6px;line-height:1.45}
+  .step.claude .sub{color:#9b968a}
+  .flow-note{font-size:14.5px;color:var(--dim);max-width:72ch;margin:0}
+  .flow-note b{color:var(--ink);font-weight:500;font-family:var(--display)}
+
+  /* command list */
+  .cmds{border-top:1px solid var(--ink)}
+  .cmd{display:grid;grid-template-columns:210px 1fr;gap:0 34px;
+       padding:26px 0;border-bottom:1px solid var(--hair);align-items:start}
+  .cmd code{font-family:var(--mono);font-size:14px;color:var(--clay);font-weight:500;
+            display:block;padding-top:2px;word-break:break-all}
+  .cmd .out{font-size:14px;color:var(--dim);margin:10px 0 0;padding-top:10px;
+            border-top:1px dashed var(--rule)}
+  .cmd .out b{color:var(--ink);font-weight:500;font-family:var(--display)}
+  .cmd p{margin:0;font-size:15.5px}
+  .gate{color:var(--clay);font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;
+        text-transform:uppercase;margin-top:12px;display:block}
+
+  /* structure */
+  .tree{white-space:pre;font-family:var(--mono);font-size:13.5px;line-height:2;color:var(--body);
+        background:#fff;border:1px solid var(--rule);border-radius:3px;padding:24px 26px;
+        overflow-x:auto;margin:0 0 26px}
+  .tree b{color:var(--ink);font-weight:500}
+  .tree span{color:var(--soft)}
+  .where{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 34px}
+  .where div{padding:16px 0;border-top:1px solid var(--hair)}
+  .where b{font-family:var(--display);font-size:15.5px;font-weight:500;display:block;
+           margin-bottom:4px}
+  .where p{font-size:14.5px;margin:0;color:var(--body)}
+
+  @media(max-width:680px){
+    .wrap{padding:56px 22px 80px}
+    .cmd{grid-template-columns:1fr;gap:12px}
+    .step{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--hair)}
+  }
+</style>
+
+<div class="wrap">
+
+<section>
+  <p class="kicker">CRM workflow</p>
+  <h1>Four commands, from a rough request to a sendable email</h1>
+  <p class="lede">Claude does the work between the tools. The tools stay the tools — the brief and
+  the copy live in Notion, the design lives in Figma, the template goes to the ESP. What changes
+  is that nobody retypes anything on the way across.</p>
+</section>
+
+<hr>
+
+<section>
+  <p class="tag">The flow</p>
+  <h2>Claude sits between each pair of tools, not on top of them</h2>
+  <div class="flow">
+    <div class="step claude"><p class="who">Claude</p><p class="what">Reads the request</p>
+      <p class="sub">Asks only what genuinely blocks</p></div>
+    <div class="step"><p class="who">Notion</p><p class="what">Brief and copy</p>
+      <p class="sub">A record anyone can read and edit</p></div>
+    <div class="step claude"><p class="who">Claude</p><p class="what">Builds the design</p>
+      <p class="sub">Layers named by copy key</p></div>
+    <div class="step"><p class="who">Figma</p><p class="what">Human approval</p>
+      <p class="sub">The gate. Nothing is built before it</p></div>
+    <div class="step claude"><p class="who">Claude</p><p class="what">Writes the template</p>
+      <p class="sub">Builds, QAs, publishes</p></div>
+    <div class="step"><p class="who">CRM</p><p class="what">Sendable template</p>
+      <p class="sub">Copy arrives from the feed at send time</p></div>
+  </div>
+  <p class="flow-note"><b>The words never move by hand.</b> The same key names a Notion row, a
+  Figma layer and a template slot — so copy review needs no engineer, a new language is a column,
+  and the design cannot quietly disagree with the build.</p>
+</section>
+
+<hr>
+
+<section>
+  <p class="tag">The steps</p>
+  <h2>Each one ends somewhere a person can look</h2>
+  <div class="cmds">
+
+    <div class="cmd">
+      <code>/campaign-brief</code>
+      <div>
+        <h3>Request → brief and copy</h3>
+        <p>Turns a few lines into a structured brief. Asks only what genuinely blocks; everything
+        else becomes an assumption it labels rather than hides. Writes every word the email will
+        say, in every language, as a table in Notion.</p>
+        <p class="out"><b>Ends with</b> a campaign record, and copy anyone can edit</p>
+      </div>
+    </div>
+
+    <div class="cmd">
+      <code>/campaign-design</code>
+      <div>
+        <h3>Brief → editable Figma</h3>
+        <p>Real auto-layout and real text layers, each named for its copy key. Raises a review
+        task saying what it would most like overruled — then stops.</p>
+        <span class="gate">Stops here · human approval required</span>
+        <p class="out"><b>Ends with</b> a design and an open question, waiting</p>
+      </div>
+    </div>
+
+    <div class="cmd">
+      <code>/campaign-build</code>
+      <div>
+        <h3>Approved design → sendable template</h3>
+        <p>Refuses to start unless the design is approved. Reconciles any copy edited on the
+        canvas back into the table, writes the template, builds, runs QA, publishes.</p>
+        <p class="out"><b>Ends with</b> a preview URL, and the file that goes into the ESP</p>
+      </div>
+    </div>
+
+    <div class="cmd">
+      <code>/campaign-strings</code>
+      <div>
+        <h3>Copy changed → everything follows</h3>
+        <p>The one command to run after editing wording. Pulls from Notion, shows every word that
+        moved, catches the other languages up, rebuilds and re-runs QA.</p>
+        <p class="out"><b>Ends with</b> the change in the template, in every language</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr>
+
+<section>
+  <p class="tag">The structure</p>
+  <h2>Four commands, one campaign folder, one place for standing context</h2>
+  <div class="tree"><b>context/</b><span>          brand · email · CRM · Iterable · localisation · images</span>
+<b>campaigns/</b><span>&lt;slug&gt;/</span>
+<span>  </span>brief.md<span>          the brief, every field tagged</span>
+<span>  </span>strings.json<span>      every word, every language</span>
+<span>  </span>design.json<span>       the Figma file, and whether it is approved</span>
+<span>  </span>email/<span>            template.mjml → template.html</span>
+<span>  </span>previews/<span>         the interactive preview</span>
+<b>service/</b><span>          stands in for the ESP while there is no account</span>
+<b>lib/</b><span>              build · qa · sync · publish · verify</span></div>
+  <div class="where">
+    <div><b>context/</b><p>Read by every stage, so the brand and the CRM rules are not re-explained
+      three times.</p></div>
+    <div><b>campaigns/</b><p>One folder per campaign. Nothing about one leaks into another.</p></div>
+    <div><b>service/</b><p>Serves the copy feed and the assets. In a real Iterable account it would
+      not exist.</p></div>
+  </div>
+</section>
+
+</div>
