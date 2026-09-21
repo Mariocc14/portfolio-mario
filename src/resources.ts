@@ -7,7 +7,9 @@ export type ResourceBlock =
   | { type: "h3"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "ol"; items: string[] }
-  | { type: "quote"; text: string; attr?: string };
+  | { type: "quote"; text: string; attr?: string }
+  /** Verbatim, monospace block — prompt templates, file contents, commands. */
+  | { type: "code"; text: string };
 
 export type Resource = {
   slug: string;
@@ -16,7 +18,7 @@ export type Resource = {
   language: "es" | "en";
   category: string;
   /** Omitted when the article has no downloadable companion; the download UI hides. */
-  format?: "PDF" | "Notion";
+  format?: "PDF" | "Notion" | "Markdown";
   readingTime: string;
   body: ResourceBlock[];
   /** ISO dates for Article structured data. Freshness is a real citation signal. */
@@ -308,6 +310,97 @@ export const resources: Resource[] = [
         type: "quote",
         text:
           "A preview shows you one version of the email. Your audience receives all of them.",
+      },
+    ],
+  },
+  {
+    slug: "self-improving-prompt",
+    title: "A prompt that improves itself before it runs",
+    subtitle:
+      "A Claude Code command that turns a one-line request into a full brief — expert role, steps, quality criteria — and shows you the rewrite before doing anything. One Markdown file, works in any project.",
+    language: "en",
+    category: "AI Workflows",
+    format: "Markdown",
+    readingTime: "4 min",
+    datePublished: "2026-09-21",
+    dateModified: "2026-09-21",
+    downloadHref: "/resources/improve-prompt-SKILL.md",
+    downloadFilename: "improve-prompt-SKILL.md",
+    body: [
+      {
+        type: "p",
+        text:
+          "Most requests to an AI agent are one line long. \"Analyse this website and give me conclusions.\" \"Write an email to clients who haven't paid.\" The output is generic because the request is generic: no role, no definition of good, no format. The usual advice is to learn prompt engineering. The faster fix is to make the tool write the brief.",
+      },
+      {
+        type: "p",
+        text:
+          "/improve-prompt is a skill for Claude Code — a single Markdown file dropped into a folder. You type your request after the command. It rewrites it as a complete prompt, shows you the rewrite, and only runs it once you say so.",
+      },
+      { type: "h2", text: "What it does" },
+      {
+        type: "ol",
+        items: [
+          "Reads your request and, if you are inside a project, a small amount of context: the project's instructions file and any files you named. Three reads at most — it does not go exploring.",
+          "Checks for ambiguity. If \"analyse this website\" could mean UX, SEO, copy or performance, it asks one multiple-choice question. If there is one obvious reading, it does not ask.",
+          "Rewrites the request as a prompt with a fixed structure: expert role, objective, context, steps, quality criteria, output format, constraints. Same language you wrote in.",
+          "Shows the rewrite in a code block, with one line explaining the role it picked, and asks: run it, adjust it, or just copy it.",
+          "On run, executes the improved prompt — and loads a specialised skill first if one fits the task.",
+        ],
+      },
+      { type: "h2", text: "What the rewrite looks like" },
+      {
+        type: "p",
+        text: "The input:",
+      },
+      {
+        type: "code",
+        text: "/improve-prompt write an email to clients who haven't paid",
+      },
+      {
+        type: "p",
+        text: "The output, before anything runs:",
+      },
+      {
+        type: "code",
+        text:
+          "Act as a senior collections and client retention lead, experienced in B2B communication that is firm but cordial.\n\nObjective: write a payment reminder email that gets the invoice paid without damaging the relationship.\n\nContext: [company and sector], invoice overdue by [N days], [first reminder / second reminder].\n\nSteps:\n1. A clear subject line that names the invoice and does not read as a threat.\n2. A brief reminder of the amount, invoice number and due date.\n3. How to pay, and who to contact if it is already paid or there is a dispute.\n4. A cordial close with a specific deadline.\n\nQuality criteria:\n- Under 150 words.\n- Professional tone, no blame and no over-apologising.\n- One single call to action.\n\nOutput format: subject line + email body, in English.\n\nConstraints: do not offer discounts or payment plans unless the user asks.",
+      },
+      {
+        type: "p",
+        text:
+          "Note the brackets. The skill does not invent your company name or how overdue the invoice is. It leaves a placeholder and asks for the value at the confirmation step — which is also where you catch a wrong role before it costs you a run.",
+      },
+      { type: "h2", text: "The rules that make it work" },
+      {
+        type: "ul",
+        items: [
+          "It always delivers a prompt. It never answers with a list of questions — that is what an agent without the skill does, and it is the main failure it was written against.",
+          "One question at most, and only when the answer changes the expert role or the deliverable. A missing URL is not a question; it is a placeholder.",
+          "Nothing runs without passing through the confirmation step.",
+          "If your request is already well written, it says so and changes almost nothing. It organises long requests instead of inflating them.",
+          "It stays in your language and keeps your intent. It does not add requirements you did not ask for.",
+        ],
+      },
+      { type: "h2", text: "Install it" },
+      {
+        type: "ol",
+        items: [
+          "Download the file below.",
+          "Save it as ~/.claude/skills/improve-prompt/SKILL.md — the folder name must match.",
+          "Start a new Claude Code session. The command is available in every project from then on.",
+          "Type /improve-prompt followed by your request.",
+        ],
+      },
+      {
+        type: "p",
+        text:
+          "The file follows the open SKILL.md format, so the same file works in other agents that read skills from a folder — for Codex, the path is ~/.agents/skills/improve-prompt/SKILL.md. Open it in any editor: it is plain Markdown, and the whole point is that you can change the structure, the rules or the example to match how you work.",
+      },
+      {
+        type: "quote",
+        text:
+          "A vague request is not a prompting problem. It is a missing brief. This writes the brief, and lets you read it first.",
       },
     ],
   },

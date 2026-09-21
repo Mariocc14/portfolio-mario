@@ -155,5 +155,11 @@ function renderBlock(block: ResourceBlock, key: number) {
           {block.attr && <cite>— {block.attr}</cite>}
         </blockquote>
       );
+    case "code":
+      return (
+        <pre key={key} className={styles.code}>
+          <code>{block.text}</code>
+        </pre>
+      );
   }
 }
