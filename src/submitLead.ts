@@ -1,22 +1,5 @@
-// Lead submit handler — writes to Supabase `public.leads`.
-//
-// The table is insert-only from the browser via the anon key. Reads
-// happen in the Supabase dashboard (or server-side with the service
-// role key). See SUPABASE_SETUP.md for the SQL and policies.
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as
-  | string
-  | undefined;
-
-const sb =
-  supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey, {
-        auth: { persistSession: false },
-      })
-    : null;
+// Lead submit handler — sends the lead to /api/lead, which adds it to a Brevo list.
+// The Brevo API key lives only on the server (Vercel env: BREVO_API_KEY, BREVO_LIST_ID).
 
 export type LeadRole =
   | { kind: "business_owner"; industry: string }
@@ -33,42 +16,25 @@ export type LeadPayload = {
 export type SubmitResult = { ok: true } | { ok: false; error: string };
 
 export async function submitLead(payload: LeadPayload): Promise<SubmitResult> {
-  if (!sb) {
-    // No Supabase env vars at build time — fall back to the stub so the
-    // UI is still usable in local dev / preview without keys.
-    if (typeof window !== "undefined") {
-      // eslint-disable-next-line no-console
-      console.warn("[lead submit] Supabase env not configured — using stub", payload);
-    }
-    await new Promise((r) => setTimeout(r, 400));
-    return { ok: true };
+  const roleValue = payload.role.kind === "business_owner" ? payload.role.industry : payload.role.area;
+  try {
+    const r = await fetch("/api/lead", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        name: payload.name,
+        email: payload.email,
+        roleKind: payload.role.kind,
+        roleValue,
+        resourceSlug: payload.resourceSlug,
+        resourceTitle: payload.resourceTitle,
+      }),
+    });
+    const d = (await r.json().catch(() => null)) as SubmitResult | null;
+    return d && d.ok ? { ok: true } : { ok: false, error: (d && !d.ok && d.error) || "Something went wrong. Try again." };
+  } catch {
+    return { ok: false, error: "Network error. Try again." };
   }
-
-  const role_kind = payload.role.kind;
-  const role_value =
-    payload.role.kind === "business_owner"
-      ? payload.role.industry
-      : payload.role.area;
-
-  const { error } = await sb.from("leads").insert({
-    name: payload.name,
-    email: payload.email,
-    role_kind,
-    role_value,
-    resource_slug: payload.resourceSlug,
-    resource_title: payload.resourceTitle,
-    user_agent:
-      typeof navigator !== "undefined" ? navigator.userAgent : null,
-    referrer:
-      typeof document !== "undefined" ? document.referrer || null : null,
-  });
-
-  // 23505 = unique_violation. The user already requested this resource
-  // with the same email — treat as success so they still get the UX.
-  if (error && error.code !== "23505") {
-    return { ok: false, error: error.message };
-  }
-  return { ok: true };
 }
 
 /* ============ Form options (UI uses these) ============ */
