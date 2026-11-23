@@ -1,0 +1,30 @@
+# Mario Calvo
+
+> Mario Calvo is a CRM and lifecycle marketing consultant based in Spain. He designs and builds lifecycle journeys, marketing automation and multichannel CRM (email, push, in-app) for marketplaces, ecommerce and subscription products, in Salesforce Marketing Cloud and Braze, segmented with SQL and templated in HTML and CSS. Currently working at Magnific; formerly at Fever and Freepik.
+
+This is his portfolio: case studies of lifecycle and CRM work, and free guides on email deliverability and lifecycle operations. All pages are in English unless marked otherwise.
+
+## About
+
+- [About Mario Calvo](https://www.marioclv.com/info): background (trained in Law, then digital marketing and automation), what he does, how he works and how to get in touch.
+- [LinkedIn](https://www.linkedin.com/in/mariocalvocastillo/): professional profile.
+
+## Case studies
+
+- [Event Lifecycle: design, build & automation at scale](https://www.marioclv.com/event-lifecycle-automation): a six-phase event lifecycle (waitlist, pre-launch, launch, open gates, date extension, FOMO) fully automated in Salesforce Marketing Cloud.
+- [Transactional Comms: design, build & Product Integration](https://www.marioclv.com/transactional-comms-redesign): redesign of the four highest-traffic transactional emails (purchase confirmation, abandoned cart, pre-event reminder, post-event review).
+- [New Business Vertical (Tourism): Lifecycle design & build](https://www.marioclv.com/tourism-lifecycle): a lifecycle built from scratch for a new tourism vertical at Fever, with pre-trip, in-trip and post-trip stages.
+- [In-product Notifications: multi-channel strategy](https://www.marioclv.com/content-cards): content cards, in-app messages and in-product nudges driven by the same CRM segmentation as email (Braze).
+- [Bark Pro Lifecycle](https://www.marioclv.com/bark): an interview case study reviewing a two-sided marketplace's Pro onboarding, from signup to trial conversion. [Spanish version](https://www.marioclv.com/bark/es).
+
+## Guides
+
+- [How to warm up a sending domain properly](https://www.marioclv.com/resources/domain-warm-up): why it matters, what to do in the first four weeks, and the mistakes that cost months to undo.
+- [The bulk sender rules, and what breaks first when you miss them](https://www.marioclv.com/resources/bulk-sender-requirements): the Gmail and Outlook authentication and complaint-rate requirements for senders at volume, and the order things fail in.
+- [The pre-send QA checklist](https://www.marioclv.com/resources/pre-send-qa-checklist): the checks worth running before a campaign goes out, biased toward failures that never show up in a preview.
+- [A prompt that improves itself before it runs](https://www.marioclv.com/resources/self-improving-prompt): a Claude Code command that turns a one-line request into a full brief before running it.
+- [All resources](https://www.marioclv.com/resources)
+
+## Skills and tools
+
+CRM, lifecycle marketing, marketing automation, email marketing, email deliverability, transactional email, push and in-app messaging, segmentation with SQL. Salesforce Marketing Cloud (Journey Builder, AMPscript), Braze, Iterable, Odoo.

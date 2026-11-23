@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(root, "dist");
 
-const { render, metaForPath, allRoutes, SITE_URL } = await import(
+const { render, metaForPath, allRoutes, lastModifiedFor, SITE_URL } = await import(
   join(root, "dist-ssr", "entry-server.js")
 );
 
@@ -93,12 +93,15 @@ for (const path of routes) {
   await writeFile(join(dir, "index.html"), pageFor(path), "utf8");
 }
 
-const today = new Date().toISOString().slice(0, 10);
-const urls = [...routes, "/bark"]
-  .map(
-    (p) =>
-      `  <url><loc>${SITE_URL}${p === "/" ? "/" : p}</loc><lastmod>${today}</lastmod></url>`
-  )
+/* /bark and /bark/es are static pages served from public/, outside the SPA, so they are
+   listed here by hand. Each entry gets a <lastmod> only when the page knows a real date. */
+const urls = [...routes, "/bark", "/bark/es"]
+  .map((p) => {
+    const lastmod = lastModifiedFor(p);
+    return `  <url><loc>${SITE_URL}${p}</loc>${
+      lastmod ? `<lastmod>${lastmod}</lastmod>` : ""
+    }</url>`;
+  })
   .join("\n");
 
 await writeFile(

@@ -6,10 +6,11 @@
 import { projects } from "./projects";
 import { resources } from "./resources";
 import { normalisePath } from "./routes";
+import { HOME_TITLE, INFO_TITLE, RESOURCES_TITLE } from "./titles";
 
 export const SITE_URL = "https://www.marioclv.com";
 export const AUTHOR = "Mario Calvo";
-export const HOME_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
+export { HOME_TITLE };
 
 const HOME_DESCRIPTION =
   "CRM & Lifecycle Marketing Consultant. Lifecycle journeys, marketing automation and multichannel CRM for marketplaces, ecommerce and subscription products.";
@@ -36,28 +37,50 @@ export type PageMeta = {
   noindex?: boolean;
 };
 
+const PERSON_ID = `${SITE_URL}/#person`;
+
+/* One Person entity, referenced by @id from every other block, so search engines and
+   AI assistants resolve the site, the case studies and the guides to the same author.
+   Everything here is stated somewhere on the site itself: nothing is added that a
+   visitor could not read. */
 const personLd = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": PERSON_ID,
   name: AUTHOR,
-  url: SITE_URL,
+  url: `${SITE_URL}/`,
   image: `${SITE_URL}/imagen_perfil/mario-avatar.png`,
   jobTitle: "CRM & Lifecycle Marketing Consultant",
+  description:
+    "CRM and lifecycle marketing consultant based in Spain. Designs and builds lifecycle journeys, marketing automation and multichannel CRM (email, push, in-app) in Salesforce Marketing Cloud and Braze, segmented with SQL.",
   email: "mailto:mariocalvocst@gmail.com",
+  address: { "@type": "PostalAddress", addressCountry: "ES" },
   sameAs: ["https://www.linkedin.com/in/mariocalvocastillo/"],
   knowsAbout: [
     "CRM",
     "Lifecycle marketing",
     "Marketing automation",
+    "Email marketing",
     "Email deliverability",
+    "Transactional email",
+    "Push notifications",
+    "In-app messaging",
+    "Customer segmentation",
+    "SQL",
     "Salesforce Marketing Cloud",
+    "Journey Builder",
+    "AMPscript",
+    "Braze",
     "Iterable",
+    "Odoo",
   ],
 };
 
+const authorRef = { "@type": "Person", "@id": PERSON_ID, name: AUTHOR, url: `${SITE_URL}/` };
+
 export function metaForPath(pathname: string): PageMeta {
   const path = normalisePath(pathname);
-  const canonical = `${SITE_URL}${path === "/" ? "" : path}`;
+  const canonical = `${SITE_URL}${path}`;
 
   if (path === "/") {
     return {
@@ -72,8 +95,12 @@ export function metaForPath(pathname: string): PageMeta {
         {
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: HOME_TITLE,
-          url: SITE_URL,
+          "@id": `${SITE_URL}/#website`,
+          name: AUTHOR,
+          alternateName: HOME_TITLE,
+          url: `${SITE_URL}/`,
+          inLanguage: "en",
+          publisher: { "@id": PERSON_ID },
         },
       ],
     };
@@ -81,20 +108,30 @@ export function metaForPath(pathname: string): PageMeta {
 
   if (path === "/info") {
     return {
-      title: "Info — Mario Calvo",
+      title: INFO_TITLE,
       description:
         "Background, how I work, and what I've built across CRM and lifecycle marketing — from Law to automation, via Fever, Freepik and Magnific.",
       canonical,
       image: `${SITE_URL}/imagen_perfil/mario-avatar.png`,
       ogType: "profile",
       lang: "en",
-      jsonLd: [personLd],
+      jsonLd: [
+        {
+          "@context": "https://schema.org",
+          "@type": "ProfilePage",
+          url: canonical,
+          name: INFO_TITLE,
+          inLanguage: "en",
+          isPartOf: { "@id": `${SITE_URL}/#website` },
+          mainEntity: personLd,
+        },
+      ],
     };
   }
 
   if (path === "/resources") {
     return {
-      title: "Resources — Mario Calvo",
+      title: RESOURCES_TITLE,
       description:
         "Practical playbooks and guides on email deliverability, lifecycle automation and CRM × product integrations. Free to read, free to download.",
       canonical,
@@ -106,7 +143,14 @@ export function metaForPath(pathname: string): PageMeta {
           "@type": "CollectionPage",
           name: "Resources",
           url: canonical,
-          author: { "@type": "Person", name: AUTHOR },
+          inLanguage: "en",
+          author: authorRef,
+          isPartOf: { "@id": `${SITE_URL}/#website` },
+          hasPart: resources.map((r) => ({
+            "@type": "Article",
+            headline: r.title,
+            url: `${SITE_URL}/resources/${r.slug}`,
+          })),
         },
       ],
     };
@@ -130,8 +174,8 @@ export function metaForPath(pathname: string): PageMeta {
           description: r.subtitle,
           inLanguage: r.language,
           url: canonical,
-          author: { "@type": "Person", name: AUTHOR, url: SITE_URL },
-          publisher: { "@type": "Person", name: AUTHOR, url: SITE_URL },
+          author: authorRef,
+          publisher: authorRef,
           ...(r.datePublished ? { datePublished: r.datePublished } : {}),
           ...(r.dateModified ? { dateModified: r.dateModified } : {}),
           articleSection: r.category,
@@ -157,7 +201,11 @@ export function metaForPath(pathname: string): PageMeta {
         name: p.title,
         description: p.shortDesc,
         url: canonical,
-        creator: { "@type": "Person", name: AUTHOR, url: SITE_URL },
+        inLanguage: "en",
+        ...(p.thumb ? { image: `${SITE_URL}${p.thumb}` } : {}),
+        keywords: p.tools.join(", "),
+        creator: authorRef,
+        author: authorRef,
       },
     ],
   };
@@ -185,4 +233,23 @@ export function allRoutes(): string[] {
     // /bark is a static page served outside the SPA, so it is not prerendered here.
     ...projects.filter((p) => p.slug !== "bark").map((p) => `/${p.slug}`),
   ];
+}
+
+/** The date a page's content last changed, for the sitemap's <lastmod>. Only the guides
+    carry a real one; for the rest the build date would be a guess, and a lastmod that
+    changes on every deploy teaches search engines to ignore it. */
+export function lastModifiedFor(pathname: string): string | undefined {
+  const path = normalisePath(pathname);
+  if (path.startsWith("/resources/")) {
+    const r = resources.find((x) => `/resources/${x.slug}` === path);
+    return r?.dateModified ?? r?.datePublished;
+  }
+  if (path === "/resources") {
+    const dates = resources
+      .map((r) => r.dateModified ?? r.datePublished)
+      .filter((d): d is string => Boolean(d))
+      .sort();
+    return dates.at(-1);
+  }
+  return undefined;
 }

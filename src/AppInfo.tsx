@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import styles from "./AppInfo.module.css";
 import { spotlight } from "./spotlight";
+import { INFO_TITLE } from "./titles";
 
-const DOC_TITLE = "Info — Mario Calvo";
+const DOC_TITLE = INFO_TITLE;
 
 export default function AppInfo() {
   const [menuOpen, setMenuOpen] = useState(false);
