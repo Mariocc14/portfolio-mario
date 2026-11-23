@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import styles from "./AppProject.module.css";
 import { spotlight } from "./spotlight";
 import { getProjectBySlug, getNeighbours } from "./projects";
+import { imgSize } from "./imageSizes";
 
 export default function AppProject({ slug }: { slug: string }) {
   const project = getProjectBySlug(slug);
@@ -112,7 +113,7 @@ export default function AppProject({ slug }: { slug: string }) {
                   className={`${styles.galleryItem} ${g.dark ? styles.galleryItemDark : ""} spotlight`}
                   {...spotlight}
                 >
-                  <img src={g.src} alt={g.alt} loading="lazy" />
+                  <img src={g.src} alt={g.alt} {...imgSize(g.src)} loading="lazy" />
                 </figure>
               ))}
             </div>
@@ -173,6 +174,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
           <span className={styles.mockupChromeMeta}>
             <img
               src="/fever-logo.png"
+              {...imgSize("/fever-logo.png")}
               alt="Fever"
               className={styles.mockupChromeLogo}
             />
@@ -182,6 +184,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
         </div>
         <img
           src={emailImg}
+          {...imgSize(emailImg)}
           alt="Email mockup"
           className={styles.mockupEmailImg}
           loading="lazy"
@@ -193,7 +196,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
       <article className={`${styles.mockup} ${styles.mockupPush} spotlight`} {...spotlight}>
         <div className={styles.mockupPushTop}>
           <span className={styles.mockupPushIcon}>
-            <img src="/fever-icon.png" alt="" />
+            <img src="/fever-icon.png" alt="Fever app icon" {...imgSize("/fever-icon.png")} />
           </span>
           <span className={styles.mockupPushApp}>FEVER</span>
           <span className={styles.mockupPushTime}>now</span>
@@ -210,7 +213,7 @@ function ChannelMockups({ emailImg }: { emailImg: string }) {
       <article className={`${styles.mockup} ${styles.mockupWa} spotlight`} {...spotlight}>
         <div className={styles.mockupWaHeader}>
           <span className={styles.mockupWaAvatar}>
-            <img src="/fever-icon.png" alt="" />
+            <img src="/fever-icon.png" alt="Fever app icon" {...imgSize("/fever-icon.png")} />
           </span>
           <div className={styles.mockupWaHeaderText}>
             <span className={styles.mockupWaName}>Fever</span>
@@ -248,13 +251,14 @@ function TransactionalEmails({
             <span className={styles.mockupChromeDot} style={{ background: "#febc2e" }} />
             <span className={styles.mockupChromeDot} style={{ background: "#28c840" }} />
             <span className={styles.txEmailMeta}>
-              <img src="/fever-logo.png" alt="Fever" className={styles.mockupChromeLogo} />
+              <img src="/fever-logo.png" alt="Fever" className={styles.mockupChromeLogo} {...imgSize("/fever-logo.png")} />
               <span className={styles.mockupChromeSep}>·</span>
               {email.subject}
             </span>
           </div>
           <img
             src={email.src}
+            {...imgSize(email.src)}
             alt={email.label}
             className={styles.txEmailImg}
             loading="lazy"

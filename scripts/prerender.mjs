@@ -46,7 +46,6 @@ function headFor(meta) {
   const tags = [
     `<title>${esc(meta.title)}</title>`,
     `<meta name="description" content="${esc(meta.description)}">`,
-    `<link rel="canonical" href="${esc(meta.canonical)}">`,
     `<meta property="og:type" content="${meta.ogType}">`,
     `<meta property="og:title" content="${esc(meta.title)}">`,
     `<meta property="og:description" content="${esc(meta.description)}">`,
@@ -57,6 +56,10 @@ function headFor(meta) {
     `<meta name="twitter:title" content="${esc(meta.title)}">`,
     `<meta name="twitter:description" content="${esc(meta.description)}">`,
   ];
+  // A noindex page (the 404) has no URL of its own to declare as canonical.
+  if (!meta.noindex) {
+    tags.splice(2, 0, `<link rel="canonical" href="${esc(meta.canonical)}">`);
+  }
   if (meta.image) {
     tags.push(`<meta property="og:image" content="${esc(meta.image)}">`);
     tags.push(`<meta name="twitter:image" content="${esc(meta.image)}">`);
@@ -66,8 +69,8 @@ function headFor(meta) {
   return tags.join("\n    ");
 }
 
-function pageFor(path) {
-  const meta = metaForPath(path);
+function pageFor(path, override = {}) {
+  const meta = { ...metaForPath(path), ...override };
   let html = shell;
 
   // Drop the shell's generic title and description; the per-route block replaces both.
@@ -93,6 +96,16 @@ for (const path of routes) {
   await writeFile(join(dir, "index.html"), pageFor(path), "utf8");
 }
 
+/* 404.html: Vercel serves it, with a 404 status, for any path that matches no file and
+   no rewrite. Before, a catch-all rewrite sent every unknown URL to the homepage with a
+   200, so a typo or a dead link was an indexable copy of the home (a soft 404). It renders
+   the app's not-found view and carries noindex. */
+await writeFile(
+  join(dist, "404.html"),
+  pageFor("/404", { title: "Page not found — Mario Calvo", noindex: true }),
+  "utf8"
+);
+
 /* /bark and /bark/es are static pages served from public/, outside the SPA, so they are
    listed here by hand. Each entry gets a <lastmod> only when the page knows a real date. */
 const urls = [...routes, "/bark", "/bark/es"]
@@ -117,7 +130,7 @@ await writeFile(
 );
 
 console.log(
-  `prerendered ${routes.length} routes + sitemap.xml + robots.txt\n${routes
+  `prerendered ${routes.length} routes + 404.html + sitemap.xml + robots.txt\n${routes
     .map((r) => `  ${r}`)
     .join("\n")}`
 );

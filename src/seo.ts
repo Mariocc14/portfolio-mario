@@ -55,7 +55,14 @@ const personLd = {
     "CRM and lifecycle marketing consultant based in Spain. Designs and builds lifecycle journeys, marketing automation and multichannel CRM (email, push, in-app) in Salesforce Marketing Cloud and Braze, segmented with SQL.",
   email: "mailto:mariocalvocst@gmail.com",
   address: { "@type": "PostalAddress", addressCountry: "ES" },
-  sameAs: ["https://www.linkedin.com/in/mariocalvocastillo/"],
+  /* Each URL checked by hand: LinkedIn is linked from the site itself, Malt is the
+     profile that ranks for the name (same person, CRM & lifecycle, Madrid), GitHub is
+     the account the site's own repository lives under. */
+  sameAs: [
+    "https://www.linkedin.com/in/mariocalvocastillo/",
+    "https://www.malt.com/profile/mariocalvocastillo1",
+    "https://github.com/Mariocc14",
+  ],
   knowsAbout: [
     "CRM",
     "Lifecycle marketing",
@@ -181,6 +188,21 @@ export function metaForPath(pathname: string): PageMeta {
           articleSection: r.category,
           mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
         },
+        ...(r.faq?.length
+          ? [
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                url: canonical,
+                inLanguage: r.language,
+                mainEntity: r.faq.map((f) => ({
+                  "@type": "Question",
+                  name: f.q,
+                  acceptedAnswer: { "@type": "Answer", text: f.a },
+                })),
+              },
+            ]
+          : []),
       ],
     };
   }

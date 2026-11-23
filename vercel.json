@@ -23,10 +23,6 @@
     {
       "source": "/bark/ai-demo",
       "destination": "/bark/ai-demo.html"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/"
     }
   ]
 }

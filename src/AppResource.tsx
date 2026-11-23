@@ -69,7 +69,25 @@ export default function AppResource({ slug }: { slug: string }) {
 
         {/* ============ BODY ============ */}
         <article className={styles.body}>
+          {resource.quickAnswer && (
+            <blockquote className={styles.quote}>
+              <p>
+                <strong>Short answer:</strong> {resource.quickAnswer}
+              </p>
+            </blockquote>
+          )}
           {resource.body.map((block, i) => renderBlock(block, i))}
+          {resource.faq && resource.faq.length > 0 && (
+            <section>
+              <h2 className={styles.h2}>Frequently asked questions</h2>
+              {resource.faq.map((item, i) => (
+                <div key={i}>
+                  <h3 className={styles.h3}>{item.q}</h3>
+                  <p className={styles.p}>{item.a}</p>
+                </div>
+              ))}
+            </section>
+          )}
         </article>
 
         {/* ============ DOWNLOAD CTA ============ */}

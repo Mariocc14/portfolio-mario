@@ -2,7 +2,7 @@
    Dark editorial: near-black bg, browser-window hero, glowing italic
    accent word, large rounded project cards with email mockups inside. */
 
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+/* Fonts (Geist, Instrument Serif) load once, non-blocking, from index.html. */
 
 .page {
   --bg: #060606;
