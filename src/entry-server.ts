@@ -4,7 +4,7 @@ import { renderToString } from "react-dom/server";
 import { routeFor } from "./routes.tsx";
 import { metaForPath } from "./seo";
 
-export { allRoutes, SITE_URL } from "./seo";
+export { allRoutes, lastModifiedFor, SITE_URL } from "./seo";
 export { metaForPath };
 
 export function render(pathname: string): string {

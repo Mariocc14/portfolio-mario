@@ -9,6 +9,7 @@ import styles from "./App.module.css";
 import { projects, type ProjectDetail } from "./projects";
 import { spotlight } from "./spotlight";
 import { captureEvent } from "./posthog";
+import { imgSize } from "./imageSizes";
 
 const DOC_TITLE = "Mario Calvo — CRM & Lifecycle Marketing Consultant";
 
@@ -292,6 +293,7 @@ function ProjectCard({ project }: { project: ProjectDetail }) {
             </div>
             <img
               src={m.src}
+              {...imgSize(m.src)}
               alt={m.alt}
               className={styles.emailImg}
               loading="lazy"

@@ -1,8 +1,10 @@
 import { useEffect, useState, type ReactNode } from "react";
 import styles from "./AppInfo.module.css";
 import { spotlight } from "./spotlight";
+import { INFO_TITLE } from "./titles";
+import { imgSize } from "./imageSizes";
 
-const DOC_TITLE = "Info — Mario Calvo";
+const DOC_TITLE = INFO_TITLE;
 
 export default function AppInfo() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -85,6 +87,7 @@ export default function AppInfo() {
           <div className={styles.avatarWrap}>
             <img
               src="/imagen_perfil/mario-avatar.png"
+              {...imgSize("/imagen_perfil/mario-avatar.png")}
               alt="Mario Calvo"
               className={styles.avatar}
               loading="eager"

@@ -28,6 +28,12 @@ export type Resource = {
   downloadHref?: string;
   /** Filename suggested when the browser saves it (PDF only). */
   downloadFilename?: string;
+  /** Two or three sentences that answer the title on their own, shown above the body.
+      Only restates what the body says. */
+  quickAnswer?: string;
+  /** Questions answered at the end of the article, also emitted as FAQPage data.
+      Every answer must already be supported by the body. */
+  faq?: { q: string; a: string }[];
 };
 
 export const resources: Resource[] = [
@@ -41,10 +47,34 @@ export const resources: Resource[] = [
     format: "PDF",
     readingTime: "4 min",
     datePublished: "2026-06-16",
-    dateModified: "2026-08-29",
+    dateModified: "2026-11-23",
     // The PDF itself is still the original Spanish file.
     downloadHref: "/resources/warm-up-de-dominio.pdf",
     downloadFilename: "domain-warm-up-mario-calvo.pdf",
+    quickAnswer:
+      "Set up SPF, DKIM and DMARC, then grow volume over four weeks: 50 to 200 sends a day to your most engaged contacts in week 1, 500 to 2,000 in week 2, 5,000 to 10,000 in week 3 and full volume in week 4. Keep marketing and transactional mail on separate subdomains, and step the volume back down as soon as bounces, spam complaints or your Google Postmaster Tools reputation move.",
+    faq: [
+      {
+        q: "How long does it take to warm up a new sending domain?",
+        a: "About four weeks with the progression in this guide. Scale the daily volumes to your list size: what matters is the rate of growth, not the absolute numbers.",
+      },
+      {
+        q: "How many emails should I send in the first week?",
+        a: "50 to 200 a day, only to your most engaged segment (anyone who interacted in the last 30 days). Aim for an open rate above 40%, bounces under 1% and spam complaints under 0.05%.",
+      },
+      {
+        q: "Which signals should I watch during a warm-up?",
+        a: "Bounce rate under 2%, spam complaints under 0.1%, open rate above 20%, a Google Postmaster Tools reputation of Medium or High (never Low) and inbox placement above 85% in a seed test such as GlockApps.",
+      },
+      {
+        q: "Should marketing and transactional email share a domain?",
+        a: "No. Split them into subdomains, for example mail.yourdomain.com for marketing and notifications.yourdomain.com for transactional, so a reputation hit on marketing does not block order confirmations or password resets.",
+      },
+      {
+        q: "What is the most common warm-up mistake?",
+        a: "Starting at full volume, which can kill a domain in 48 hours. Close behind: sending to a list you have not mailed in six months without verifying it first, since every hard bounce damages reputation.",
+      },
+    ],
     body: [
       {
         type: "p",

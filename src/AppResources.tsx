@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import styles from "./AppResources.module.css";
 import { resources } from "./resources";
 import { spotlight } from "./spotlight";
+import { RESOURCES_TITLE } from "./titles";
 
-const DOC_TITLE = "Resources — Mario Calvo";
+const DOC_TITLE = RESOURCES_TITLE;
 
 export default function AppResources() {
   const [menuOpen, setMenuOpen] = useState(false);

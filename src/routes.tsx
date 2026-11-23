@@ -1,5 +1,5 @@
 /* Route resolution, shared by the browser entry (main.tsx) and the build-time
-   prerender (entry-server.tsx). Both must pick the same component for the same
+   prerender (entry-server.ts). Both must pick the same component for the same
    path or the prerendered HTML and the hydrated app disagree. */
 import type { ReactElement } from "react";
 import App from "./App.tsx";
